@@ -35,3 +35,6 @@ def chat(request):
     if request.method == "GET":
         context['messages'] = Message.objects.all()
         return render(request,"chat.html",context)
+
+def index(request):
+    return render(request,'index.html')
