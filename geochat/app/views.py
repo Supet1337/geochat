@@ -3,6 +3,24 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import logout, login, authenticate
 from .models import *
 from .forms import *
+import json
+
+def ajax_send(request):
+    if request.user.is_authenticated:
+        print(request.is_ajax)
+        if request.is_ajax:
+            new_message = Message()
+            new_message.text = request.POST.get('message')
+            new_message.author = request.user
+            new_message.save()
+
+    messages = []
+    for message in Message.objects.all():
+        messages.append(message.json())
+    print(messages)
+    return HttpResponse(json.dumps(messages))
+
+
 
 def chat(request):
     context = {}
