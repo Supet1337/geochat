@@ -90,7 +90,7 @@
 
                 $("#kek").html("");
                 json.forEach(function(item, i, json) {
-                  $("#kek").append(json[i].text, json[i].author, json[i].date, "<br>");
+                  $("#kek").append('<p>сообщение:'+json[i].text+' автор:'+json[i].author+' дата:'+json[i].date+'</p>');
                 });
             }
         });
@@ -100,7 +100,7 @@
 
     {% csrf_token %}
     <input type="text" name="message" id="message" placeholder="Введите сообщение">
-    <button  onclick="lol()" value="Отправить"></button>
+    <button  onclick="lol()">Отправить</button>
 
 </div>
 

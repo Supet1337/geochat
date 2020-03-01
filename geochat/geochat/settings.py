@@ -108,6 +108,8 @@ LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'Europe/Moscow'
 
+DATE_FORMAT = 'd E Y G часов i минут s секунд'
+
 USE_I18N = True
 
 USE_L10N = True

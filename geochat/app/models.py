@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import dateformat
+from django.conf import settings
 # Create your models here.
 
 class Message(models.Model):
@@ -8,6 +10,7 @@ class Message(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
     def json(self):
-        return  {'text':self.text, 'author': str(self.author), 'date':str(self.date)}
+        datef = dateformat.format(self.date,settings.DATE_FORMAT)
+        return  {'text':self.text, 'author': str(self.author), 'date':str(datef)}
 
 
