@@ -37,7 +37,5 @@ def chat(request):
         return render(request,"chat.html",context)
 
 def index(request):
-    return render(request,'dashboard-sales.html')
+    return render(request,'index.html')
 
-def map(request):
-    return render(request,'map-vector.html')
