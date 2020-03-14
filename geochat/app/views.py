@@ -20,7 +20,13 @@ def ajax_send(request):
     print(messages)
     return HttpResponse(json.dumps(messages))
 
+def ajax_update(request):
 
+    messages = []
+    for message in Message.objects.all():
+        messages.append(message.json())
+    print(messages)
+    return HttpResponse(json.dumps(messages))
 
 def chat(request):
     context = {}

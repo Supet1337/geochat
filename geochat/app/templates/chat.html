@@ -70,7 +70,7 @@
 
 <div id="kek" align="center">
     {% for message in messages %}
-    <p>{{message.text}} {{message.author}}  {{message.date}}</p>
+    <p>сообщение:{{message.text}} | автор:{{message.author}} | дата:{{message.date}}</p>
     {% endfor %}
 </div>
 <div align="center">
@@ -90,11 +90,26 @@
 
                 $("#kek").html("");
                 json.forEach(function(item, i, json) {
-                  $("#kek").append('<p>сообщение:'+json[i].text+' автор:'+json[i].author+' дата:'+json[i].date+'</p>');
+                  $("#kek").append('<p>сообщение:'+json[i].text+' | автор:'+json[i].author+' | дата:'+json[i].date+'</p>');
                 });
             }
         });
     }
+
+    function update() {
+        $.ajax({
+            url: "/ajax-update",
+            success: function (result) {
+                var json = $.parseJSON(result);
+
+                $("#kek").html("");
+                json.forEach(function(item, i, json) {
+                  $("#kek").append('<p>сообщение:'+json[i].text+' | автор:'+json[i].author+' | дата:'+json[i].date+'</p>');
+                });
+            }
+        });
+    }
+    setInterval(update, 3000);
     </script>
 
 
