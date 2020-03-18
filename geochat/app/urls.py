@@ -6,5 +6,5 @@ urlpatterns = [
     path('',index),
     path('ajax',ajax_send),
     path('ajax-update',ajax_update),
-    path('map',map),
+    path('chad',chad),
 ]

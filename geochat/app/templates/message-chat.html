@@ -22,12 +22,12 @@
     <!-- ============================================================== -->
     <!-- main wrapper -->
     <!-- ============================================================== -->
-    <div class="dashboard-main-wrapper">
+    <div class="dashboard-main-wrapper" style="">
         <!-- ============================================================== -->
         <!-- navbar -->
         <!-- ============================================================== -->
 
-<div class="dashboard-header">
+        <div class="dashboard-header">
             <nav class="navbar navbar-expand-lg bg-white fixed-top">
                 <a class="navbar-brand" href="index.html">Geo Chat</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -430,88 +430,98 @@
         <!-- ============================================================== -->
         <!-- wrapper  -->
         <!-- ============================================================== -->
-        <div class="dashboard-wrapper">
-            <div class="container-fluid  dashboard-content">
-                <!-- ============================================================== -->
-                <!-- pageheader  -->
-                <!-- ============================================================== -->
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="page-header">
-                            <h3 class="mb-2">Geo chat</h3>
+         <div class="dashboard-wrapper" style="">
+            <div class="main-container" style="height:750px">
+                <div class="navbar bg-white breadcrumb-bar border-top" style="height:100px">
+                    <div style="height:20px; margin-left: 700px; " ><h3>Имя Фамилия</h3></div>
+                    <div class="dropdown" align="right">
+                        <button class="btn btn-outline-light btn-sm" data-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item" href="">Мой профиль</a>
+                            <a class="dropdown-item text-danger" href="index.html">Bыйти на главную</a>
                         </div>
                     </div>
                 </div>
+                <div class="content-container" >
+                    <div class="chat-module" >
+                        <div class="chat-module-top">
+                            <div class="chat-module-body">
+                                <div class="media chat-item">
+                                    <img  src="../assets/images/avatar-1.jpg" class="rounded-circle user-avatar-lg">
+                                    <div class="media-body">
+                                        <div class="chat-item-title">
+                                            <span class="chat-item-author">William</span>
+                                            <span>4 days ago</span>
+                                        </div>
+                                        <div class="chat-item-body">
+                                            <p>Hey guys</p>
+                                        </div>
+                                    </div>
+                                </div>
 
-                <div id="map" style="width: 1600px; height: 700px"></div>
-                <script type="text/javascript">
-                ymaps.ready(init);
-                function init () {
-    myMap = new ymaps.Map("map", {
-        center: [55.76, 37.64],
-        zoom: 11
-    }, {
-        balloonMaxWidth: 200,
-        searchControlProvider: 'yandex#search'
-    });
+                                <div class="media chat-item">
+                                    <img  src="../assets/images/avatar-1.jpg" class="rounded-circle user-avatar-lg">
+                                    <div class="media-body">
+                                        <div class="chat-item-title">
+                                            <span class="chat-item-author">William</span>
+                                            <span>4 days ago</span>
+                                        </div>
+                                        <div class="chat-item-body">
+                                            <p>Hey guys</p>
+                                        </div>
+                                    </div>
+                                </div>
 
-    // Обработка события, возникающего при щелчке
-    // левой кнопкой мыши в любой точке карты.
-    // При возникновении такого события откроем балун.
-    myMap.events.add('click', function (e) {
-            var coords = e.get('coords');
-            var myCircle = new ymaps.Circle([
-        // Координаты центра круга.
-        [coords[0].toPrecision(6), coords[1].toPrecision(6)],
-        // Радиус круга в метрах.
-        300
-    ], {
-        // Описываем свойства круга.
-        // Содержимое балуна.
-        // Содержимое хинта.
-        hintContent:[ coords[0].toPrecision(6),coords[1].toPrecision(6)]
-    }, {
-        // Задаем опции круга.
-        // Включаем возможность перетаскивания круга.
-        // Цвет заливки.
-        // Последний байт (77) определяет прозрачность.
-        // Прозрачность заливки также можно задать используя опцию "fillOpacity".
-        fillColor: "#3caa3c",
-        fillOpacity: 0.5,
-        // Цвет обводки.
-        strokeColor: "#3caa3c",
-        // Прозрачность обводки.
-        strokeOpacity: 0.8,
-        // Ширина обводки в пикселях.
-        strokeWidth: 1
-    });
-    myMap.geoObjects.add(myCircle);
-    });
-}
-            </script>
-
-
-
-            <div class="footer">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                           FS102/Geo chat©
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="text-md-right footer-links d-none d-sm-block">
-                                <a href="javascript: void(0);">О нас</a>
-                                <a href="javascript: void(0);">Поддержка</a>
+                                <div class="media chat-item">
+                                    <img  src="../assets/images/avatar-1.jpg" class="rounded-circle user-avatar-lg">
+                                    <div class="media-body">
+                                        <div class="chat-item-title">
+                                            <span class="chat-item-author">William</span>
+                                            <span>4 days ago</span>
+                                        </div>
+                                        <div class="chat-item-body">
+                                            <p>Hey guys</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="media chat-item">
+                                    <img  src="../assets/images/avatar-1.jpg" class="rounded-circle user-avatar-lg">
+                                    <div class="media-body">
+                                        <div class="chat-item-title">
+                                            <span class="chat-item-author">William</span>
+                                            <span>4 days ago</span>
+                                        </div>
+                                        <div class="chat-item-body">
+                                            <p>Hey guys</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
+                        </div>
+                        <div class="chat-module-bottom">
+                            <form class="chat-form" style="margin-bottom:100px">
+                                <textarea class="form-control" placeholder="Type message" rows="2"></textarea>
+                                <div class="chat-form-buttons">
+                                    <button type="button" class="btn btn-link">
+                                        <i class="far fa-smile"></i>
+                                    </button>
+                                    <div class="custom-file custom-file-naked">
+                                        <input type="file" class="custom-file-input" id="customFile">
+                                        <label class="custom-file-label" for="customFile">
+                                            <i class="fas fa-paperclip"></i>
+                                        </label>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 
-    </div>
 </body>
 
         <script src="static/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
