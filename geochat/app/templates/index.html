@@ -12,8 +12,7 @@
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/circular-std/style.css" %}>
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
-    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/vector-map/jqvmap.css" %}>
-    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/jvectormap/jquery-jvectormap-2.0.2.css" %}>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=7abcaac9-c988-4344-9b01-50d57672abf2&lang=ru_RU" type="text/javascript"></script>
 
     <title>///</title>
 </head>
@@ -444,14 +443,66 @@
                     </div>
                 </div>
 
-                                <div class="col-xl-6 col-lg-6 col-md-12 col-sm-12 col-12">
-                        <div class="card" style="height: 550px; width:1550px">
-                            <h5 class="card-header">Карта</h5>
-                            <div class="card-body">
-                                <div id="world-map-markers" style="height: 450px; width:1600px"></div>
-                            </div>
-                        </div>
-                    </div>
+                <div id="map" style="width: 1600px; height: 700px"></div>
+                <script type="text/javascript">
+                // Функция ymaps.ready() будет вызвана, когда
+                // загрузятся все компоненты API, а также когда будет готово DOM-дерево.
+                ymaps.ready(init);
+                function init () {
+    myMap = new ymaps.Map("map", {
+        center: [55.76, 37.64], // Углич
+        zoom: 11
+    }, {
+        balloonMaxWidth: 200,
+        searchControlProvider: 'yandex#search'
+    });
+
+    // Обработка события, возникающего при щелчке
+    // левой кнопкой мыши в любой точке карты.
+    // При возникновении такого события откроем балун.
+    myMap.events.add('click', function (e) {
+            var coords = e.get('coords');
+            var myCircle = new ymaps.Circle([
+        // Координаты центра круга.
+        [coords[0].toPrecision(6), coords[1].toPrecision(6)],
+        // Радиус круга в метрах.
+        300
+    ], {
+        // Описываем свойства круга.
+        // Содержимое балуна.
+        // Содержимое хинта.
+        hintContent:[ coords[0].toPrecision(6),coords[1].toPrecision(6)]
+    }, {
+        // Задаем опции круга.
+        // Включаем возможность перетаскивания круга.
+        // Цвет заливки.
+        // Последний байт (77) определяет прозрачность.
+        // Прозрачность заливки также можно задать используя опцию "fillOpacity".
+        fillColor: "#3caa3c",
+        fillOpacity: 0.5,
+        // Цвет обводки.
+        strokeColor: "#3caa3c",
+        // Прозрачность обводки.
+        strokeOpacity: 0.8,
+        // Ширина обводки в пикселях.
+        strokeWidth: 1
+    });
+    myMap.geoObjects.add(myCircle);
+    });
+
+
+    // Добавляем круг на карту.
+
+    // Обработка события, возникающего при щелчке
+    // правой кнопки мыши в любой точке карты.
+    // При возникновении такого события покажем всплывающую подсказку
+    // в точке щелчка.
+
+
+    // Скрываем хинт при открытии балуна.
+}
+            </script>
+
 
 
             <div class="footer">
@@ -480,12 +531,6 @@
         <script src="static/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
         <script src="static/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
         <script src="static/assets/libs/js/main-js.js"></script>
-        <script src="static/assets/vendor/jvectormap/jquery-jvectormap-2.0.2.min.js"></script>
-        <script src="static/assets/vendor/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
-        <script src="static/assets/vendor/jvectormap/jquery-jvectormap-in-mill.js"></script>
-        <script src="static/assets/vendor/jvectormap/jquery-jvectormap-us-aea-en.js"></script>
-        <script src="static/assets/vendor/jvectormap/jquery-jvectormap-uk-mill-en.js"></script>
-        <script src="static/assets/vendor/jvectormap/jquery-jvectormap-au-mill.js"></script>
         <script src="static/assets/libs/js/jvectormap.custom.js"></script>
 
 
