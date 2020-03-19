@@ -11,62 +11,8 @@
  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
 </head>
 <body>
-{% include "header.html" %}
-{% include "menu.html" %}
-{% if not request.user.is_authenticated %}
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-  Авторизация
-</button>
 
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-          <h4 class="modal-title" id="myModalLabel">Авторизация</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-            <div class="container">
-              <div class="row">
-                <div class="w-100"></div>
-                <div class="col">
-                     <form method="POST" action="">
-                        {% csrf_token %}
-                         <br>
-                        <input type="text" id="username" name="username" class="form-control" placeholder="Логин">
-                        <input type="email" id="email" name="email" class="form-control" placeholder="Email">
-                        <input type="password" id="password1" name="password1" class="form-control" placeholder="Пароль">
-                        <input type="password" id="password2" name="password2" class="form-control" placeholder="Подтвердите пароль">
-                        <input type="submit" value="Зарегистрироваться" class="btn btn-dark">
-                         <br>
-                         <br>
-                    </form>
-
-
-
-
-                </div>
-                <div class="col">
-
-                    <form action="" method="post">
-                        {% csrf_token %}
-                        <br>
-                        <input type="text" id="username_auth" name="username_auth" class="form-control" placeholder="Логин">
-                        <input type="password" id="password" name="password" class="form-control" placeholder="Пароль">
-                        <input type="submit" value="Войти" class="btn btn-dark">
-                    </form>
-
-                </div>
-              </div>
-            </div>
-    </div>
-  </div>
-</div>
-Войдите, чтобы присоедениться к чату
-{%else%}
-<p>Вас зовут: {{request.user.username}}</p>
 
 <div id="kek" align="center">
     {% for message in messages %}
@@ -79,7 +25,7 @@
 
     function lol() {
         $.ajax({
-            url: "/ajax",
+            url: "/ajax/{{room.id}}",
             method: "POST",
             data: {
                 message: message.value,
@@ -98,7 +44,11 @@
 
     function update() {
         $.ajax({
-            url: "/ajax-update",
+            url: "/ajax-update/{{room.id}}",
+            method: "POST",
+            data: {
+                csrfmiddlewaretoken: '{{csrf_token}}'
+            },
             success: function (result) {
                 var json = $.parseJSON(result);
 
@@ -119,7 +69,5 @@
 
 </div>
 
-{%endif%}
-{% include "footer.html" %}
 </body>
 </html>

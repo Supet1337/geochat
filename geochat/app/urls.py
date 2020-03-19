@@ -2,9 +2,10 @@ from .views import *
 from django.urls import path
 
 urlpatterns = [
-    path('chat', chat),
+    path('rooms',rooms),
+    path('create-room',create_room),
+    path('room/<int:number>', room),
     path('',index),
-    path('ajax',ajax_send),
-    path('ajax-update',ajax_update),
-    path('map',map),
+    path('ajax/<int:number>',ajax_send),
+    path('ajax-update/<int:number>',ajax_update),
 ]

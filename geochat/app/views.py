@@ -1,34 +1,81 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login, authenticate
+from django.contrib.auth.hashers import check_password
 from .models import *
 from .forms import *
 import json
 
-def ajax_send(request):
+@login_required
+def ajax_send(request,number):
     if request.user.is_authenticated:
         print(request.is_ajax)
         if request.is_ajax:
             new_message = Message()
             new_message.text = request.POST.get('message')
             new_message.author = request.user
+            new_message.room = Room.objects.get(id=number)
             new_message.save()
 
     messages = []
-    for message in Message.objects.all():
+    for message in Message.objects.filter(room_id=number):
         messages.append(message.json())
     print(messages)
     return HttpResponse(json.dumps(messages))
 
-def ajax_update(request):
+@login_required
+def ajax_update(request,number):
 
     messages = []
-    for message in Message.objects.all():
+    for message in Message.objects.filter(room_id=number):
         messages.append(message.json())
     print(messages)
     return HttpResponse(json.dumps(messages))
 
-def chat(request):
+@login_required
+def room(request,number):
+    context = {}
+    if request.method == "POST":
+        text = request.POST.get('message')
+        if text == '':
+            return HttpResponseRedirect("/chat")
+        new_message = Message()
+        new_message.text = text
+        new_message.author = request.user
+        new_message.save()
+        return HttpResponseRedirect("/chat")
+    if request.method == "GET":
+        context['messages'] = Message.objects.filter(room_id=number)
+        context['room'] = Room.objects.get(id=number)
+        return render(request,"chat.html",context)
+
+@login_required
+def create_room(request):
+    if request.method == "POST":
+        new_room = Room()
+        new_room.author = request.user
+        new_room.name = request.POST.get('name')
+        new_room.password = request.POST.get('password')
+        new_room.save()
+        return HttpResponseRedirect('rooms')
+    if request.method == "GET":
+        return render(request,'create-room.html')
+
+
+def rooms(request):
+    if request.method == 'POST':
+        room_enter = Room.objects.get(id=request.POST.get('id'))
+        if check_password(request.POST.get('password'),room_enter.password):
+            return HttpResponseRedirect('/room/' + str(request.POST.get('id')))
+        else:
+            return HttpResponse('jopa')
+    if request.method == 'GET':
+        context = {}
+        context['rooms'] = Room.objects.all()
+        return render(request,'rooms.html',context)
+
+def index(request):
     context = {}
     if request.method == "POST":
         form = RegisterForm(request.POST)
@@ -38,7 +85,7 @@ def chat(request):
                 user = form.save(commit=False)
                 user.email = form.data['email']
                 user.save()
-                return render(request, 'chat.html', context)
+                return render(request, 'index.html', context)
             else:
                 username = request.POST['username_auth']
                 password = request.POST['password']
@@ -46,20 +93,7 @@ def chat(request):
                 if user is not None:
                     if user.is_active:
                         login(request, user)
-                        return HttpResponseRedirect("/chat")
-        else:
-            text = request.POST.get('message')
-            if text == '':
-                return HttpResponseRedirect("/chat")
-            new_message = Message()
-            new_message.text = text
-            new_message.author = request.user
-            new_message.save()
-            return HttpResponseRedirect("/chat")
+                        return HttpResponseRedirect("/")
     if request.method == "GET":
-        context['messages'] = Message.objects.all()
-        return render(request,"chat.html",context)
-
-def index(request):
-    return render(request,'index.html')
+        return render(request,'index.html')
 
