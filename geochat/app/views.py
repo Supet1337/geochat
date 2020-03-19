@@ -13,10 +13,12 @@ def ajax_send(request,number):
         print(request.is_ajax)
         if request.is_ajax:
             new_message = Message()
-            new_message.text = request.POST.get('message')
-            new_message.author = request.user
-            new_message.room = Room.objects.get(id=number)
-            new_message.save()
+            text = request.POST.get('message')
+            if not text == '':
+                new_message.text = text
+                new_message.author = request.user
+                new_message.room = Room.objects.get(id=number)
+                new_message.save()
 
     messages = []
     for message in Message.objects.filter(room_id=number):
@@ -57,6 +59,10 @@ def create_room(request):
         new_room.author = request.user
         new_room.name = request.POST.get('name')
         new_room.password = request.POST.get('password')
+        if request.POST.get('is_private'):
+            new_room.is_private = True
+        else:
+            new_room.is_private = False
         new_room.save()
         return HttpResponseRedirect('rooms')
     if request.method == "GET":

@@ -6,6 +6,7 @@
 </head>
 <body>
 {% for room in rooms %}
+{% if room.is_private %}
 <p>{{room.name}}</p>
 <form method="post">
     {% csrf_token %}
@@ -13,6 +14,9 @@
     <input type="hidden" name="id" value="{{room.id}}">
     <input type="submit" value="Присоединиться">
 </form>
+{% else %}
+<a href="room/{{room.id}}">{{room.name}}</a>
+{% endif %}
 {% endfor %}
 </body>
 </html>

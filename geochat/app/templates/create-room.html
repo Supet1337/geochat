@@ -5,10 +5,11 @@
     <title>Title</title>
 </head>
 <body>
-<form method="POST">
+<form method="POST" autocomplete="off">
     {% csrf_token %}
-    <input type="text" id="name" name="name" placeholder="Название комнаты">
-    <input type="password" id="password" name="password" placeholder="Введите пароль">
+    <input type="text" id="name" name="name" placeholder="Название комнаты" readonly onfocus="this.removeAttribute('readonly')">
+    <input type="password" id="password" name="password" placeholder="Введите пароль" readonly onfocus="this.removeAttribute('readonly')">
+    <input type="checkbox" id="is_private" name="is_private"> Приватный Чат
     <input type="submit" value="Создать">
 </form>
 </body>

@@ -65,7 +65,7 @@
 
     {% csrf_token %}
     <input type="text" name="message" id="message" placeholder="Введите сообщение">
-    <button  onclick="lol()">Отправить</button>
+    <button  onclick="lol();document.getElementById('message').value = '';">Отправить</button>
 
 </div>
 
