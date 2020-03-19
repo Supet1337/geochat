@@ -5,6 +5,15 @@ from .models import *
 from .forms import *
 import json
 
+def ajax_circle(request):
+    print(request.is_ajax)
+    if request.is_ajax:
+        new_circle = Circle()
+        new_circle.x = request.POST.get('x')
+        new_circle.y = request.POST.get('y')
+        new_circle.save()
+    return HttpResponseRedirect('/')
+
 def ajax_send(request):
     if request.user.is_authenticated:
         print(request.is_ajax)

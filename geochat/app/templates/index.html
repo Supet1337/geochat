@@ -13,6 +13,7 @@
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=7abcaac9-c988-4344-9b01-50d57672abf2&lang=ru_RU" type="text/javascript"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
     <title>///</title>
 </head>
@@ -460,6 +461,15 @@
     // При возникновении такого события откроем балун.
     myMap.events.add('click', function (e) {
             var coords = e.get('coords');
+            $.ajax({
+            url: "/ajax_circle",
+            method: "POST",
+            data: {
+                x: coords[0],
+                y: coords[1],
+                csrfmiddlewaretoken: '{{csrf_token}}'
+            }
+        });
             var myCircle = new ymaps.Circle([
         // Координаты центра круга.
         [coords[0].toPrecision(6), coords[1].toPrecision(6)],
@@ -487,7 +497,10 @@
     });
     myMap.geoObjects.add(myCircle);
     });
+
 }
+
+
             </script>
 
 
