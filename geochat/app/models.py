@@ -16,3 +16,6 @@ class Message(models.Model):
 class Circle(models.Model):
     x = models.FloatField()
     y = models.FloatField()
+
+    def json(self):
+        return  {'x':self.x, 'y':self.y}

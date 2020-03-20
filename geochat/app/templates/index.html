@@ -455,7 +455,41 @@
         balloonMaxWidth: 200,
         searchControlProvider: 'yandex#search'
     });
+    $.ajax({
+            url: "/ajax-circle-draw",
+            success: function (result) {
+                var json = $.parseJSON(result);
 
+                json.forEach(function(item, i, json) {
+                  var myCircle = new ymaps.Circle([
+        // Координаты центра круга.
+        [json[i].x, json[i].y],
+        // Радиус круга в метрах.
+        300
+    ], {
+        // Описываем свойства круга.
+        // Содержимое балуна.
+        // Содержимое хинта.
+        hintContent:[ json[i].x,json[i].y]
+    }, {
+        // Задаем опции круга.
+        // Включаем возможность перетаскивания круга.
+        // Цвет заливки.
+        // Последний байт (77) определяет прозрачность.
+        // Прозрачность заливки также можно задать используя опцию "fillOpacity".
+        fillColor: "#3caa3c",
+        fillOpacity: 0.5,
+        // Цвет обводки.
+        strokeColor: "#3caa3c",
+        // Прозрачность обводки.
+        strokeOpacity: 0.8,
+        // Ширина обводки в пикселях.
+        strokeWidth: 1
+    });
+    myMap.geoObjects.add(myCircle);
+                });
+            }
+        });
     // Обработка события, возникающего при щелчке
     // левой кнопкой мыши в любой точке карты.
     // При возникновении такого события откроем балун.
@@ -470,6 +504,7 @@
                 csrfmiddlewaretoken: '{{csrf_token}}'
             }
         });
+
             var myCircle = new ymaps.Circle([
         // Координаты центра круга.
         [coords[0].toPrecision(6), coords[1].toPrecision(6)],
@@ -499,6 +534,7 @@
     });
 
 }
+
 
 
             </script>

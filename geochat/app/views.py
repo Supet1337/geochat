@@ -37,6 +37,14 @@ def ajax_update(request):
     print(messages)
     return HttpResponse(json.dumps(messages))
 
+def ajax_circle_draw(request):
+
+    circles = []
+    for circle in Circle.objects.all():
+        circles.append(circle.json())
+    print(circles)
+    return HttpResponse(json.dumps(circles))
+
 def chat(request):
     context = {}
     if request.method == "POST":
