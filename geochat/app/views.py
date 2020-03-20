@@ -67,7 +67,7 @@ def room(request,number):
     if request.method == "GET":
         context['messages'] = Message.objects.filter(room_id=number)
         context['room'] = Room.objects.get(id=number)
-        return render(request,"chat.html",context)
+        return render(request,"mess.html",context)
 
 @login_required
 def create_room(request):

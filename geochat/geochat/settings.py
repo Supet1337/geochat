@@ -112,8 +112,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-DATE_FORMAT = 'd E Y G:i'
-
+DATE_FORMAT = 'd.m G:i'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
