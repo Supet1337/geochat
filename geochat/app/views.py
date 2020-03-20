@@ -63,5 +63,5 @@ def chat(request):
 def index(request):
     return render(request,'index.html')
 def chad(request):
-    return render(request,'message-chat.html')
+    return render(request,'mess.html')
 
