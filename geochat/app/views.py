@@ -7,6 +7,15 @@ from .models import *
 from .forms import *
 import json
 
+def ajax_circle(request):
+    print(request.is_ajax)
+    if request.is_ajax:
+        new_circle = Circle()
+        new_circle.x = request.POST.get('x')
+        new_circle.y = request.POST.get('y')
+        new_circle.save()
+    return HttpResponseRedirect('/')
+
 @login_required
 def ajax_send(request,number):
     if request.user.is_authenticated:
@@ -34,6 +43,14 @@ def ajax_update(request,number):
         messages.append(message.json())
     print(messages)
     return HttpResponse(json.dumps(messages))
+
+def ajax_circle_draw(request):
+
+    circles = []
+    for circle in Circle.objects.all():
+        circles.append(circle.json())
+    print(circles)
+    return HttpResponse(json.dumps(circles))
 
 @login_required
 def room(request,number):

@@ -25,4 +25,9 @@ class Message(models.Model):
         datef = dateformat.format(self.date,settings.DATE_FORMAT)
         return  {'text':self.text, 'author': str(self.author), 'date':str(datef)}
 
+class Circle(models.Model):
+    x = models.FloatField()
+    y = models.FloatField()
 
+    def json(self):
+        return  {'x':self.x, 'y':self.y}
