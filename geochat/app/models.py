@@ -31,3 +31,8 @@ class Circle(models.Model):
 
     def json(self):
         return  {'x':self.x, 'y':self.y}
+
+class JoinRoom(models.Model):
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    room_id = models.IntegerField()
+    date = models.DateTimeField(auto_now_add=True)

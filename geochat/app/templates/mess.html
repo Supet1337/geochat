@@ -1,11 +1,17 @@
 <!DOCTYPE html>
+{% load static %}
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
+<link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
+    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/circular-std/style.css" %}>
+    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
+    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
 <style class="cp-pen-styles">
 body {
   display: flex;
-  align-items: center;
-  justify-content: center;
   min-height: 100vh;
   font-family: "proxima-nova", "Source Sans Pro", sans-serif;
   font-size: 1em;
@@ -19,7 +25,7 @@ body {
 #frame {
   width: 95%;
   min-width: 360px;
-  max-width: 1000px;
+  max-width: 1650px;
   height: 92vh;
   min-height: 300px;
   max-height: 720px;
@@ -37,7 +43,7 @@ body {
 
 
 #frame .content .contact-profile {
-  width: 1000px;
+  width: 2000px;
   height: 60px;
   line-height: 60px;
   background: #f5f5f5;
@@ -129,7 +135,7 @@ body {
 }
 #frame .content .message-input {
   position: absolute;
-  bottom: 0;
+  bottom: -8px;
   width: 100%;
   z-index: 99;
 }
@@ -157,9 +163,9 @@ body {
 }
 
 #frame .content .message-input .wrap button {
-  float: right;
+  float: left;
   border: none;
-  width: 50px;
+  width: 80px;
   padding: 12px 0;
   cursor: pointer;
   background: #32465a;
@@ -167,8 +173,11 @@ body {
 }
 
 </style></head><body>
-
-
+<div class="dashboard-main-wrapper">
+{% include "header.html" %}
+{% include "left_sidebar2.html" %}
+<div class="dashboard-wrapper">
+	<div class="container-fluid  dashboard-content">
 <div id="frame">
 	<div class="content">
 		<div class="contact-profile">
@@ -193,7 +202,10 @@ body {
 		</div>
 	</div>
 </div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	</div>
+	{% include "footer.html" %}
+</div>
+
 <script >
 
 	function lol() {
@@ -210,9 +222,9 @@ body {
                 $("#kek").html("");
                 json.forEach(function(item, i, json) {
                   if( json[i].author == '{{request.user}}' )
-                      $("#kek").append('<li class="sent"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+json[i].author+'<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+                      $("#kek").append('<li class="sent"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
                   else
-                      $("#kek").append('<li class="replies"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+json[i].author+'<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+                      $("#kek").append('<li class="replies"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
                 });
             }
         });
@@ -231,9 +243,9 @@ body {
                 $("#kek").html("");
                 json.forEach(function(item, i, json) {
                   if( json[i].author == '{{request.user}}' )
-                      $("#kek").append('<li class="sent"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+json[i].author+'<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+                      $("#kek").append('<li class="sent"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
                   else
-                      $("#kek").append('<li class="replies"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+json[i].author+'<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+                      $("#kek").append('<li class="replies"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
                 });
             }
         });
@@ -241,4 +253,10 @@ body {
     setInterval(update, 3000);
 
 </script>
-</body></html>
+</div>
+</body>
+		<script src="../static/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+        <script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+        <script src="../static/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+        <script src="../static/assets/libs/js/main-js.js"></script>
+</html>

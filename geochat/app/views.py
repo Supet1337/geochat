@@ -65,9 +65,31 @@ def room(request,number):
         new_message.save()
         return HttpResponseRedirect("/chat")
     if request.method == "GET":
-        context['messages'] = Message.objects.filter(room_id=number)
-        context['room'] = Room.objects.get(id=number)
-        return render(request,"mess.html",context)
+        room = Room.objects.get(id=number)
+        joins = JoinRoom.objects.filter(room_id=number)
+        for join in joins:
+            if request.user == join.user:
+                context['room'] = room
+                join_rooms = JoinRoom.objects.filter(user=request.user)
+                rooms = []
+                for join_room in join_rooms:
+                    rooms.append(Room.objects.get(id=join_room.room_id))
+                context['rooms'] = rooms
+                return render(request,"mess.html",context)
+        if room.is_private:
+            return HttpResponse('соси жопу')
+        else:
+            new_join = JoinRoom()
+            new_join.user = request.user
+            new_join.room_id = number
+            new_join.save()
+            context['room'] = room
+            join_rooms = JoinRoom.objects.filter(user=request.user)
+            rooms = []
+            for join_room in join_rooms:
+                rooms.append(Room.objects.get(id=join_room.room_id))
+            context['rooms'] = rooms
+            return render(request, "mess.html", context)
 
 @login_required
 def create_room(request):
@@ -81,7 +103,7 @@ def create_room(request):
         else:
             new_room.is_private = False
         new_room.save()
-        return HttpResponseRedirect('rooms')
+        return HttpResponseRedirect('/')
     if request.method == "GET":
         return render(request,'create-room.html')
 
@@ -90,9 +112,13 @@ def rooms(request):
     if request.method == 'POST':
         room_enter = Room.objects.get(id=request.POST.get('id'))
         if check_password(request.POST.get('password'),room_enter.password):
+            new_join = JoinRoom()
+            new_join.user = request.user
+            new_join.room_id = request.POST.get('id')
+            new_join.save()
             return HttpResponseRedirect('/room/' + str(request.POST.get('id')))
         else:
-            return HttpResponse('jopa')
+            return HttpResponse('Неправильный пароль')
     if request.method == 'GET':
         context = {}
         context['rooms'] = Room.objects.all()
@@ -117,6 +143,50 @@ def index(request):
                     if user.is_active:
                         login(request, user)
                         return HttpResponseRedirect("/")
+        else:
+            if request.POST.get('name') == None:
+                room_enter = Room.objects.get(id=request.POST.get('id'))
+                if check_password(request.POST.get('password'), room_enter.password):
+                    new_join = JoinRoom()
+                    new_join.user = request.user
+                    new_join.room_id = request.POST.get('id')
+                    new_join.save()
+                    return HttpResponseRedirect('/room/' + str(request.POST.get('id')))
+                else:
+                    return HttpResponse('Неправильный пароль')
+            else:
+                new_room = Room()
+                new_room.author = request.user
+                new_room.name = request.POST.get('name')
+                new_room.password = request.POST.get('password')
+                if request.POST.get('is_private'):
+                    new_room.is_private = True
+                else:
+                    new_room.is_private = False
+                new_room.save()
+                return HttpResponseRedirect('/')
+
+
+
     if request.method == "GET":
-        return render(request,'index.html')
+        join_rooms = []
+        if request.user.is_authenticated:
+            join_rooms = JoinRoom.objects.filter(user=request.user)
+
+        roomsj = []
+        for join_room in join_rooms:
+            roomsj.append(Room.objects.get(id=join_room.room_id))
+        context['roomsj'] = roomsj
+        rooms = []
+        flag = False
+        for room in Room.objects.all():
+            for roomj in roomsj:
+                if room == roomj:
+                    flag = True
+                    break
+            if not flag:
+                rooms.append(room)
+            flag = False
+        context['rooms'] = rooms
+        return render(request,'index.html',context)
 
