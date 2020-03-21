@@ -1,0 +1,71 @@
+<div class="footer">
+    {% if not request.user.is_authenticated %}
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+  Авторизация
+</button>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel">Авторизация</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+            <div class="container">
+              <div class="row">
+                <div class="w-100"></div>
+                <div class="col">
+                     <form method="POST" action="">
+                        {% csrf_token %}
+                         <br>
+                        <input type="text" id="username" name="username" class="form-control" placeholder="Логин">
+                        <input type="email" id="email" name="email" class="form-control" placeholder="Email">
+                        <input type="password" id="password1" name="password1" class="form-control" placeholder="Пароль">
+                        <input type="password" id="password2" name="password2" class="form-control" placeholder="Подтвердите пароль">
+                        <input type="submit" value="Зарегистрироваться" class="btn btn-dark">
+                         <br>
+                         <br>
+                    </form>
+
+
+
+
+                </div>
+                <div class="col">
+
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <br>
+                        <input type="text" id="username_auth" name="username_auth" class="form-control" placeholder="Логин">
+                        <input type="password" id="password" name="password" class="form-control" placeholder="Пароль">
+                        <input type="submit" value="Войти" class="btn btn-dark">
+                    </form>
+
+                </div>
+              </div>
+            </div>
+    </div>
+  </div>
+</div>
+Войдите, чтобы жить
+{%else%}
+<p>Вас зовут: {{request.user.username}}</p>
+{%endif%}
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                           FS102/Geo chat©
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="text-md-right footer-links d-none d-sm-block">
+                                <a href="javascript: void(0);">О нас</a>
+                                <a href="javascript: void(0);">Поддержка</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
