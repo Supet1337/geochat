@@ -24,8 +24,8 @@ body {
 
 #frame {
   width: 95%;
-  min-width: 360px;
-  max-width: 1650px;
+  min-width: 1610px;
+  max-width: 1500px;
   height: 92vh;
   min-height: 300px;
   max-height: 720px;
@@ -173,7 +173,7 @@ body {
 }
 
 </style></head><body>
-<div class="dashboard-main-wrapper">
+<div class="dashboard-main-wrapper" style="width:1700px">
 {% include "header.html" %}
 {% include "left_sidebar2.html" %}
 <div class="dashboard-wrapper">
@@ -197,7 +197,7 @@ body {
 			<div class="wrap">
 				{% csrf_token %}
 				<input type="text" name="message" id="message" placeholder="Введите сообщение...">
-				<button onclick="lol()" ><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+				<button onclick="lol(); document.getElementById('message').value = '';" ><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
 			</div>
 		</div>
 	</div>
@@ -225,10 +225,23 @@ body {
                       $("#kek").append('<li class="sent"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
                   else
                       $("#kek").append('<li class="replies"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+
                 });
+
             }
+
         });
+
     }
+
+$(window).keydown(function(e) {
+   if (e.which == 13) {
+      lol();
+      document.getElementById('message').value = '';
+   }
+});
+
+
 
     function update() {
         $.ajax({

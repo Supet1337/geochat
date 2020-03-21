@@ -193,4 +193,15 @@ def index(request):
 def profile(request, number):
     context = {}
     user = User.objects.get(id=number)
-    return render(request,'profile.html')
+    context['username'] = user.username
+    context['email'] = user.email
+    context['last_login'] = user.last_login
+    context['room'] = room
+
+    join_rooms = JoinRoom.objects.filter(user=request.user)
+    rooms = []
+    for join_room in join_rooms:
+        rooms.append(Room.objects.get(id=join_room.room_id))
+    context['rooms'] = rooms
+
+    return render(request,'profile.html', context)

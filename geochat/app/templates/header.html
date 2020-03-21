@@ -90,12 +90,15 @@
                             <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="https://anews.az/file/pic/xeber/2019-01/1548232156__dsc4943.jpg" alt="" class="user-avatar-md rounded-circle"></a>
                             <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
                                 <div class="nav-user-info">
-                                    <h5 class="mb-0 text-white nav-user-name">John Abraham </h5>
-                                    <span class="status"></span><span class="ml-2">Available</span>
+                                    {% if request.user.is_authenticated%}
+                                        <h5 class="mb-0 text-white nav-user-name">{{request.user}} </h5>
+                                    {%else%}
+                                    <h5 class="mb-0 text-white nav-user-name">Гость</h5>
+                                    {%endif%}
                                 </div>
-                                <a class="dropdown-item" href="#"><i class="fas fa-user mr-2"></i>Account</a>
+                                <a class="dropdown-item" href="../profile/{{request.user.id}}"><i class="fas fa-user mr-2"></i>Account</a>
                                 <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
-                                <a class="dropdown-item" href="#"><i class="fas fa-power-off mr-2"></i>Logout</a>
+                                <a class="dropdown-item" href="../accounts/logout"><i class="fas fa-power-off mr-2"></i>Logout</a>
                             </div>
                         </li>
                     </ul>
