@@ -77,7 +77,7 @@ def room(request,number):
                 context['rooms'] = rooms
                 return render(request,"mess.html",context)
         if room.is_private:
-            return HttpResponse('соси жопу')
+            return HttpResponse('У вас нет доступа к этому чату')
         else:
             new_join = JoinRoom()
             new_join.user = request.user
