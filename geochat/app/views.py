@@ -190,3 +190,7 @@ def index(request):
         context['rooms'] = rooms
         return render(request,'index.html',context)
 
+def profile(request, number):
+    context = {}
+    user = User.objects.get(id=number)
+    return render(request,'profile.html')
