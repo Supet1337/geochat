@@ -1,11 +1,17 @@
 <!DOCTYPE html>
+{% load static %}
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
+<link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
+    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/circular-std/style.css" %}>
+    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
+    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
 <style class="cp-pen-styles">
 body {
   display: flex;
-  align-items: center;
-  justify-content: center;
   min-height: 100vh;
   font-family: "proxima-nova", "Source Sans Pro", sans-serif;
   font-size: 1em;
@@ -18,8 +24,8 @@ body {
 
 #frame {
   width: 95%;
-  min-width: 360px;
-  max-width: 1000px;
+  min-width: 1610px;
+  max-width: 1500px;
   height: 92vh;
   min-height: 300px;
   max-height: 720px;
@@ -37,7 +43,7 @@ body {
 
 
 #frame .content .contact-profile {
-  width: 1000px;
+  width: 2000px;
   height: 60px;
   line-height: 60px;
   background: #f5f5f5;
@@ -51,7 +57,9 @@ body {
 #frame .content .contact-profile p {
   float: left;
 }
-
+#frame .content .contact-profile div {
+  float: left;
+}
 #frame .content .messages {
   height: auto;
   min-height: calc(100% - 93px);
@@ -80,6 +88,10 @@ body {
   background: #435f7a;
   color: #f5f5f5;
 }
+#frame .content .messages ul li.sent div {
+  background: #e6eaea;
+  color: #435f7a;
+}
 #frame .content .messages ul li.replies img {
   float: right;
   margin: 6px 0 0 8px;
@@ -88,8 +100,12 @@ body {
   background: #f5f5f5;
   float: right;
 }
+#frame .content .messages ul li.replies div {
+  background: #e6eaea;
+  float: right;
+}
 #frame .content .messages ul li img {
-  width: 22px;
+  width: 50px;
   border-radius: 50%;
   float: left;
 }
@@ -100,14 +116,26 @@ body {
   max-width: 205px;
   line-height: 130%;
 }
+#frame .content .messages ul li div {
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 20px;
+  max-width: 205px;
+  line-height: 130%;
+}
 @media screen and (min-width: 735px) {
   #frame .content .messages ul li p {
-    max-width: 300px;
+    max-width: 735px;
+  }
+}
+@media screen and (min-width: 735px) {
+  #frame .content .messages ul li div {
+    max-width: 735px;
   }
 }
 #frame .content .message-input {
   position: absolute;
-  bottom: 0;
+  bottom: -8px;
   width: 100%;
   z-index: 99;
 }
@@ -135,9 +163,9 @@ body {
 }
 
 #frame .content .message-input .wrap button {
-  float: right;
+  float: left;
   border: none;
-  width: 50px;
+  width: 80px;
   padding: 12px 0;
   cursor: pointer;
   background: #32465a;
@@ -145,54 +173,103 @@ body {
 }
 
 </style></head><body>
-
-
+<div class="dashboard-main-wrapper" style="width:1700px">
+{% include "header.html" %}
+{% include "left_sidebar2.html" %}
+<div class="dashboard-wrapper">
+	<div class="container-fluid  dashboard-content">
 <div id="frame">
 	<div class="content">
 		<div class="contact-profile">
 			<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-			<p>Harvey Specter</p>
+			<p>{{room.name}}</p>
 		</div>
 		<div class="messages">
-			<ul>
-				<li class="sent">
-					<img src="http://emilcarlsson.se/assets/mikeross.png" alt="" />
-					<p>How the hell am I supposed to get a jury to believe you when I am not even sure that I do?!</p>
-				</li>
-				<li class="replies">
+			<ul id="kek">
+				<!--<li class="replies">
 					<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
 					<p>When you're backed against the wall, break the god damn thing down.</p>
-				</li>
+				</li> -->
 			</ul>
 		</div>
 		<div class="message-input">
-			<div class="wrap">
-			<input type="text" placeholder="Write your message..." />
 
-			<button class="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+			<div class="wrap">
+				{% csrf_token %}
+				<input type="text" name="message" id="message" placeholder="Введите сообщение...">
+				<button onclick="lol(); document.getElementById('message').value = '';" ><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
 			</div>
 		</div>
 	</div>
 </div>
-<script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
-<script >$(".messages").animate({ scrollTop: $(document).height() }, "fast");
+	</div>
+	{% include "footer.html" %}
+</div>
 
+<script >
 
+	function lol() {
+        $.ajax({
+            url: "/ajax/{{room.id}}",
+            method: "POST",
+            data: {
+                message: message.value,
+                csrfmiddlewaretoken: '{{csrf_token}}'
+            },
+            success: function (result) {
+                var json = $.parseJSON(result);
 
-function newMessage() {
-	message = $(".message-input input").val();
-	if($.trim(message) == '') {
-		return false;
-	}
-	$('<li class="sent"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>' + message + '</p></li>').appendTo($('.messages ul'));
-	$('.message-input input').val(null);
-	$('.contact.active .preview').html('<span>You: </span>' + message);
-	$(".messages").animate({ scrollTop: $(document).height() }, "fast");
-};
+                $("#kek").html("");
+                json.forEach(function(item, i, json) {
+                  if( json[i].author == '{{request.user}}' )
+                      $("#kek").append('<li class="sent"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+                  else
+                      $("#kek").append('<li class="replies"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
 
-$('.submit').click(function() {
-  newMessage();
+                });
+
+            }
+
+        });
+
+    }
+
+$(window).keydown(function(e) {
+   if (e.which == 13) {
+      lol();
+      document.getElementById('message').value = '';
+   }
 });
 
+
+
+    function update() {
+        $.ajax({
+            url: "/ajax-update/{{room.id}}",
+            method: "POST",
+            data: {
+                csrfmiddlewaretoken: '{{csrf_token}}'
+            },
+            success: function (result) {
+                var json = $.parseJSON(result);
+
+                $("#kek").html("");
+                json.forEach(function(item, i, json) {
+                  if( json[i].author == '{{request.user}}' )
+                      $("#kek").append('<li class="sent"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+                  else
+                      $("#kek").append('<li class="replies"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+                });
+            }
+        });
+    }
+    setInterval(update, 3000);
+
 </script>
-</body></html>
+</div>
+</body>
+		<script src="../static/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+        <script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+        <script src="../static/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+        <script src="../static/assets/libs/js/main-js.js"></script>
+</html>

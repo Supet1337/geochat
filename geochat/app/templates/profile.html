@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+
+ 
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    {% load static %}
+    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
+    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/circular-std/style.css" %}>
+    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
+    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
+    <script src="../static/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="../static/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <script src="../static/assets/libs/js/main-js.js"></script>
+    <title>Профиль</title>
+</head>
+
+<body>
+    <!-- ============================================================== -->
+    <!-- main wrapper -->
+    <!-- ============================================================== -->
+       <!-- ============================================================== -->
+        <!-- navbar -->
+        {% include "header.html" %}
+        <!-- ============================================================== -->
+        {% include "left_sidebar2.html" %}
+        <!-- ============================================================== -->
+        <!-- end navbar -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- left sidebar -->
+        <!-- ============================================================== -->
+
+        <!-- ============================================================== -->
+        <!-- end left sidebar -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- wrapper  -->
+        <!-- ============================================================== -->
+        <div class="dashboard-wrapper">
+            <div class="influence-profile">
+                <div class="container-fluid dashboard-content ">
+                    <!-- ============================================================== -->
+                    <!-- pageheader -->
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- end pageheader -->
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- content -->
+                    <!-- ============================================================== -->
+                    <div class="row">
+                        <!-- ============================================================== -->
+                        <!-- profile -->
+                        <!-- ============================================================== -->
+                        <div class="col-xl-3 col-lg-3 col-md-5 col-sm-12 col-12">
+                            <!-- ============================================================== -->
+                            <!-- card profile -->
+                            <!-- ============================================================== -->
+                            <div class="card" style="width:1590px; height:900px; margin-top:80px">
+                                <div class="card-body">
+                                    <div class="user-avatar text-center d-block">
+                                        <img src="https://www.meme-arsenal.com/memes/d2f65f5eb5f18f76d5a9d0a046873c89.jpg" alt="User Avatar" class="rounded-circle user-avatar-xxl">
+                                    </div>
+                                    <div class="text-center">
+                                        <h2 class="font-24 mb-0">{{user.username}}</h2>
+                                        <p>Статус</p>
+                                    </div>
+                                </div>
+                                <div class="card-body border-top">
+                                    <h3 class="font-16">Contact Information</h3>
+                                    <div class="">
+                                        <ul class="list-unstyled mb-0">
+                                        <li class="mb-2"><i class="fas fa-fw fa-envelope mr-2"></i>{{user.email}}</li>
+                                        <li class="mb-0"><i class="fas fa-fw fa-phone mr-2"></i>Был в сети:{{user.date_joined}}</li>
+                                    </ul>
+                                    </div>
+                                </div>
+                                <div class="card-body border-top">
+                                    <h3 class="font-16">Rating</h3>
+                                    <h1 class="mb-0">4.8</h1>
+                                    <div class="rating-star">
+                                        <i class="fa fa-fw fa-star"></i>
+                                        <i class="fa fa-fw fa-star"></i>
+                                        <i class="fa fa-fw fa-star"></i>
+                                        <i class="fa fa-fw fa-star"></i>
+                                        <i class="fa fa-fw fa-star"></i>
+                                        <p class="d-inline-block text-dark">14 Reviews </p>
+                                    </div>
+                                </div>
+                                <div class="card-body border-top">
+                                    <h3 class="font-16">Social Channels</h3>
+                                    <div class="">
+                                        <ul class="mb-0 list-unstyled">
+                                        <li class="mb-1"><a href="#"><i class="fab fa-fw fa-facebook-square mr-1 facebook-color"></i>fb.me/michaelchristy</a></li>
+                                        <li class="mb-1"><a href="#"><i class="fab fa-fw fa-twitter-square mr-1 twitter-color"></i>twitter.com/michaelchristy</a></li>
+                                        <li class="mb-1"><a href="#"><i class="fab fa-fw fa-instagram mr-1 instagram-color"></i>instagram.com/michaelchristy</a></li>
+                                        <li class="mb-1"><a href="#"><i class="fas fa-fw fa-rss-square mr-1 rss-color"></i>michaelchristy.com/blog</a></li>
+                                        <li class="mb-1"><a href="#"><i class="fab fa-fw fa-pinterest-square mr-1 pinterest-color"></i>pinterest.com/michaelchristy</a></li>
+                                        <li class="mb-1"><a href="#"><i class="fab fa-fw fa-youtube mr-1 youtube-color"></i>youtube/michaelchristy</a></li>
+                                    </ul>
+                                    </div>
+                                </div>
+                                <div class="card-body border-top">
+                                    <h3 class="font-16">Category</h3>
+                                    <div>
+                                        <a href="#" class="badge badge-light mr-1">Fitness</a><a href="#" class="badge badge-light mr-1">Life Style</a><a href="#" class="badge badge-light mr-1">Gym</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- ============================================================== -->
+                            <!-- end card profile -->
+                            <!-- ============================================================== -->
+                        </div>
+                        <!-- ============================================================== -->
+                        <!-- end profile -->
+                        <!-- ============================================================== -->
+                        <!-- ============================================================== -->
+                        <!-- campaign data -->
+                        <!-- ============================================================== -->
+
+                            <!-- ============================================================== -->
+                            <!-- end campaign tab one -->
+                            <!-- ============================================================== -->
+                        </div>
+                        <!-- ============================================================== -->
+                        <!-- end campaign data -->
+                        <!-- ============================================================== -->
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- end content -->
+            <!-- ============================================================== -->
+            <div class="footer" style="margin-left:250px; width:1655px">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                             FS102/Geo chat©
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="text-md-right footer-links d-none d-sm-block">
+                                <a href="">О нас</a>
+                                <a href=";">Поддержка</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- end footer -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- end wrapper -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- end main wrapper -->
+    <!-- ============================================================== -->
+    <!-- Optional JavaScript -->
+    <!-- jquery 3.3.1  -->
+
+   
+</body>
+ 
+</html>
