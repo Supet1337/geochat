@@ -57,6 +57,8 @@
                          <div id="insert-password">
 
                         </div>
+                         <input type="hidden" id="x" name="x">
+                         <input type="hidden" id="y" name="y">
                         <input type="submit" value="Создать" class="btn btn-dark">
                          <br>
                          <br>
@@ -98,7 +100,7 @@
         center: [55.76, 37.64],
         zoom: 11
     }, {
-        balloonMaxWidth: 200,
+        balloonMaxWidth: 300,
         searchControlProvider: 'yandex#search'
     });
     $.ajax({
@@ -115,8 +117,69 @@
     ], {
         // Описываем свойства круга.
         // Содержимое балуна.
+        balloonContentHeader: json[i].name,
+        // Зададим содержимое основной части балуна.
+        balloonContentBody: '{% if '+json[i].is_private+' == '+True+' %}'+
+                                                '<div>'+
+                                                    '<p>'+json[i].is_private+'</p>'+
+                                                    '<form method="post">'+
+                                                    '{% csrf_token %}'+
+                                                    '<input type="password" name="password" class="form-control" placeholder="пароль">'+
+                                                    '<input type="hidden" name="id" value="'+json[i].id+'">'+
+                                                    '<input type="submit" value="Присоединиться" class="btn btn-secondary">'+
+                                                '</form>'+
+                                                '</div>'+
+                                            '{% else %}'+
+                                                '<div>'+
+                                                    '<a href="../../../../room/'+json[i].id+'"> <button type="button" class="btn btn-secondary">Присоединиться</button></a>'+
+                                                '</div>' +
+                                            '{% endif %}',
+        // Зададим содержимое нижней части балуна.
+        balloonContentFooter: '<sup>Geo Chat</sup>',
         // Содержимое хинта.
-        hintContent:[ json[i].x,json[i].y]
+        hintContent:[ json[i].name]
+    }, {
+        // Задаем опции круга.
+        // Включаем возможность перетаскивания круга.
+        // Цвет заливки.
+        // Последний байт (77) определяет прозрачность.
+        // Прозрачность заливки также можно задать используя опцию "fillOpacity".
+        fillColor: "#3caa3c",
+        fillOpacity: 0.5,
+        // Цвет обводки.
+        strokeColor: "#3caa3c",
+        // Прозрачность обводки.
+        strokeOpacity: 0.8,
+        // Ширина обводки в пикселях.
+        strokeWidth: 1
+    });
+    myMap.geoObjects.add(myCircle);
+                });
+            }
+        });
+    $.ajax({
+            url: "/ajax-circle-draw-joined",
+            success: function (result) {
+                var json = $.parseJSON(result);
+
+                json.forEach(function(item, i, json) {
+                  var myCircle = new ymaps.Circle([
+        // Координаты центра круга.
+        [json[i].x, json[i].y],
+        // Радиус круга в метрах.
+        300
+    ], {
+        // Описываем свойства круга.
+        // Содержимое балуна.
+        balloonContentHeader: json[i].name,
+        // Зададим содержимое основной части балуна.
+        balloonContentBody:'<div>'+
+'<a href="../../../../room/'+json[i].id+'"><button class="btn btn-secondary" >Войти</button></a>'+
+         '</div>',
+        // Зададим содержимое нижней части балуна.
+        balloonContentFooter: '<sup>Geo Chat</sup>',
+        // Содержимое хинта.
+        hintContent:[ json[i].name]
     }, {
         // Задаем опции круга.
         // Включаем возможность перетаскивания круга.
@@ -141,47 +204,24 @@
     // При возникновении такого события откроем балун.
     myMap.events.add('click', function (e) {
             var coords = e.get('coords');
-            $.ajax({
-            url: "/ajax_circle",
-            method: "POST",
-            data: {
-                x: coords[0],
-                y: coords[1],
-                csrfmiddlewaretoken: '{{csrf_token}}'
-            }
-        });
+            if (!myMap.balloon.isOpen()) {
+            myMap.balloon.open(coords, {
+                contentHeader:'Вы можете создать здесь чат!',
+                contentBody:'<button type="button" class="btn btn-primary" onclick="create('+coords[0]+','+coords[1]+')" data-toggle="modal" data-target="#myModal1">Создать чат</button>',
+                contentFooter:'<sup>Geo Chat</sup>',
+            });
+        }
+        else {
+            myMap.balloon.close();
+        }
 
-            var myCircle = new ymaps.Circle([
-        // Координаты центра круга.
-        [coords[0].toPrecision(6), coords[1].toPrecision(6)],
-        // Радиус круга в метрах.
-        300
-    ], {
-        // Описываем свойства круга.
-        // Содержимое балуна.
-        // Содержимое хинта.
-        hintContent:[ coords[0].toPrecision(6),coords[1].toPrecision(6)]
-    }, {
-        // Задаем опции круга.
-        // Включаем возможность перетаскивания круга.
-        // Цвет заливки.
-        // Последний байт (77) определяет прозрачность.
-        // Прозрачность заливки также можно задать используя опцию "fillOpacity".
-        fillColor: "#3caa3c",
-        fillOpacity: 0.5,
-        // Цвет обводки.
-        strokeColor: "#3caa3c",
-        // Прозрачность обводки.
-        strokeOpacity: 0.8,
-        // Ширина обводки в пикселях.
-        strokeWidth: 1
-    });
-    myMap.geoObjects.add(myCircle);
     });
 
 }
-
-
+function create(x,y){
+    document.getElementById('x').value = x;
+    document.getElementById('y').value = y;
+}
 
             </script>
 

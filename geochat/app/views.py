@@ -7,15 +7,6 @@ from .models import *
 from .forms import *
 import json
 
-def ajax_circle(request):
-    print(request.is_ajax)
-    if request.is_ajax:
-        new_circle = Circle()
-        new_circle.x = request.POST.get('x')
-        new_circle.y = request.POST.get('y')
-        new_circle.save()
-    return HttpResponseRedirect('/')
-
 @login_required
 def ajax_send(request,number):
     if request.user.is_authenticated:
@@ -45,12 +36,40 @@ def ajax_update(request,number):
     return HttpResponse(json.dumps(messages))
 
 def ajax_circle_draw(request):
+    join_rooms = []
+    if request.user.is_authenticated:
+        join_rooms = JoinRoom.objects.filter(user=request.user)
 
-    circles = []
-    for circle in Circle.objects.all():
-        circles.append(circle.json())
-    print(circles)
-    return HttpResponse(json.dumps(circles))
+    roomsj = []
+    for join_room in join_rooms:
+        roomsj.append(Room.objects.get(id=join_room.room_id))
+    rooms = []
+    flag = False
+    for room in Room.objects.all():
+        for roomj in roomsj:
+            if room == roomj:
+                flag = True
+                break
+        if not flag:
+            rooms.append(room)
+        flag = False
+    rms = []
+    for room in rooms:
+        rms.append(room.json())
+    return HttpResponse(json.dumps(rms))
+
+def ajax_circle_draw_joined(request):
+    join_rooms = []
+    if request.user.is_authenticated:
+        join_rooms = JoinRoom.objects.filter(user=request.user)
+
+    roomsj = []
+    for join_room in join_rooms:
+        roomsj.append(Room.objects.get(id=join_room.room_id))
+    rms = []
+    for room in roomsj:
+        rms.append(room.json())
+    return HttpResponse(json.dumps(rms))
 
 @login_required
 def room(request,number):
@@ -159,6 +178,8 @@ def index(request):
                 new_room.author = request.user
                 new_room.name = request.POST.get('name')
                 new_room.password = request.POST.get('password')
+                new_room.x = request.POST.get('x')
+                new_room.y = request.POST.get('y')
                 if request.POST.get('is_private'):
                     new_room.is_private = True
                 else:
