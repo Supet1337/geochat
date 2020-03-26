@@ -95,11 +95,11 @@
                                 <div class="card-body border-top">
                                     <h3 class="font-16">Созданные чаты</h3>
                                     <div class="">
-                                        <p onclick="maps()">Показать карты</p>
                                         {% for room in created_rooms %}
                                             <p>{{room.name}}</p>
                                         <div id="map{{room.id}}" style="width: 300px; height: 300px" align="top">
                                         </div>
+                                        <p id="addr{{room.id}}"></p>
                                         {% endfor %}
                                     </div>
                                 </div>
@@ -181,6 +181,7 @@
         // Зададим ограниченную область прямоугольником,
         restrictMapArea: true
     });
+    getAddress(json[i].x,json[i].y,json[i].id)
 });
 
                 });
@@ -190,6 +191,14 @@
         });
 
     }
+    maps();
+    function getAddress(x,y,id) {
+    ymaps.geocode([x,y]).then(function(res) {
+        var firstGeoObject = res.geoObjects.get(0);
+        document.getElementById('addr'+id+'').innerHTML = firstGeoObject.getAddressLine();
+      }
+
+    )}
    </script>
 </body>
  
