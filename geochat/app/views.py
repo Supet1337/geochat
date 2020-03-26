@@ -35,6 +35,13 @@ def ajax_update(request,number):
     print(messages)
     return HttpResponse(json.dumps(messages))
 
+def ajax_maps_draw(request,number):
+    rooms = []
+    for room in Room.objects.filter(author_id=number):
+        rooms.append(room.json())
+    print(rooms)
+    return HttpResponse(json.dumps(rooms))
+
 def ajax_circle_draw(request):
     join_rooms = []
     if request.user.is_authenticated:
@@ -218,7 +225,7 @@ def profile(request, number):
     context['email'] = user.email
     context['last_login'] = user.last_login
     context['room'] = room
-
+    context['created_rooms'] = Room.objects.filter(author_id=number)
     join_rooms = JoinRoom.objects.filter(user=request.user)
     rooms = []
     for join_room in join_rooms:

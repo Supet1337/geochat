@@ -109,6 +109,7 @@
                 var json = $.parseJSON(result);
 
                 json.forEach(function(item, i, json) {
+                if(json[i].is_private){
                   var myCircle = new ymaps.Circle([
         // Координаты центра круга.
         [json[i].x, json[i].y],
@@ -119,21 +120,15 @@
         // Содержимое балуна.
         balloonContentHeader: json[i].name,
         // Зададим содержимое основной части балуна.
-        balloonContentBody: '{% if '+json[i].is_private+' == '+True+' %}'+
+        balloonContentBody:
                                                 '<div>'+
-                                                    '<p>'+json[i].is_private+'</p>'+
                                                     '<form method="post">'+
                                                     '{% csrf_token %}'+
                                                     '<input type="password" name="password" class="form-control" placeholder="пароль">'+
                                                     '<input type="hidden" name="id" value="'+json[i].id+'">'+
                                                     '<input type="submit" value="Присоединиться" class="btn btn-secondary">'+
                                                 '</form>'+
-                                                '</div>'+
-                                            '{% else %}'+
-                                                '<div>'+
-                                                    '<a href="../../../../room/'+json[i].id+'"> <button type="button" class="btn btn-secondary">Присоединиться</button></a>'+
-                                                '</div>' +
-                                            '{% endif %}',
+                                                '</div>',
         // Зададим содержимое нижней части балуна.
         balloonContentFooter: '<sup>Geo Chat</sup>',
         // Содержимое хинта.
@@ -153,6 +148,42 @@
         // Ширина обводки в пикселях.
         strokeWidth: 1
     });
+    }
+    else{
+    var myCircle = new ymaps.Circle([
+        // Координаты центра круга.
+        [json[i].x, json[i].y],
+        // Радиус круга в метрах.
+        300
+    ], {
+        // Описываем свойства круга.
+        // Содержимое балуна.
+        balloonContentHeader: json[i].name,
+        // Зададим содержимое основной части балуна.
+        balloonContentBody:
+                                                '<div>'+
+                                                    '<a href="../../../../room/'+json[i].id+'"> <button type="button" class="btn btn-secondary">Присоединиться</button></a>'+
+                                                '</div>',
+        // Зададим содержимое нижней части балуна.
+        balloonContentFooter: '<sup>Geo Chat</sup>',
+        // Содержимое хинта.
+        hintContent:[ json[i].name]
+    }, {
+        // Задаем опции круга.
+        // Включаем возможность перетаскивания круга.
+        // Цвет заливки.
+        // Последний байт (77) определяет прозрачность.
+        // Прозрачность заливки также можно задать используя опцию "fillOpacity".
+        fillColor: "#3caa3c",
+        fillOpacity: 0.5,
+        // Цвет обводки.
+        strokeColor: "#3caa3c",
+        // Прозрачность обводки.
+        strokeOpacity: 0.8,
+        // Ширина обводки в пикселях.
+        strokeWidth: 1
+    });
+    }
     myMap.geoObjects.add(myCircle);
                 });
             }

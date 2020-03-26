@@ -6,6 +6,7 @@ urlpatterns = [
     path('create-room',create_room),
     path('room/<int:number>', room),
     path('',index),
+    path('ajax-maps-draw/<int:number>',ajax_maps_draw),
     path('ajax-circle-draw',ajax_circle_draw),
     path('ajax-circle-draw-joined',ajax_circle_draw_joined),
     path('ajax/<int:number>',ajax_send),

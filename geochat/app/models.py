@@ -18,7 +18,7 @@ class Room(models.Model):
         super().save(**kwargs)
 
     def json(self):
-        return  {'x':self.x, 'y':self.y,'name':self.name,'author':str(self.author),'is_private':str(self.is_private),'id':str(self.id)}
+        return  {'x':self.x, 'y':self.y,'name':self.name,'author':str(self.author),'is_private':self.is_private,'id':str(self.id)}
 class Message(models.Model):
     text = models.CharField(max_length=250)
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)

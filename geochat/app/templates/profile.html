@@ -12,7 +12,7 @@
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/circular-std/style.css" %}>
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
-    <script src="../static/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=7abcaac9-c988-4344-9b01-50d57672abf2&lang=ru_RU" type="text/javascript"></script>    <script src="../static/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
     <script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
     <script src="../static/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
     <script src="../static/assets/libs/js/main-js.js"></script>
@@ -76,7 +76,7 @@
                                     <div class="">
                                         <ul class="list-unstyled mb-0">
                                         <li class="mb-2"><i class="fas fa-fw fa-envelope mr-2"></i>{{user.email}}</li>
-                                        <li class="mb-0"><i class="fas fa-fw fa-phone mr-2"></i>Был в сети:{{user.date_joined}}</li>
+                                        <li class="mb-0"><i class="fas fa-fw fa-phone mr-2"></i>Дата регистрации:{{user.date_joined}}</li>
                                     </ul>
                                     </div>
                                 </div>
@@ -93,16 +93,14 @@
                                     </div>
                                 </div>
                                 <div class="card-body border-top">
-                                    <h3 class="font-16">Social Channels</h3>
+                                    <h3 class="font-16">Созданные чаты</h3>
                                     <div class="">
-                                        <ul class="mb-0 list-unstyled">
-                                        <li class="mb-1"><a href="#"><i class="fab fa-fw fa-facebook-square mr-1 facebook-color"></i>fb.me/michaelchristy</a></li>
-                                        <li class="mb-1"><a href="#"><i class="fab fa-fw fa-twitter-square mr-1 twitter-color"></i>twitter.com/michaelchristy</a></li>
-                                        <li class="mb-1"><a href="#"><i class="fab fa-fw fa-instagram mr-1 instagram-color"></i>instagram.com/michaelchristy</a></li>
-                                        <li class="mb-1"><a href="#"><i class="fas fa-fw fa-rss-square mr-1 rss-color"></i>michaelchristy.com/blog</a></li>
-                                        <li class="mb-1"><a href="#"><i class="fab fa-fw fa-pinterest-square mr-1 pinterest-color"></i>pinterest.com/michaelchristy</a></li>
-                                        <li class="mb-1"><a href="#"><i class="fab fa-fw fa-youtube mr-1 youtube-color"></i>youtube/michaelchristy</a></li>
-                                    </ul>
+                                        <p onclick="maps()">Показать карты</p>
+                                        {% for room in created_rooms %}
+                                            <p>{{room.name}}</p>
+                                        <div id="map{{room.id}}" style="width: 300px; height: 300px" align="top">
+                                        </div>
+                                        {% endfor %}
                                     </div>
                                 </div>
                                 <div class="card-body border-top">
@@ -166,7 +164,33 @@
     <!-- Optional JavaScript -->
     <!-- jquery 3.3.1  -->
 
-   
+   <script>
+    function maps() {
+        $.ajax({
+            url: "/ajax-maps-draw/1",
+            success: function (result) {
+                var json = $.parseJSON(result);
+
+                json.forEach(function(item, i, json) {
+                    ymaps.ready(function () {
+    var myMap = new ymaps.Map('map'+json[i].id+'', {
+        center: [json[i].x,json[i].y],
+        zoom:17,
+        controls: ['smallMapDefaultSet']
+    }, {
+        // Зададим ограниченную область прямоугольником,
+        restrictMapArea: true
+    });
+});
+
+                });
+
+            }
+
+        });
+
+    }
+   </script>
 </body>
  
 </html>
