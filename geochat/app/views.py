@@ -117,21 +117,7 @@ def room(request,number):
             context['rooms'] = rooms
             return render(request, "mess.html", context)
 
-@login_required
-def create_room(request):
-    if request.method == "POST":
-        new_room = Room()
-        new_room.author = request.user
-        new_room.name = request.POST.get('name')
-        new_room.password = request.POST.get('password')
-        if request.POST.get('is_private'):
-            new_room.is_private = True
-        else:
-            new_room.is_private = False
-        new_room.save()
-        return HttpResponseRedirect('/')
-    if request.method == "GET":
-        return render(request,'create-room.html')
+
 
 
 def rooms(request):
@@ -182,16 +168,19 @@ def index(request):
                     return HttpResponse('Неправильный пароль')
             else:
                 new_room = Room()
-                new_room.author = request.user
-                new_room.name = request.POST.get('name')
-                new_room.password = request.POST.get('password')
-                new_room.x = request.POST.get('x')
-                new_room.y = request.POST.get('y')
-                if request.POST.get('is_private'):
-                    new_room.is_private = True
+                if not request.POST.get('name') == '':
+                    new_room.author = request.user
+                    new_room.name = request.POST.get('name')
+                    new_room.password = request.POST.get('password')
+                    new_room.x = request.POST.get('x')
+                    new_room.y = request.POST.get('y')
+                    if request.POST.get('is_private'):
+                        new_room.is_private = True
+                    else:
+                        new_room.is_private = False
+                    new_room.save()
                 else:
-                    new_room.is_private = False
-                new_room.save()
+                    return HttpResponse('НАЗВАНИЕ ВАЫАВЫАЫВАЫВА')
                 return HttpResponseRedirect('/')
 
 
