@@ -61,7 +61,7 @@
                             <!-- ============================================================== -->
                             <!-- card profile -->
                             <!-- ============================================================== -->
-                            <div class="card" style="width:1590px; height:900px; margin-top:80px">
+                            <div class="card" style="width:1590px; height:700px; margin-top:80px">
                                 <div class="card-body">
                                     <div class="user-avatar text-center d-block">
                                         <img src="https://www.meme-arsenal.com/memes/d2f65f5eb5f18f76d5a9d0a046873c89.jpg" alt="User Avatar" class="rounded-circle user-avatar-xxl">
@@ -92,23 +92,7 @@
                                         <p class="d-inline-block text-dark">14 Reviews </p>
                                     </div>
                                 </div>
-                                <div class="card-body border-top">
-                                    <h3 class="font-16">Созданные чаты</h3>
-                                    <div class="">
-                                        <p onclick="maps()">Показать карты</p>
-                                        {% for room in created_rooms %}
-                                            <p>{{room.name}}</p>
-                                        <div id="map{{room.id}}" style="width: 300px; height: 300px" align="top">
-                                        </div>
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                                <div class="card-body border-top">
-                                    <h3 class="font-16">Category</h3>
-                                    <div>
-                                        <a href="#" class="badge badge-light mr-1">Fitness</a><a href="#" class="badge badge-light mr-1">Life Style</a><a href="#" class="badge badge-light mr-1">Gym</a>
-                                    </div>
-                                </div>
+
                             </div>
                             <!-- ============================================================== -->
                             <!-- end card profile -->
@@ -125,6 +109,26 @@
                             <!-- end campaign tab one -->
                             <!-- ============================================================== -->
                         </div>
+                    <div class="tab-content" id="pills-tabContent" >
+                                    <div class="tab-pane fade show active" id="pills-campaign" role="tabpanel" aria-labelledby="pills-campaign-tab">
+                                        <div class="row">
+
+                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                                <div class="section-block">
+                                                    <h3 class="section-title">Созданные чаты:</h3>
+                                                </div>
+                                            </div>
+                                            {% for room in created_rooms %}
+                                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h1 class="mb-1">{{room.name}}</h1>
+                                                        <div id="map{{room.id}}" style="width: 333px; height: 300px"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                </div>
                         <!-- ============================================================== -->
                         <!-- end campaign data -->
                         <!-- ============================================================== -->
@@ -134,7 +138,7 @@
             <!-- ============================================================== -->
             <!-- end content -->
             <!-- ============================================================== -->
-            <div class="footer" style="margin-left:250px; width:1655px">
+            <div class="footer" style="margin-left:0px; width:1640px">
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -175,7 +179,7 @@
                     ymaps.ready(function () {
     var myMap = new ymaps.Map('map'+json[i].id+'', {
         center: [json[i].x,json[i].y],
-        zoom:17,
+        zoom:16,
         controls: ['smallMapDefaultSet']
     }, {
         // Зададим ограниченную область прямоугольником,
@@ -190,6 +194,7 @@
         });
 
     }
+maps();
    </script>
 </body>
  
