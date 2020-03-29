@@ -57,6 +57,16 @@
                          <div id="insert-password">
 
                         </div>
+                          <div class="form-row align-items-center">
+                            <div class="col-auto my-1">
+                              <select class="custom-select mr-sm-2" id="choose_diametr" name="choose_diametr">
+                                <option selected>Выберите диаметр чата:</option>
+                                <option  value="150">150м</option>
+                                <option  value="300">300м</option>
+                                <option  value="450">450м</option>
+                              </select>
+                            </div>
+                          </div>
                          <input type="hidden" id="x" name="x">
                          <input type="hidden" id="y" name="y">
                         <input type="submit" value="Создать" class="btn btn-dark">
@@ -96,31 +106,31 @@
                 <script type="text/javascript">
                 ymaps.ready(init);
                 function init () {
-                    var geolocation = ymaps.geolocation,
-                    myMap = new ymaps.Map("map", {
-                        center: [55.76, 37.64],
-                        zoom: 11
-                    }, {
-                    balloonMaxWidth: 300,
-                    searchControlProvider: 'yandex#search'
-                });
+    myMap = new ymaps.Map("map", {
+        center: [55.76, 37.64],
+        zoom: 11
+    }, {
+        balloonMaxWidth: 300,
+        searchControlProvider: 'yandex#search'
+    });
+    $.ajax({
+            url: "/ajax-circle-draw",
+            success: function (result) {
+                var json = $.parseJSON(result);
 
-                $.ajax({
-                    url: "/ajax-circle-draw",
-                    success: function (result) {
-                        var json = $.parseJSON(result);
-                        json.forEach(function(item, i, json) {
-                            if(json[i].is_private){
-                                var myCircle = new ymaps.Circle([
-                                    // Координаты центра круга.
-                                    [json[i].x, json[i].y],
-                                    // Радиус круга в метрах.
-                                    300
-                                ], {
-                                    // Содержимое балуна.
-                                    balloonContentHeader: json[i].name,
-                                    // Зададим содержимое основной части балуна.
-                                    balloonContentBody:
+                json.forEach(function(item, i, json) {
+                if(json[i].is_private){
+                  var myCircle = new ymaps.Circle([
+        // Координаты центра круга.
+        [json[i].x, json[i].y],
+        // Радиус круга в метрах.
+        json[i].diametr
+    ], {
+        // Описываем свойства круга.
+        // Содержимое балуна.
+        balloonContentHeader: json[i].name,
+        // Зададим содержимое основной части балуна.
+        balloonContentBody:
                                                 '<div>'+
                                                     '<form method="post">'+
                                                     '{% csrf_token %}'+

@@ -174,6 +174,7 @@ def index(request):
                     new_room.password = request.POST.get('password')
                     new_room.x = request.POST.get('x')
                     new_room.y = request.POST.get('y')
+                    new_room.diametr = request.POST.get('choose_diametr')
                     if request.POST.get('is_private'):
                         new_room.is_private = True
                     else:
