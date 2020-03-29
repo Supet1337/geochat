@@ -96,31 +96,31 @@
                 <script type="text/javascript">
                 ymaps.ready(init);
                 function init () {
-    myMap = new ymaps.Map("map", {
-        center: [55.76, 37.64],
-        zoom: 11
-    }, {
-        balloonMaxWidth: 300,
-        searchControlProvider: 'yandex#search'
-    });
-    $.ajax({
-            url: "/ajax-circle-draw",
-            success: function (result) {
-                var json = $.parseJSON(result);
+                    var geolocation = ymaps.geolocation,
+                    myMap = new ymaps.Map("map", {
+                        center: [55.76, 37.64],
+                        zoom: 11
+                    }, {
+                    balloonMaxWidth: 300,
+                    searchControlProvider: 'yandex#search'
+                });
 
-                json.forEach(function(item, i, json) {
-                if(json[i].is_private){
-                  var myCircle = new ymaps.Circle([
-        // Координаты центра круга.
-        [json[i].x, json[i].y],
-        // Радиус круга в метрах.
-        300
-    ], {
-        // Описываем свойства круга.
-        // Содержимое балуна.
-        balloonContentHeader: json[i].name,
-        // Зададим содержимое основной части балуна.
-        balloonContentBody:
+                $.ajax({
+                    url: "/ajax-circle-draw",
+                    success: function (result) {
+                        var json = $.parseJSON(result);
+                        json.forEach(function(item, i, json) {
+                            if(json[i].is_private){
+                                var myCircle = new ymaps.Circle([
+                                    // Координаты центра круга.
+                                    [json[i].x, json[i].y],
+                                    // Радиус круга в метрах.
+                                    300
+                                ], {
+                                    // Содержимое балуна.
+                                    balloonContentHeader: json[i].name,
+                                    // Зададим содержимое основной части балуна.
+                                    balloonContentBody:
                                                 '<div>'+
                                                     '<form method="post">'+
                                                     '{% csrf_token %}'+
@@ -129,65 +129,71 @@
                                                     '<input type="submit" value="Присоединиться" class="btn btn-secondary">'+
                                                 '</form>'+
                                                 '</div>',
-        // Зададим содержимое нижней части балуна.
-        balloonContentFooter: '<sup>Geo Chat</sup>',
-        // Содержимое хинта.
-        hintContent:[ json[i].name]
-    }, {
-        // Задаем опции круга.
-        // Включаем возможность перетаскивания круга.
-        // Цвет заливки.
-        // Последний байт (77) определяет прозрачность.
-        // Прозрачность заливки также можно задать используя опцию "fillOpacity".
-        fillColor: "#3caa3c",
-        fillOpacity: 0.5,
-        // Цвет обводки.
-        strokeColor: "#3caa3c",
-        // Прозрачность обводки.
-        strokeOpacity: 0.8,
-        // Ширина обводки в пикселях.
-        strokeWidth: 1
-    });
-    }
-    else{
-    var myCircle = new ymaps.Circle([
-        // Координаты центра круга.
-        [json[i].x, json[i].y],
-        // Радиус круга в метрах.
-        300
-    ], {
-        // Описываем свойства круга.
-        // Содержимое балуна.
-        balloonContentHeader: json[i].name,
-        // Зададим содержимое основной части балуна.
-        balloonContentBody:
+                                    // Зададим содержимое нижней части балуна.
+                                    balloonContentFooter: '<sup>Geo Chat</sup>',
+                                    // Содержимое хинта.
+                                    hintContent:[ json[i].name]
+                                }, {
+                                    fillColor: "#ff2200",
+                                    fillOpacity: 0.5,
+                                    // Цвет обводки.
+                                    strokeColor: "#ff2200",
+                                    // Прозрачность обводки.
+                                    strokeOpacity: 0.8,
+                                    // Ширина обводки в пикселях.
+                                    strokeWidth: 1
+                                });
+                            }
+                            else{
+                                var myCircle = new ymaps.Circle([
+                                    // Координаты центра круга.
+                                    [json[i].x, json[i].y],
+                                    // Радиус круга в метрах.
+                                    300
+                                ], {
+                                    // Содержимое балуна.
+                                    balloonContentHeader: json[i].name,
+                                    // Зададим содержимое основной части балуна.
+                                    balloonContentBody:
                                                 '<div>'+
                                                     '<a href="../../../../room/'+json[i].id+'"> <button type="button" class="btn btn-secondary">Присоединиться</button></a>'+
                                                 '</div>',
-        // Зададим содержимое нижней части балуна.
-        balloonContentFooter: '<sup>Geo Chat</sup>',
-        // Содержимое хинта.
-        hintContent:[ json[i].name]
-    }, {
-        // Задаем опции круга.
-        // Включаем возможность перетаскивания круга.
-        // Цвет заливки.
-        // Последний байт (77) определяет прозрачность.
-        // Прозрачность заливки также можно задать используя опцию "fillOpacity".
-        fillColor: "#3caa3c",
-        fillOpacity: 0.5,
-        // Цвет обводки.
-        strokeColor: "#3caa3c",
-        // Прозрачность обводки.
-        strokeOpacity: 0.8,
-        // Ширина обводки в пикселях.
-        strokeWidth: 1
-    });
-    }
-    myMap.geoObjects.add(myCircle);
+                                    // Зададим содержимое нижней части балуна.
+                                    balloonContentFooter: '<sup>Geo Chat</sup>',
+                                    // Содержимое хинта.
+                                    hintContent:[ json[i].name]
+                                }, {
+                                    fillColor: "#ff2200",
+                                    fillOpacity: 0.5,
+                                    // Цвет обводки.
+                                    strokeColor: "#ff2200",
+                                    // Прозрачность обводки.
+                                    strokeOpacity: 0.8,
+                                    // Ширина обводки в пикселях.
+                                    strokeWidth: 1
+                                });
+                            }
+                            myMap.geoObjects.add(myCircle);
+                            geolocation.get({
+                                provider: 'browser',
+                                mapStateAutoApply: true
+                            }).then(function (result) {
+                                result.geoObjects.options.set('preset', 'islands#blueCircleIcon');
+                                objects = ymaps.geoQuery([
+                                    {
+                                        type: 'Point',
+                                        coordinates: result.geoObjects.position
+                                    }
+                                ]);
+                                var objectsInsideCircle = objects.searchInside(myCircle);
+                                if (objectsInsideCircle._objects.length == 0){
+                                    myMap.geoObjects.remove(myCircle);
+                                }
+                            });
+
+                        });
+                    }
                 });
-            }
-        });
     $.ajax({
             url: "/ajax-circle-draw-joined",
             success: function (result) {
