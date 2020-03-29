@@ -53,20 +53,34 @@
                         {% csrf_token %}
                          <br>
                         <input type="text" id="name" name="name" class="form-control" placeholder="Название комнаты" readonly onfocus="this.removeAttribute('readonly')">
-                         <input type="checkbox" id="is_private" name="is_private" onclick="private()"> Сделать приватной
+                         <input type="checkbox" id="is_place" name="is_place"> Виден только тем, кто находится поблизости
+                         <br>
+                         <input type="checkbox" id="is_private" name="is_private" onclick="private()"> С паролем
                          <div id="insert-password">
 
                         </div>
                           <div class="form-row align-items-center">
                             <div class="col-auto my-1">
                               <select class="custom-select mr-sm-2" id="choose_diametr" name="choose_diametr">
-                                <option selected>Выберите диаметр чата:</option>
+                                <option value="50" selected>Выберите диаметр чата:</option>
+                                <option  value="50">50м</option>
                                 <option  value="150">150м</option>
                                 <option  value="300">300м</option>
                                 <option  value="450">450м</option>
                               </select>
                             </div>
                           </div>
+                         <div class="form-row align-items-center">
+                            <div class="col-auto my-1">
+                              <select class="custom-select mr-sm-2" id="choose_max" name="choose_max">
+                                <option value="3" selected>Выберите максимальное количество пользователей:</option>
+                                <option  value="3">3 человека</option>
+                                <option  value="5">5 человек</option>
+                                <option  value="10">10 человек</option>
+                                <option  value="15">15 человек</option>
+                              </select>
+                            </div>
+                         </div>
                          <input type="hidden" id="x" name="x">
                          <input type="hidden" id="y" name="y">
                         <input type="submit" value="Создать" class="btn btn-dark">
@@ -106,6 +120,7 @@
                 <script type="text/javascript">
                 ymaps.ready(init);
                 function init () {
+    var geolocation = ymaps.geolocation,
     myMap = new ymaps.Map("map", {
         center: [55.76, 37.64],
         zoom: 11
@@ -159,7 +174,7 @@
                                     // Координаты центра круга.
                                     [json[i].x, json[i].y],
                                     // Радиус круга в метрах.
-                                    300
+                                    json[i].diametr
                                 ], {
                                     // Содержимое балуна.
                                     balloonContentHeader: json[i].name,
@@ -195,9 +210,11 @@
                                         coordinates: result.geoObjects.position
                                     }
                                 ]);
-                                var objectsInsideCircle = objects.searchInside(myCircle);
-                                if (objectsInsideCircle._objects.length == 0){
-                                    myMap.geoObjects.remove(myCircle);
+                                if(json[i].is_place){
+                                    var objectsInsideCircle = objects.searchInside(myCircle);
+                                    if (objectsInsideCircle._objects.length == 0){
+                                        myMap.geoObjects.remove(myCircle);
+                                }
                                 }
                             });
 
@@ -214,7 +231,7 @@
         // Координаты центра круга.
         [json[i].x, json[i].y],
         // Радиус круга в метрах.
-        300
+        json[i].diametr
     ], {
         // Описываем свойства круга.
         // Содержимое балуна.
@@ -269,7 +286,6 @@ function create(x,y){
     document.getElementById('x').value = x;
     document.getElementById('y').value = y;
 }
-
             </script>
 
 

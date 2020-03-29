@@ -146,6 +146,10 @@ def index(request):
                 user = form.save(commit=False)
                 user.email = form.data['email']
                 user.save()
+                new_Wallet = Wallet()
+                new_Wallet.user = user
+                new_Wallet.balance = 1000
+                new_Wallet.save()
                 return render(request, 'index.html', context)
             else:
                 username = request.POST['username_auth']
@@ -158,27 +162,42 @@ def index(request):
         else:
             if request.POST.get('name') == None:
                 room_enter = Room.objects.get(id=request.POST.get('id'))
-                if check_password(request.POST.get('password'), room_enter.password):
-                    new_join = JoinRoom()
-                    new_join.user = request.user
-                    new_join.room_id = request.POST.get('id')
-                    new_join.save()
-                    return HttpResponseRedirect('/room/' + str(request.POST.get('id')))
+                joins = JoinRoom.objects.filter(room_id=request.POST.get('id'))
+                if len(joins) < room_enter.max_members:
+                    if check_password(request.POST.get('password'), room_enter.password):
+                        new_join = JoinRoom()
+                        new_join.user = request.user
+                        new_join.room_id = request.POST.get('id')
+                        new_join.save()
+                        return HttpResponseRedirect('/room/' + str(request.POST.get('id')))
+                    else:
+                        return HttpResponse('Неправильный пароль')
                 else:
-                    return HttpResponse('Неправильный пароль')
+                    return HttpResponse('В данном чате уже максимальное количество пользователей')
             else:
                 new_room = Room()
                 if not request.POST.get('name') == '':
+                    wallet = Wallet.objects.get(user=request.user)
                     new_room.author = request.user
                     new_room.name = request.POST.get('name')
                     new_room.password = request.POST.get('password')
                     new_room.x = request.POST.get('x')
                     new_room.y = request.POST.get('y')
                     new_room.diametr = request.POST.get('choose_diametr')
+                    new_room.max_members = request.POST.get('choose_max')
+                    if wallet.balance - (int(new_room.diametr)-50 + (int(new_room.max_members)-3)*10) >= 0:
+                        wallet.balance -= int(new_room.diametr)-50 + (int(new_room.max_members)-3)*10
+                        wallet.save()
+                    else:
+                        return HttpResponse('МАЛА ДЕНЕК')
                     if request.POST.get('is_private'):
                         new_room.is_private = True
                     else:
                         new_room.is_private = False
+                    if request.POST.get('is_place'):
+                        new_room.is_place = True
+                    else:
+                        new_room.is_place = False
                     new_room.save()
                 else:
                     return HttpResponse('НАЗВАНИЕ ВАЫАВЫАЫВАЫВА')
@@ -216,6 +235,7 @@ def profile(request, number):
     context['last_login'] = user.last_login
     context['room'] = room
     context['created_rooms'] = Room.objects.filter(author_id=number)
+    context['balance'] = Wallet.objects.get(user_id=number).balance
     join_rooms = JoinRoom.objects.filter(user=request.user)
     rooms = []
     for join_room in join_rooms:

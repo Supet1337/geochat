@@ -82,13 +82,13 @@
                                 </div>
                                 <div class="card-body border-top">
                                     <h3 class="font-16">Rating</h3>
-                                    <h1 class="mb-0">4.8</h1>
+                                    <h1 class="mb-0">{{balance}}</h1>
                                     <div class="rating-star">
                                         <i class="fa fa-fw fa-star"></i>
                                         <i class="fa fa-fw fa-star"></i>
                                         <i class="fa fa-fw fa-star"></i>
                                         <i class="fa fa-fw fa-star"></i>
-                                        <i class="fa fa-fw fa-star"></i>
+                                        <i class="fa fa-fw fa-star-half"></i>
                                         <p class="d-inline-block text-dark">14 Reviews </p>
                                     </div>
                                 </div>
@@ -172,7 +172,7 @@
    <script>
     function maps() {
         $.ajax({
-            url: "/ajax-maps-draw/1",
+            url: "/ajax-maps-draw/"+{{user.id}},
             success: function (result) {
                 var json = $.parseJSON(result);
 
