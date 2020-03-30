@@ -40,6 +40,8 @@
                                     <ul class="nav flex-column">
                                         {% if request.user.is_authenticated %}
                                         {% for room in rooms %}
+                                            {% if room.is_place %}
+                                            {% else %}
                                             {% if room.is_private %}
                                                 <li class="nav-item">
                                                     <a class="nav-link">{{room.name}}</a>
@@ -58,11 +60,8 @@
                                                     <a href="../../../../room/{{room.id}}"> <button type="button" class="btn btn-secondary">Присоединиться</button></a>
                                                 </li>
                                             {% endif %}
+                                        {% endif %}
                                         {% endfor %}
-                                        <li class="nav-item">
-                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal1">Создать чат</button>
-
-                                        </li>
                                         {% else %}
                                         <li class="nav-item">
                                             <a class="nav-link">Войдите, чтобы пользоваться чатами</a>
@@ -92,8 +91,12 @@
                                     </ul>
                                 </div>
                             </li>
-                            <li class="nav-item">
-
+                            <li class="nav-item ">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5"><i class="fa fa-comment"></i>Чаты поблизости</a>
+                                <div id="submenu-5" class="collapse submenu" style="">
+                                    <ul class="nav flex-column" id="place-chat">
+                                    </ul>
+                                </div>
                             </li>
                             <li class="nav-divider">
                                 @

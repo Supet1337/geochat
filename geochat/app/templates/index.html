@@ -132,7 +132,19 @@
             url: "/ajax-circle-draw",
             success: function (result) {
                 var json = $.parseJSON(result);
-
+                geolocation.get({
+                                provider: 'browser',
+                                mapStateAutoApply: true
+                            }).then(function (result) {
+                                result.geoObjects.options.set('preset', 'islands#blueCircleIcon');
+                                objects = ymaps.geoQuery([
+                                    {
+                                        type: 'Point',
+                                        coordinates: result.geoObjects.position
+                                    }
+                                ]).addToMap(myMap);
+                            });
+                $("#place-chat").html("");
                 json.forEach(function(item, i, json) {
                 if(json[i].is_private){
                   var myCircle = new ymaps.Circle([
@@ -203,7 +215,6 @@
                                 provider: 'browser',
                                 mapStateAutoApply: true
                             }).then(function (result) {
-                                result.geoObjects.options.set('preset', 'islands#blueCircleIcon');
                                 objects = ymaps.geoQuery([
                                     {
                                         type: 'Point',
@@ -214,7 +225,26 @@
                                     var objectsInsideCircle = objects.searchInside(myCircle);
                                     if (objectsInsideCircle._objects.length == 0){
                                         myMap.geoObjects.remove(myCircle);
-                                }
+                                    }
+                                    else{
+                                        if('+{{request.user.is_authenticated}}+'){
+                                            if(json[i].is_private){
+                                                console.log('nannnnn');
+                                                $("#place-chat").append('<li class="nav-item">'+
+                                                    '<a class="nav-link">'+json[i].name+'</a>'+
+                                                    '<form method="post">'+
+                                                    '{% csrf_token %}'+
+                                                    '<input type="password" name="password" class="form-control" placeholder="пароль">'+
+                                                    '<input type="hidden" name="id" value="'+json[i].id+'">'+
+                                                    '<input type="submit" value="Присоединиться" class="btn btn-secondary">'+
+                                                    '</form>'+
+                                                '</li>');
+                                            }
+                                            else{
+                                                $("#place-chat").append('<li class="nav-item"><a class="nav-link">'+json[i].name+'</a><a href="../../../../room/'+json[i].id+'"> <button type="button" class="btn btn-secondary">Присоединиться</button></a></li>');
+                                            }
+                                        }
+                                    }
                                 }
                             });
 
