@@ -81,16 +81,8 @@
                                     </div>
                                 </div>
                                 <div class="card-body border-top">
-                                    <h3 class="font-16">Rating</h3>
-                                    <h1 class="mb-0">{{balance}}</h1>
-                                    <div class="rating-star">
-                                        <i class="fa fa-fw fa-star"></i>
-                                        <i class="fa fa-fw fa-star"></i>
-                                        <i class="fa fa-fw fa-star"></i>
-                                        <i class="fa fa-fw fa-star"></i>
-                                        <i class="fa fa-fw fa-star-half"></i>
-                                        <p class="d-inline-block text-dark">14 Reviews </p>
-                                    </div>
+                                    <h3 class="font-16">Баланс</h3>
+                                    <h1 class="mb-0" id="profile-balance">{{balance}}<img src={% static "images/geocoin.png" %} style="width: 40px;height: 40px"></h1>
                                 </div>
 
                             </div>
@@ -180,7 +172,7 @@
                     ymaps.ready(function () {
     var myMap = new ymaps.Map('map'+json[i].id+'', {
         center: [json[i].x,json[i].y],
-        zoom:16,
+        zoom:15,
         controls: ['smallMapDefaultSet']
     }, {
         // Зададим ограниченную область прямоугольником,

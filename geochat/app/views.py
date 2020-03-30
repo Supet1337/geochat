@@ -27,6 +27,13 @@ def ajax_send(request,number):
     return HttpResponse(json.dumps(messages))
 
 @login_required
+def ajax_update_balance(request):
+    wallet = Wallet.objects.get(user=request.user)
+    wallet.balance += 1
+    wallet.save()
+    return HttpResponse(json.dumps({'balance':wallet.balance}))
+
+@login_required
 def ajax_update(request,number):
 
     messages = []
@@ -225,6 +232,7 @@ def index(request):
                 rooms.append(room)
             flag = False
         context['rooms'] = rooms
+        context['balance'] = Wallet.objects.get(user=request.user).balance
         return render(request,'index.html',context)
 
 def profile(request, number):
