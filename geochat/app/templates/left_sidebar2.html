@@ -1,3 +1,4 @@
+{% load static %}
 <div class="nav-left-sidebar sidebar-dark">
             <div class="menu-list">
                 <nav class="navbar navbar-expand-lg navbar-light">
@@ -11,9 +12,16 @@
                                 Меню
                             </li>
                             <li class="nav-item ">
-                                <a class="nav-link active" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fa fa-fw fa-user-circle"></i>Dashboard <span class="badge badge-success">6</span></a>
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fa fa-money-bill-alt"></i>Кликер <span class="badge badge-success">6</span></a>
                                 <div id="submenu-1" class="collapse submenu" style="">
-
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <p id="balance">Ваш баланс: {{balance}}<img src={% static "images/geocoin.png" %} style="width: 20px;height: 20px"></p>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button class="btn btn-secondary" style="width:220px" onclick="update_balance()">Клик</button>
+                                        </li>
+                                    </ul>
                                 </div>
                             </li>
                             <li class="nav-item">
@@ -61,3 +69,17 @@
                 </nav>
             </div>
         </div>
+<script>
+    function update_balance(){
+        $.ajax({
+            url: "/ajax-update-balance",
+            data: {
+            },
+            success: function (result) {
+                var json = $.parseJSON(result);
+                $("#balance").html('Ваш баланс: ' +json['balance']+'<img src={% static "images/geocoin.png" %} style="width: 20px;height: 20px">');
+                $("#profile-balance").html(json['balance']+'<img src={% static "images/geocoin.png" %} style="width: 40px;height: 40px">');
+            }
+        });
+    }
+</script>
