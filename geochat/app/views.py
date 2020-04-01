@@ -8,25 +8,6 @@ from .forms import *
 import json
 
 @login_required
-def ajax_send(request,number):
-    if request.user.is_authenticated:
-        print(request.is_ajax)
-        if request.is_ajax:
-            new_message = Message()
-            text = request.POST.get('message')
-            if not text == '':
-                new_message.text = text
-                new_message.author = request.user
-                new_message.room = Room.objects.get(id=number)
-                new_message.save()
-
-    messages = []
-    for message in Message.objects.filter(room_id=number):
-        messages.append(message.json())
-    print(messages)
-    return HttpResponse(json.dumps(messages))
-
-@login_required
 def ajax_update_balance(request):
     wallet = Wallet.objects.get(user=request.user)
     wallet.balance += 1
@@ -34,7 +15,7 @@ def ajax_update_balance(request):
     return HttpResponse(json.dumps({'balance':wallet.balance}))
 
 @login_required
-def ajax_update(request,number):
+def ajax_load_messages(request,number):
 
     messages = []
     for message in Message.objects.filter(room_id=number):
@@ -232,7 +213,10 @@ def index(request):
                 rooms.append(room)
             flag = False
         context['rooms'] = rooms
-        context['balance'] = Wallet.objects.get(user=request.user).balance
+        if request.user.is_authenticated:
+            context['balance'] = Wallet.objects.get(user=request.user).balance
+        else:
+            context['balance'] = 0
         return render(request,'index.html',context)
 
 def profile(request, number):

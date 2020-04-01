@@ -186,18 +186,14 @@ body {
 		</div>
 		<div class="messages">
 			<ul id="kek">
-				<!--<li class="replies">
-					<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-					<p>When you're backed against the wall, break the god damn thing down.</p>
-				</li> -->
+
 			</ul>
 		</div>
 		<div class="message-input">
 
 			<div class="wrap">
-				{% csrf_token %}
 				<input type="text" name="message" id="message" placeholder="Введите сообщение...">
-				<button onclick="lol(); document.getElementById('message').value = '';" ><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+				<button type="submit" id="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
 			</div>
 		</div>
 	</div>
@@ -208,62 +204,68 @@ body {
 
 <script >
 
-	function lol() {
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/'
+            + '{{room.id}}'
+            + '/'
+        );
+		$("#kek").html("");
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            if( data.author_name == '{{request.user}}' )
+                $("#kek").append('<li class="replies"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+data.author_name+':<br>'+data.message+'</p><div class="data">'+data.date+'</div></li>');
+            else
+                $("#kek").append('<li class="sent"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+data.author_name+':<br>'+data.message+'</p><div class="data">'+data.date+'</div></li>');
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#message').focus();
+        document.querySelector('#message').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#submit').click();
+            }
+        };
+
+        document.querySelector('#submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#message');
+            const message = messageInputDom.value;
+            if (message != ''){
+            	chatSocket.send(JSON.stringify({
+                	'message': message,
+                	'author_id': {{request.user.id}},
+                	'room_id': {{room.id}}
+            	}));
+            }
+            messageInputDom.value = '';
+        };
+
+
+
+	load_messages();
+    function load_messages() {
         $.ajax({
-            url: "/ajax/{{room.id}}",
+            url: "/ajax-load-messages/{{room.id}}",
             method: "POST",
             data: {
-                message: message.value,
                 csrfmiddlewaretoken: '{{csrf_token}}'
             },
             success: function (result) {
                 var json = $.parseJSON(result);
 
-                $("#kek").html("");
                 json.forEach(function(item, i, json) {
                   if( json[i].author == '{{request.user}}' )
-                      $("#kek").append('<li class="sent"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
-                  else
                       $("#kek").append('<li class="replies"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
-
-                });
-
-            }
-
-        });
-
-    }
-
-$(window).keydown(function(e) {
-   if (e.which == 13) {
-      lol();
-      document.getElementById('message').value = '';
-   }
-});
-
-
-
-    function update() {
-        $.ajax({
-            url: "/ajax-update/{{room.id}}",
-            method: "POST",
-            data: {
-                csrfmiddlewaretoken: '{{csrf_token}}'
-            },
-            success: function (result) {
-                var json = $.parseJSON(result);
-
-                $("#kek").html("");
-                json.forEach(function(item, i, json) {
-                  if( json[i].author == '{{request.user}}' )
-                      $("#kek").append('<li class="sent"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
                   else
-                      $("#kek").append('<li class="replies"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+                      $("#kek").append('<li class="sent"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p>'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
                 });
             }
         });
     }
-    setInterval(update, 3000);
 
 </script>
 </div>
