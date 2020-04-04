@@ -41,12 +41,18 @@
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fa fa-money-bill-alt"></i>Кликер <span class="badge badge-success">6</span></a>
                                 <div id="submenu-1" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
+                                        {% if request.user.is_authenticated %}
                                         <li class="nav-item">
                                             <p id="balance">Ваш баланс: {{balance}}<img src={% static "images/geocoin.png" %} style="width: 20px;height: 20px"></p>
                                         </li>
                                         <li class="nav-item">
                                             <button class="btn btn-secondary" style="width:220px" onclick="update_balance()">Клик</button>
                                         </li>
+                                        {% else %}
+                                        <li class="nav-item">
+                                            <a class="nav-link">Войдите, чтобы пользоваться чатами</a>
+                                        </li>
+                                        {% endif %}
                                     </ul>
                                 </div>
                             </li>
@@ -114,6 +120,11 @@
                                 <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5"><i class="fa fa-comment"></i>Чаты поблизости</a>
                                 <div id="submenu-5" class="collapse submenu" style="">
                                     <ul class="nav flex-column" id="place-chat">
+                                        {% if not request.user.is_authenticated %}
+                                        <li class="nav-item">
+                                            <a class="nav-link">Войдите, чтобы пользоваться чатами</a>
+                                        </li>
+                                        {% endif %}
                                     </ul>
                                 </div>
                             </li>
