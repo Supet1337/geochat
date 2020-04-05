@@ -7,28 +7,31 @@ from .models import *
 from .forms import *
 import json
 
+
 @login_required
 def ajax_update_balance(request):
     wallet = Wallet.objects.get(user=request.user)
     wallet.balance += 1
     wallet.save()
-    return HttpResponse(json.dumps({'balance':wallet.balance}))
+    return HttpResponse(json.dumps({'balance': wallet.balance}))
+
 
 @login_required
-def ajax_load_messages(request,number):
-
+def ajax_load_messages(request, number):
     messages = []
     for message in Message.objects.filter(room_id=number):
         messages.append(message.json())
     print(messages)
     return HttpResponse(json.dumps(messages))
 
-def ajax_maps_draw(request,number):
+
+def ajax_maps_draw(request, number):
     rooms = []
     for room in Room.objects.filter(author_id=number):
         rooms.append(room.json())
     print(rooms)
     return HttpResponse(json.dumps(rooms))
+
 
 def ajax_circle_draw(request):
     join_rooms = []
@@ -53,6 +56,7 @@ def ajax_circle_draw(request):
         rms.append(room.json())
     return HttpResponse(json.dumps(rms))
 
+
 def ajax_circle_draw_joined(request):
     join_rooms = []
     if request.user.is_authenticated:
@@ -66,8 +70,9 @@ def ajax_circle_draw_joined(request):
         rms.append(room.json())
     return HttpResponse(json.dumps(rms))
 
+
 @login_required
-def room(request,number):
+def room(request, number):
     context = {}
     if request.method == "POST":
         text = request.POST.get('message')
@@ -89,7 +94,7 @@ def room(request,number):
                 for join_room in join_rooms:
                     rooms.append(Room.objects.get(id=join_room.room_id))
                 context['rooms'] = rooms
-                return render(request,"mess.html",context)
+                return render(request, "mess.html", context)
         if room.is_private:
             return HttpResponse('У вас нет доступа к этому чату')
         else:
@@ -106,12 +111,10 @@ def room(request,number):
             return render(request, "mess.html", context)
 
 
-
-
 def rooms(request):
     if request.method == 'POST':
         room_enter = Room.objects.get(id=request.POST.get('id'))
-        if check_password(request.POST.get('password'),room_enter.password):
+        if check_password(request.POST.get('password'), room_enter.password):
             new_join = JoinRoom()
             new_join.user = request.user
             new_join.room_id = request.POST.get('id')
@@ -122,7 +125,8 @@ def rooms(request):
     if request.method == 'GET':
         context = {}
         context['rooms'] = Room.objects.all()
-        return render(request,'rooms.html',context)
+        return render(request, 'rooms.html', context)
+
 
 def index(request):
     context = {}
@@ -148,20 +152,24 @@ def index(request):
                         login(request, user)
                         return HttpResponseRedirect("/")
         else:
-            if request.POST.get('name') == None:
+            if request.POST.get('name') is None:
                 room_enter = Room.objects.get(id=request.POST.get('id'))
                 joins = JoinRoom.objects.filter(room_id=request.POST.get('id'))
                 if len(joins) < room_enter.max_members:
-                    if check_password(request.POST.get('password'), room_enter.password):
+                    if check_password(
+                            request.POST.get('password'),
+                            room_enter.password):
                         new_join = JoinRoom()
                         new_join.user = request.user
                         new_join.room_id = request.POST.get('id')
                         new_join.save()
-                        return HttpResponseRedirect('/room/' + str(request.POST.get('id')))
+                        return HttpResponseRedirect(
+                            '/room/' + str(request.POST.get('id')))
                     else:
                         return HttpResponse('Неправильный пароль')
                 else:
-                    return HttpResponse('В данном чате уже максимальное количество пользователей')
+                    return HttpResponse(
+                        'В данном чате уже максимальное количество пользователей')
             else:
                 new_room = Room()
                 if not request.POST.get('name') == '':
@@ -173,8 +181,10 @@ def index(request):
                     new_room.y = request.POST.get('y')
                     new_room.diametr = request.POST.get('choose_diametr')
                     new_room.max_members = request.POST.get('choose_max')
-                    if wallet.balance - (int(new_room.diametr)-50 + (int(new_room.max_members)-3)*10) >= 0:
-                        wallet.balance -= int(new_room.diametr)-50 + (int(new_room.max_members)-3)*10
+                    if wallet.balance - \
+                            (int(new_room.diametr) - 50 + (int(new_room.max_members) - 3) * 10) >= 0:
+                        wallet.balance -= int(new_room.diametr) - \
+                            50 + (int(new_room.max_members) - 3) * 10
                         wallet.save()
                     else:
                         return HttpResponse('МАЛА ДЕНЕК')
@@ -190,8 +200,6 @@ def index(request):
                 else:
                     return HttpResponse('НАЗВАНИЕ ВАЫАВЫАЫВАЫВА')
                 return HttpResponseRedirect('/')
-
-
 
     if request.method == "GET":
         join_rooms = []
@@ -217,7 +225,8 @@ def index(request):
             context['balance'] = Wallet.objects.get(user=request.user).balance
         else:
             context['balance'] = 0
-        return render(request,'index.html',context)
+        return render(request, 'index.html', context)
+
 
 def profile(request, number):
     context = {}
@@ -234,4 +243,4 @@ def profile(request, number):
         rooms.append(Room.objects.get(id=join_room.room_id))
     context['rooms'] = rooms
 
-    return render(request,'profile.html', context)
+    return render(request, 'profile.html', context)
