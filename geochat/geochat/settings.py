@@ -126,8 +126,6 @@ DATE_FORMAT = 'd.m G:i'
 
 STATIC_URL = '/static/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static")
-]
+STATIC_ROOT = "app/static/static_server"
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATICFILES_DIRS = ("app/static/static_local",)
