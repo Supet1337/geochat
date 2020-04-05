@@ -184,7 +184,7 @@ body {
 			<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
 			<p>{{room.name}}</p>
 		</div>
-		<div class="messages">
+		<div id="scroll" class="messages">
 			<ul id="kek">
 
 			</ul>
@@ -214,6 +214,7 @@ body {
 		$("#kek").html("");
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
+            scrl();
             if( data.author_name == '{{request.user}}' )
                 $("#kek").append('<li class="replies"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p style="word-wrap: break-word">'+data.author_name+':<br>'+data.message+'</p><div class="data">'+data.date+'</div></li>');
             else
@@ -228,6 +229,7 @@ body {
         document.querySelector('#message').onkeyup = function(e) {
             if (e.keyCode === 13) {  // enter, return
                 document.querySelector('#submit').click();
+
             }
         };
 
@@ -258,6 +260,7 @@ body {
                 var json = $.parseJSON(result);
 
                 json.forEach(function(item, i, json) {
+                scrl();
                   if( json[i].author == '{{request.user}}' )
                       $("#kek").append('<li class="replies"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p style="word-wrap: break-word"">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
                   else
@@ -266,7 +269,10 @@ body {
             }
         });
     }
-
+function scrl(){
+    var block = document.getElementById("scroll");
+    block.scrollTop = block.scrollHeight;
+}
 </script>
 </div>
 </body>
