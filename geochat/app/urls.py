@@ -2,7 +2,6 @@ from .views import *
 from django.urls import path
 
 urlpatterns = [
-    path('rooms',rooms),
     path('room/<int:number>', room),
     path('',index),
     path('ajax-update-balance',ajax_update_balance),
