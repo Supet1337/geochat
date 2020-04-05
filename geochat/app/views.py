@@ -21,7 +21,6 @@ def ajax_load_messages(request, number):
     messages = []
     for message in Message.objects.filter(room_id=number):
         messages.append(message.json())
-    print(messages)
     return HttpResponse(json.dumps(messages))
 
 
@@ -29,7 +28,6 @@ def ajax_maps_draw(request, number):
     rooms = []
     for room in Room.objects.filter(author_id=number):
         rooms.append(room.json())
-    print(rooms)
     return HttpResponse(json.dumps(rooms))
 
 
