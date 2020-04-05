@@ -235,6 +235,7 @@ def profile(request, number):
     context['email'] = user.email
     context['last_login'] = user.last_login
     context['room'] = room
+    context['id'] = number
     context['created_rooms'] = Room.objects.filter(author_id=number)
     context['balance'] = Wallet.objects.get(user_id=number).balance
     join_rooms = JoinRoom.objects.filter(user=request.user)
