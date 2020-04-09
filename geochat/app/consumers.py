@@ -22,7 +22,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-
+#Получение сообщения клиента, Сохранение в БД, Отправка на сервер
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
@@ -36,11 +36,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'chat_message',
                 'message': message,
+                'id': author_id,
                 'author_name': author_name,
                 'date': now.strftime("%d.%m %H:%M")
             }
         )
 
+# Сохранение сообщений в БД
     def save_message(self,message,author,room):
         new_message = Message()
         new_message.author = User.objects.get(id=author)
@@ -48,15 +50,18 @@ class ChatConsumer(AsyncWebsocketConsumer):
         new_message.text = message
         new_message.save()
 
+    # Получить имя
     def get_name(self,author):
         return User.objects.get(id=author).username
     async def chat_message(self, event):
         message = event['message']
         author_name = event['author_name']
+        author_id = event['id']
         date = event['date']
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
             'message': message,
+            'id': author_id,
             'author_name': author_name,
             'date': date
         }))

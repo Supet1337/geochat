@@ -18,8 +18,8 @@
                                     {%endif%}
                                 </div>
                                 {% if request.user.is_authenticated%}
-                                <a class="dropdown-item" href="../profile/{{request.user.id}}"><i class="fas fa-user mr-2"></i>Account</a>
-                                <a class="dropdown-item" href="../accounts/logout"><i class="fas fa-power-off mr-2"></i>Logout</a>
+                                <a class="dropdown-item" href="../profile/{{request.user.id}}"><i class="fas fa-user mr-2"></i>Аккаунт</a>
+                                <a class="dropdown-item" href="logout"><i class="fas fa-power-off mr-2"></i>Выйти</a>
                                 {%else%}
                                 {%endif%}
                             </div>

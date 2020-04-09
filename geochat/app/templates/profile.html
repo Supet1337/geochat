@@ -64,12 +64,20 @@
                             <div class="card" style="width:1590px; height:700px; margin-top:80px">
                                 <div class="card-body">
                                     <div class="user-avatar text-center d-block">
-                                        <img src="https://www.meme-arsenal.com/memes/d2f65f5eb5f18f76d5a9d0a046873c89.jpg" alt="User Avatar" class="rounded-circle user-avatar-xxl">
+                                        <img alt="User Avatar" class="rounded-circle user-avatar-xxl" src={% static "images/{{image.image}}" %}>
                                     </div>
                                     <div class="text-center">
                                         <h2 class="font-24 mb-0">{{username}}</h2>
                                         <p>Статус</p>
                                     </div>
+                                    <form method="POST">
+                                        {%csrf_token%}
+                                      <div class="form-group">
+                                        <label for="image">Example file input</label>
+                                        <input type="file" class="form-control-file" id="image" name="image">
+                                        <input type="submit">
+                                      </div>
+                                    </form>
                                 </div>
                                 <div class="card-body border-top">
                                     <h3 class="font-16">Contact Information</h3>

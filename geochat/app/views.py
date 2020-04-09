@@ -109,6 +109,10 @@ def room(request, number):
             context['rooms'] = rooms
             return render(request, "mess.html", context)
 
+def loggout(request):
+    logout(request)
+    return HttpResponseRedirect("/")
+
 def index(request):
     context = {}
     if request.method == "POST":
@@ -119,14 +123,25 @@ def index(request):
                 user = form.save(commit=False)
                 user.email = form.data['email']
                 user.save()
+                username_auth = form.data['username']
+                password_auth = form.data['password1']
                 new_Wallet = Wallet()
+                new_avatar = Image()
+                new_avatar.user = user
                 new_Wallet.user = user
                 new_Wallet.balance = 1000
                 new_Wallet.save()
+                new_avatar.save()
+                user_auth = authenticate(username=username_auth, password=password_auth)
+                login(request, user)
                 return render(request, 'index.html', context)
             else:
-                username = request.POST['username_auth']
-                password = request.POST['password']
+                try:
+                    username = request.POST['username_auth']
+                    password = request.POST['password']
+                except:
+                    messages.error(request, 'Пароли не совпадают.')
+                    return HttpResponseRedirect("/")
                 user = authenticate(username=username, password=password)
                 if user is not None:
                     login(request, user)
@@ -210,8 +225,15 @@ def index(request):
 
 
 def profile(request, number):
+    if request.method == "POST":
+        ava = Image()
+        ava.image = request.POST["image"]
+        ava.user = request.user
+        ava.save()
+        return HttpResponseRedirect("../profile/"+str(number))
     context = {}
     user = User.objects.get(id=number)
+    context['image'] = Image.objects.get(user=user)
     context['username'] = user.username
     context['email'] = user.email
     context['last_login'] = user.last_login

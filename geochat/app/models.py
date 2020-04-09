@@ -30,7 +30,7 @@ class Message(models.Model):
 
     def json(self):
         datef = dateformat.format(self.date,settings.DATE_FORMAT)
-        return  {'text':self.text, 'author': str(self.author), 'date':str(datef)}
+        return  {'text':self.text, 'author': str(self.author), 'date':str(datef), 'id':self.author.id}
 
 class JoinRoom(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
@@ -40,3 +40,7 @@ class JoinRoom(models.Model):
 class Wallet(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     balance = models.IntegerField(default=1000)
+
+class Image(models.Model):
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='app/static/avatar/', height_field=None, width_field=None, default='geocoin.png')

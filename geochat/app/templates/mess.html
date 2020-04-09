@@ -181,7 +181,7 @@ body {
 <div id="frame">
 	<div class="content">
 		<div class="contact-profile">
-			<img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
+			<img src={% static "images/geocoin.png" %}>
 			<p>{{room.name}}</p>
 		</div>
 		<div id="scroll" class="messages">
@@ -214,11 +214,11 @@ body {
 		$("#kek").html("");
         chatSocket.onmessage = function(e) {
             const data = JSON.parse(e.data);
-            scrl();
             if( data.author_name == '{{request.user}}' )
-                $("#kek").append('<li class="replies"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p style="word-wrap: break-word">'+data.author_name+':<br>'+data.message+'</p><div class="data">'+data.date+'</div></li>');
+                $("#kek").append('<li class="replies"> <a href="../profile/'+data.id+'"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><a><p style="word-wrap: break-word">'+data.author_name+':<br>'+data.message+'</p><div class="data">'+data.date+'</div></li>');
             else
-                $("#kek").append('<li class="sent"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p style="word-wrap: break-word"">'+data.author_name+':<br>'+data.message+'</p><div class="data">'+data.date+'</div></li>');
+                $("#kek").append('<li class="sent"> <a href="../profile/'+data.id+'"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><a><p style="word-wrap: break-word"">'+data.author_name+':<br>'+data.message+'</p><div class="data">'+data.date+'</div></li>');
+            scrl();
         };
 
         chatSocket.onclose = function(e) {
@@ -260,11 +260,11 @@ body {
                 var json = $.parseJSON(result);
 
                 json.forEach(function(item, i, json) {
-                scrl();
                   if( json[i].author == '{{request.user}}' )
-                      $("#kek").append('<li class="replies"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p style="word-wrap: break-word"">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+                      $("#kek").append('<li class="replies"> <a href="../profile/'+json[i].id+'"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><a><p style="word-wrap: break-word"">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
                   else
-                      $("#kek").append('<li class="sent"> <img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><p style="word-wrap: break-word">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+                      $("#kek").append('<li class="sent"> <a href="../profile/'+json[i].id+'"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><a><p style="word-wrap: break-word">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+                  scrl();
                 });
             }
         });
