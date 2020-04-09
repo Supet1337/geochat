@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login, authenticate
+from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from .models import *
 from .forms import *
@@ -128,9 +129,11 @@ def index(request):
                 password = request.POST['password']
                 user = authenticate(username=username, password=password)
                 if user is not None:
-                    if user.is_active:
-                        login(request, user)
-                        return HttpResponseRedirect("/")
+                    login(request, user)
+                    return HttpResponseRedirect("/")
+                else:
+                    messages.error(request, 'Неправильный логин или пароль.')
+                return HttpResponseRedirect("/")
         else:
             if request.POST.get('name') is None:
                 room_enter = Room.objects.get(id=request.POST.get('id'))
