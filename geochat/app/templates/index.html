@@ -34,10 +34,10 @@
               <div class="row">
                 <div class="w-100"></div>
                 <div class="col">
-                     <form method="POST" action="">
+                     <form method="POST" action="" >
                         {% csrf_token %}
                          <br>
-                        <input type="text" id="name" name="name" class="form-control" placeholder="Название комнаты" readonly onfocus="this.removeAttribute('readonly')">
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Название комнаты" readonly onfocus="this.removeAttribute('readonly')" autocomplete="off">
                          <input type="checkbox" id="is_place" name="is_place"> Виден только тем, кто находится поблизости
                          <br>
                          <input type="checkbox" id="is_private" name="is_private" onclick="private()"> С паролем
