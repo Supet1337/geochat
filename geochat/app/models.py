@@ -33,7 +33,12 @@ class Message(models.Model):
 
     def json(self):
         datef = dateformat.format(self.date,settings.DATE_FORMAT)
-        return  {'text':self.text, 'author': str(self.author), 'date':str(datef), 'id':self.author.id}
+        return  {'text':self.text, 'author': str(self.author), 'date':str(datef), 'id':self.author.id, 'image':str(self.get_image())}
+    def get_image(self):
+        try:
+            return Image.objects.get(user=self.author).image.url
+        except:
+            return -1
 
 class JoinRoom(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)

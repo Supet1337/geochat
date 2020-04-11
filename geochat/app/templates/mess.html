@@ -267,11 +267,20 @@ body {
                 var json = $.parseJSON(result);
 
                 json.forEach(function(item, i, json) {
-                  if( json[i].author == '{{request.user}}' )
-                      $("#kek").append('<li class="replies"> <a href="../profile/'+json[i].id+'"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><a><p style="word-wrap: break-word"">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
-                  else
-                      $("#kek").append('<li class="sent"> <a href="../profile/'+json[i].id+'"><img src="http://emilcarlsson.se/assets/mikeross.png" alt="" /><a><p style="word-wrap: break-word">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+                	if(json[i].image == '-1'){
+                	    if( json[i].author == '{{request.user}}' )
+                       	    $("#kek").append('<li class="replies"> <a href="../profile/'+json[i].id+'"><img src={% static "images/default_ava.png" %}" alt="" /><a><p style="word-wrap: break-word"">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+                        else
+                            $("#kek").append('<li class="sent"> <a href="../profile/'+json[i].id+'"><img src={% static "images/default_ava.png" %}" alt="" /><a><p style="word-wrap: break-word">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+                	}
+                	else{
+					    if( json[i].author == '{{request.user}}' )
+						    $("#kek").append('<li class="replies"> <a href="../profile/'+json[i].id+'"><img src="'+json[i].image+'" alt="" /><a><p style="word-wrap: break-word"">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+					    else
+						    $("#kek").append('<li class="sent"> <a href="../profile/'+json[i].id+'"><img src="'+json[i].image+'" alt="" /><a><p style="word-wrap: break-word">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+                  }
                   scrl();
+
                 });
             }
         });
