@@ -129,3 +129,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = "app/static/static_server"
 
 STATICFILES_DIRS = ("app/static/static_local",)
+
+MEDIA_URL = '/media/'
+
+MEDIA_ROOT = "app/media"

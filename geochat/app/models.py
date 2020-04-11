@@ -3,7 +3,10 @@ from django.contrib.auth.models import User
 from django.utils import dateformat
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
-# Create your models here.
+
+def user_directory_path(instance, filename):
+    return 'avatars/user_{0}/{1}'.format(instance.user.id, filename)
+
 class Room(models.Model):
     name = models.CharField(max_length=50)
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
@@ -37,10 +40,11 @@ class JoinRoom(models.Model):
     room_id = models.IntegerField()
     date = models.DateTimeField(auto_now_add=True)
 
+class Image(models.Model):
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=user_directory_path)
+
+
 class Wallet(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     balance = models.IntegerField(default=1000)
-
-class Image(models.Model):
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='app/static/avatar/', height_field=None, width_field=None, default='geocoin.png')

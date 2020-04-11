@@ -123,16 +123,10 @@ def index(request):
                 user = form.save(commit=False)
                 user.email = form.data['email']
                 user.save()
-                username_auth = form.data['username']
-                password_auth = form.data['password1']
                 new_Wallet = Wallet()
-                new_avatar = Image()
-                new_avatar.user = user
                 new_Wallet.user = user
                 new_Wallet.balance = 1000
                 new_Wallet.save()
-                new_avatar.save()
-                user_auth = authenticate(username=username_auth, password=password_auth)
                 login(request, user)
                 return render(request, 'index.html', context)
             else:
@@ -226,14 +220,25 @@ def index(request):
 
 def profile(request, number):
     if request.method == "POST":
-        ava = Image()
-        ava.image = request.POST["image"]
-        ava.user = request.user
-        ava.save()
+        form = UploadImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                image = Image.objects.get(user=request.user)
+                image.delete()
+            except:
+                pass
+            ava = form.save(commit=False)
+            ava.user = request.user
+            ava.save()
         return HttpResponseRedirect("../profile/"+str(number))
+    form = UploadImageForm()
     context = {}
     user = User.objects.get(id=number)
-    context['image'] = Image.objects.get(user=user)
+    context['form'] = form
+    try:
+        context['image'] = Image.objects.get(user=user)
+    except:
+        context['image'] = None
     context['username'] = user.username
     context['email'] = user.email
     context['last_login'] = user.last_login

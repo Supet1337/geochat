@@ -9,7 +9,6 @@
     <!-- Bootstrap CSS -->
     {% load static %}
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
-    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/circular-std/style.css" %}>
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=7abcaac9-c988-4344-9b01-50d57672abf2&lang=ru_RU" type="text/javascript"></script>    <script src="../static/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
@@ -64,19 +63,16 @@
                             <div class="card" style="width:1590px; height:700px; margin-top:80px">
                                 <div class="card-body">
                                     <div class="user-avatar text-center d-block">
-                                        <img alt="User Avatar" class="rounded-circle user-avatar-xxl" src={% static "images/{{image.image}}" %}>
+                                        <img alt="User Avatar" class="rounded-circle user-avatar-xxl" src="{{image.image.url}}">
                                     </div>
                                     <div class="text-center">
                                         <h2 class="font-24 mb-0">{{username}}</h2>
                                         <p>Статус</p>
                                     </div>
-                                    <form method="POST">
+                                    <form method="post" enctype="multipart/form-data">
                                         {%csrf_token%}
-                                      <div class="form-group">
-                                        <label for="image">Example file input</label>
-                                        <input type="file" class="form-control-file" id="image" name="image">
+                                        {{form.as_p}}
                                         <input type="submit">
-                                      </div>
                                     </form>
                                 </div>
                                 <div class="card-body border-top">
