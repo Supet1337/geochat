@@ -25,7 +25,6 @@ SECRET_KEY = 'wnt)319w#i$1ug2x)v2q0i_ilx7bia=hk&*1b@j4i%g+fmazfr'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
 
 
 # Application definition
@@ -37,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_cleanup.apps.CleanupConfig',
     'channels',
     'app',
 ]

@@ -63,17 +63,23 @@
                             <div class="card" style="width:1590px; height:700px; margin-top:80px">
                                 <div class="card-body">
                                     <div class="user-avatar text-center d-block">
-                                        <img alt="User Avatar" class="rounded-circle user-avatar-xxl" src="{{image.image.url}}">
+                                        {% if image == -1 %}
+                                            <img alt="User Avatar" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %}>
+                                        {% else %}
+                                            <img alt="User Avatar" class="rounded-circle user-avatar-xxl" src="{{image.image.url}}">
+                                        {% endif %}
                                     </div>
                                     <div class="text-center">
                                         <h2 class="font-24 mb-0">{{username}}</h2>
                                         <p>Статус</p>
                                     </div>
+                                    {% if request.user.id == id %}
                                     <form method="post" enctype="multipart/form-data">
                                         {%csrf_token%}
                                         {{form.as_p}}
-                                        <input type="submit">
+                                        <input type="submit" class="btn btn-primary" value="Загрузить фотографию">
                                     </form>
+                                    {% endif %}
                                 </div>
                                 <div class="card-body border-top">
                                     <h3 class="font-16">Contact Information</h3>

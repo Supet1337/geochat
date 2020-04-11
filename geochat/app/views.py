@@ -83,6 +83,10 @@ def room(request, number):
         new_message.save()
         return HttpResponseRedirect("/chat")
     if request.method == "GET":
+        try:
+            context['image'] = Image.objects.get(user=request.user)
+        except:
+            context['image'] = -1
         room = Room.objects.get(id=number)
         joins = JoinRoom.objects.filter(room_id=number)
         for join in joins:
@@ -215,6 +219,10 @@ def index(request):
             context['balance'] = Wallet.objects.get(user=request.user).balance
         else:
             context['balance'] = 0
+        try:
+            context['image'] = Image.objects.get(user=request.user)
+        except:
+            context['image'] = -1
         return render(request, 'index.html', context)
 
 
@@ -238,7 +246,7 @@ def profile(request, number):
     try:
         context['image'] = Image.objects.get(user=user)
     except:
-        context['image'] = None
+        context['image'] = -1
     context['username'] = user.username
     context['email'] = user.email
     context['last_login'] = user.last_login

@@ -44,7 +44,6 @@ class Image(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     image = models.ImageField(upload_to=user_directory_path)
 
-
 class Wallet(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     balance = models.IntegerField(default=1000)

@@ -30,6 +30,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         room = text_data_json['room_id']
         await database_sync_to_async(self.save_message)(message,author_id,room)
         author_name = await database_sync_to_async(self.get_name)(author_id)
+        author_image = await database_sync_to_async(self.get_image)(author_id)
         now = datetime.now()
         await self.channel_layer.group_send(
             self.room_group_name,
@@ -38,6 +39,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 'message': message,
                 'id': author_id,
                 'author_name': author_name,
+                'author_image': author_image,
                 'date': now.strftime("%d.%m %H:%M")
             }
         )
@@ -53,9 +55,17 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Получить имя
     def get_name(self,author):
         return User.objects.get(id=author).username
+
+    def get_image(self,user):
+        try:
+            return Image.objects.get(user_id=user).image.url
+        except:
+            return '-1'
+
     async def chat_message(self, event):
         message = event['message']
         author_name = event['author_name']
+        author_image = event['author_image']
         author_id = event['id']
         date = event['date']
         # Send message to WebSocket
@@ -63,5 +73,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'message': message,
             'id': author_id,
             'author_name': author_name,
+            'author_image': author_image,
             'date': date
         }))
