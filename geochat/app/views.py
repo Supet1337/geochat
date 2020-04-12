@@ -123,6 +123,7 @@ def index(request):
         form = RegisterForm(request.POST)
         context['form'] = form
         if not request.user.is_authenticated:
+
             if form.is_valid():
                 user = form.save(commit=False)
                 user.email = form.data['email']
