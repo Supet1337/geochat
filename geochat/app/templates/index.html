@@ -8,10 +8,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     {% load static %}
-    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
-    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/circular-std/style.css" %}>
-    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
-    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
+    <link rel="stylesheet" type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
+    <link rel="stylesheet" type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
+    <link rel="stylesheet" type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=7abcaac9-c988-4344-9b01-50d57672abf2&lang=ru_RU" type="text/javascript"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
@@ -19,22 +18,8 @@
 </head>
 
 <body>
-
-    <!-- ============================================================== -->
-    <!-- main wrapper -->
-    <!-- ============================================================== -->
     <div class="dashboard-main-wrapper">
-        <!-- ============================================================== -->
-        <!-- navbar -->
-        <!-- ============================================================== -->
-
         {% include "header.html" %}
-        <!-- ============================================================== -->
-        <!-- end navbar -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- left sidebar -->
-        <!-- ============================================================== -->
         {% include "left_sidebar.html" %}
         <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
                                                 <div class="modal-dialog" role="document">
@@ -49,14 +34,40 @@
               <div class="row">
                 <div class="w-100"></div>
                 <div class="col">
-                     <form method="POST" action="">
+                     <form method="POST" action="" >
                         {% csrf_token %}
                          <br>
-                        <input type="text" id="name" name="name" class="form-control" placeholder="Название комнаты" readonly onfocus="this.removeAttribute('readonly')">
-                         <input type="checkbox" id="is_private" name="is_private" onclick="private()"> Сделать приватной
+                        <input type="text" id="name" name="name" class="form-control" placeholder="Название комнаты" readonly onfocus="this.removeAttribute('readonly')" autocomplete="off">
+                         <input type="checkbox" id="is_place" name="is_place"> Виден только тем, кто находится поблизости
+                         <br>
+                         <input type="checkbox" id="is_private" name="is_private" onclick="private()"> С паролем
                          <div id="insert-password">
 
                         </div>
+                          <div class="form-row align-items-center">
+                            <div class="col-auto my-1">
+                              <select class="custom-select mr-sm-2" id="choose_diametr" name="choose_diametr">
+                                <option value="50" selected>Выберите диаметр чата:</option>
+                                <option  value="50">50м</option>
+                                <option  value="150">150м</option>
+                                <option  value="300">300м</option>
+                                <option  value="450">450м</option>
+                              </select>
+                            </div>
+                          </div>
+                         <div class="form-row align-items-center">
+                            <div class="col-auto my-1">
+                              <select class="custom-select mr-sm-2" id="choose_max" name="choose_max">
+                                <option value="3" selected>Выберите максимальное количество пользователей:</option>
+                                <option  value="3">3 человека</option>
+                                <option  value="5">5 человек</option>
+                                <option  value="10">10 человек</option>
+                                <option  value="15">15 человек</option>
+                              </select>
+                            </div>
+                         </div>
+                         <input type="hidden" id="x" name="x">
+                         <input type="hidden" id="y" name="y">
                         <input type="submit" value="Создать" class="btn btn-dark">
                          <br>
                          <br>
@@ -71,17 +82,8 @@
     </div>
   </div>
 </div>
-        <!-- ============================================================== -->
-        <!-- end left sidebar -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- wrapper  -->
-        <!-- ============================================================== -->
         <div class="dashboard-wrapper">
             <div class="container-fluid  dashboard-content">
-                <!-- ============================================================== -->
-                <!-- pageheader  -->
-                <!-- ============================================================== -->
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="page-header">
@@ -89,105 +91,172 @@
                         </div>
                     </div>
                 </div>
-
-                <div id="map" style="width: 1600px; height: 700px"></div>
-                <script type="text/javascript">
-                ymaps.ready(init);
-                function init () {
+                {% if request.user.is_authenticated %}
+                    <div id="map" style="width: 1600px; height: 700px"></div>
+                {% endif %}
+<script type="text/javascript">
+if('{{request.user.is_authenticated}}' == 'True')
+    ymaps.ready(init);
+function init () {
+    var geolocation = ymaps.geolocation,
     myMap = new ymaps.Map("map", {
         center: [55.76, 37.64],
         zoom: 11
     }, {
-        balloonMaxWidth: 200,
+        balloonMaxWidth: 300,
         searchControlProvider: 'yandex#search'
     });
     $.ajax({
-            url: "/ajax-circle-draw",
-            success: function (result) {
-                var json = $.parseJSON(result);
-
-                json.forEach(function(item, i, json) {
-                  var myCircle = new ymaps.Circle([
-        // Координаты центра круга.
-        [json[i].x, json[i].y],
-        // Радиус круга в метрах.
-        300
-    ], {
-        // Описываем свойства круга.
-        // Содержимое балуна.
-        // Содержимое хинта.
-        hintContent:[ json[i].x,json[i].y]
-    }, {
-        // Задаем опции круга.
-        // Включаем возможность перетаскивания круга.
-        // Цвет заливки.
-        // Последний байт (77) определяет прозрачность.
-        // Прозрачность заливки также можно задать используя опцию "fillOpacity".
-        fillColor: "#3caa3c",
-        fillOpacity: 0.5,
-        // Цвет обводки.
-        strokeColor: "#3caa3c",
-        // Прозрачность обводки.
-        strokeOpacity: 0.8,
-        // Ширина обводки в пикселях.
-        strokeWidth: 1
-    });
-    myMap.geoObjects.add(myCircle);
+        url: "/ajax-circle-draw",
+        success: function (result) {
+            var json = $.parseJSON(result);
+            geolocation.get({
+                provider: 'browser',
+                mapStateAutoApply: true
+            }).then(function (result) {
+                result.geoObjects.options.set('preset', 'islands#blueCircleIcon');
+                objects = ymaps.geoQuery([
+                {
+                    type: 'Point',
+                    coordinates: result.geoObjects.position
+                }
+                ]).addToMap(myMap);
+            });
+            $("#place-chat").html("");
+            json.forEach(function(item, i, json) {
+                if(json[i].is_private){
+                    var myCircle = new ymaps.Circle([
+                        [json[i].x, json[i].y],
+                        json[i].diametr
+                    ], {
+                        balloonContentHeader: json[i].name,
+                        balloonContentBody:
+                                                '<div>'+
+                                                    '<form method="post">'+
+                                                    '{% csrf_token %}'+
+                                                    '<input type="password" name="password" class="form-control" placeholder="пароль">'+
+                                                    '<input type="hidden" name="id" value="'+json[i].id+'">'+
+                                                    '<input type="submit" value="Присоединиться" class="btn btn-secondary">'+
+                                                '</form>'+
+                                                '</div>',
+                        balloonContentFooter: '<sup>Geo Chat</sup>',
+                        hintContent:[ json[i].name]
+                    }, {
+                        fillColor: "#ff2200",
+                        fillOpacity: 0.5,
+                        strokeColor: "#ff2200",
+                        strokeOpacity: 0.8,
+                        strokeWidth: 1
+                    });
+                }
+                else{
+                    var myCircle = new ymaps.Circle([
+                        [json[i].x, json[i].y],
+                        json[i].diametr
+                    ], {
+                        balloonContentHeader: json[i].name,
+                        balloonContentBody:
+                                                '<div>'+
+                                                    '<a href="../../../../room/'+json[i].id+'"> <button type="button" class="btn btn-secondary">Присоединиться</button></a>'+
+                                                '</div>',
+                        balloonContentFooter: '<sup>Geo Chat</sup>',
+                        hintContent:[ json[i].name]
+                    }, {
+                        fillColor: "#ff2200",
+                        fillOpacity: 0.5,
+                        strokeColor: "#ff2200",
+                        strokeOpacity: 0.8,
+                        strokeWidth: 1
+                    });
+                }
+                myMap.geoObjects.add(myCircle);
+                geolocation.get({
+                    provider: 'browser',
+                    mapStateAutoApply: true
+                }).then(function (result) {
+                    objects = ymaps.geoQuery([
+                        {
+                            type: 'Point',
+                            coordinates: result.geoObjects.position
+                        }
+                    ]);
+                    if(json[i].is_place){
+                        var objectsInsideCircle = objects.searchInside(myCircle);
+                        if (objectsInsideCircle._objects.length == 0){
+                            myMap.geoObjects.remove(myCircle);
+                        }
+                        else{
+                            if('+{{request.user.is_authenticated}}+'){
+                                if(json[i].is_private){
+                                    $("#place-chat").append('<li class="nav-item">'+
+                                                    '<a class="nav-link">'+json[i].name+'</a>'+
+                                                    '<form method="post">'+
+                                                    '{% csrf_token %}'+
+                                                    '<input type="password" name="password" class="form-control" placeholder="пароль">'+
+                                                    '<input type="hidden" name="id" value="'+json[i].id+'">'+
+                                                    '<input type="submit" value="Присоединиться" class="btn btn-secondary">'+
+                                                    '</form>'+
+                                                '</li>');
+                                }
+                                else{
+                                    $("#place-chat").append('<li class="nav-item"><a class="nav-link">'+json[i].name+'</a><a href="../../../../room/'+json[i].id+'"> <button type="button" class="btn btn-secondary">Присоединиться</button></a></li>');
+                                }
+                            }
+                        }
+                    }
                 });
-            }
+
+            });
+        }
+});
+$.ajax({
+    url: "/ajax-circle-draw-joined",
+    success: function (result) {
+        var json = $.parseJSON(result);
+        json.forEach(function(item, i, json) {
+            var myCircle = new ymaps.Circle([
+                [json[i].x, json[i].y],
+                json[i].diametr
+            ], {
+                balloonContentHeader: json[i].name,
+                balloonContentBody:'<div>'+
+                                    '<a href="../../../../room/'+json[i].id+'"><button class="btn btn-secondary" >Войти</button></a>'+
+                                    '</div>',
+                balloonContentFooter: '<sup>Geo Chat</sup>',
+                hintContent:[ json[i].name]
+            }, {
+                fillColor: "#3caa3c",
+                fillOpacity: 0.5,
+                strokeColor: "#3caa3c",
+                strokeOpacity: 0.8,
+                strokeWidth: 1
+            });
+            myMap.geoObjects.add(myCircle);
         });
-    // Обработка события, возникающего при щелчке
-    // левой кнопкой мыши в любой точке карты.
-    // При возникновении такого события откроем балун.
+    }
+});
     myMap.events.add('click', function (e) {
             var coords = e.get('coords');
-            $.ajax({
-            url: "/ajax_circle",
-            method: "POST",
-            data: {
-                x: coords[0],
-                y: coords[1],
-                csrfmiddlewaretoken: '{{csrf_token}}'
-            }
-        });
+            if (!myMap.balloon.isOpen()) {
+            myMap.balloon.open(coords, {
+                contentHeader:'Вы можете создать здесь чат!',
+                contentBody:'<button type="button" class="btn btn-primary" onclick="create('+coords[0]+','+coords[1]+')" data-toggle="modal" data-target="#myModal1">Создать чат</button>',
+                contentFooter:'<sup>Geo Chat</sup>',
+            });
+        }
+        else {
+            myMap.balloon.close();
+        }
 
-            var myCircle = new ymaps.Circle([
-        // Координаты центра круга.
-        [coords[0].toPrecision(6), coords[1].toPrecision(6)],
-        // Радиус круга в метрах.
-        300
-    ], {
-        // Описываем свойства круга.
-        // Содержимое балуна.
-        // Содержимое хинта.
-        hintContent:[ coords[0].toPrecision(6),coords[1].toPrecision(6)]
-    }, {
-        // Задаем опции круга.
-        // Включаем возможность перетаскивания круга.
-        // Цвет заливки.
-        // Последний байт (77) определяет прозрачность.
-        // Прозрачность заливки также можно задать используя опцию "fillOpacity".
-        fillColor: "#3caa3c",
-        fillOpacity: 0.5,
-        // Цвет обводки.
-        strokeColor: "#3caa3c",
-        // Прозрачность обводки.
-        strokeOpacity: 0.8,
-        // Ширина обводки в пикселях.
-        strokeWidth: 1
-    });
-    myMap.geoObjects.add(myCircle);
     });
 
 }
-
-
-
-            </script>
-
-
-
-            {% include "footer.html" %}
+function create(x,y){
+    document.getElementById('x').value = x;
+    document.getElementById('y').value = y;
+}
+</script>
+{% include "footer.html" %}
 
         </div>
     </div>
@@ -199,7 +268,6 @@
         <script src="static/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
         <script src="static/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
         <script src="static/assets/libs/js/main-js.js"></script>
-        <script src="static/assets/libs/js/jvectormap.custom.js"></script>
 
 
 

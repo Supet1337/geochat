@@ -1,4 +1,9 @@
 <div class="footer" style="width:1640px">
+    {% if not request.user.is_authenticated %}
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+  Авторизация
+</button>
+
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -25,6 +30,9 @@
                          <br>
                     </form>
 
+
+
+
                 </div>
                 <div class="col">
 
@@ -42,7 +50,10 @@
     </div>
   </div>
 </div>
-
+Войдите, чтобы пользоваться сайтом
+{%else%}
+<p>Вас зовут: {{request.user.username}}</p>
+{%endif%}
 
                 <div class="container-fluid">
                     <div class="row">

@@ -1,0 +1,8 @@
+Django
+docker
+redis
+channels
+Pillow
+redis-server
+django-cleanup
+channels-redis

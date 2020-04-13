@@ -87,13 +87,15 @@
                             </ul>
                         </li>
                         <li class="nav-item dropdown nav-user">
-                            {% if not request.user.is_authenticated %}
-                            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
-                                Авторизация
-                            </button>
-                            {%else%}
-                            <h5 class="mb-0 text-black nav-user-name">{{request.user}} </h5>
-                            {%endif%}
+                            <a class="nav-link nav-user-img" href="#" id="navbarDropdownMenuLink2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="https://anews.az/file/pic/xeber/2019-01/1548232156__dsc4943.jpg" alt="" class="user-avatar-md rounded-circle"></a>
+                            <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
+                                <div class="nav-user-info">
+                                    {% if request.user.is_authenticated%}
+                                        <h5 class="mb-0 text-white nav-user-name">{{request.user}} </h5>
+                                    {%else%}
+                                    <h5 class="mb-0 text-white nav-user-name">Гость</h5>
+                                    {%endif%}
+                                </div>
                                 {% if request.user.is_authenticated%}
                                 <a class="dropdown-item" href="../profile/{{request.user.id}}"><i class="fas fa-user mr-2"></i>Account</a>
                                 <a class="dropdown-item" href="#"><i class="fas fa-cog mr-2"></i>Setting</a>
