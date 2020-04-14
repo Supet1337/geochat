@@ -1,3 +1,14 @@
+{% if messages %}
+{% for message in messages %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+{{message}}
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+
+{% endfor %}
+{% endif %}
 <div class="footer" style="width:1640px">
     {% if not request.user.is_authenticated %}
 <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
@@ -18,13 +29,25 @@
               <div class="row">
                 <div class="w-100"></div>
                 <div class="col">
-                     <form method="POST" action="">
+                     <form method="POST" class="needs-validation" action="" novalidate>
                         {% csrf_token %}
                          <br>
-                        <input type="text" id="username" name="username" class="form-control" placeholder="Логин">
-                        <input type="email" id="email" name="email" class="form-control" placeholder="Email">
-                        <input type="password" id="password1" name="password1" class="form-control" placeholder="Пароль">
-                        <input type="password" id="password2" name="password2" class="form-control" placeholder="Подтвердите пароль">
+                        <input type="text" id="username" name="username" class="form-control" placeholder="Логин" required>
+                          <div class="invalid-feedback">
+                           Заполните поле
+                          </div>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="Email" required>
+                         <div class="invalid-feedback">
+                           <small style="font-size:10.5px">Адресс электронной почты должен содеражть @</small>
+                          </div>
+                        <input type="password" id="password1"  pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*" name="password1" class="form-control" placeholder="Пароль" required>
+                         <div class="invalid-feedback">
+                           Минимум 8 символов, одна цифра, одна буква в верхнем регистре и одна в нижнем
+                          </div>
+                        <input type="password" id="password2"  pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*" name="password2" class="form-control" placeholder="Подтвердите пароль" required>
+                         <div class="invalid-feedback">
+                           Минимум 8 символов, одна цифра, одна буква в верхнем регистре и одна в нижнем
+                          </div>
                         <input type="submit" value="Зарегистрироваться" class="btn btn-dark">
                          <br>
                          <br>
@@ -36,12 +59,16 @@
                 </div>
                 <div class="col">
 
-                    <form action="" method="post">
+                   <form class="needs-validation" method="POST" novalidate>
                         {% csrf_token %}
                         <br>
-                        <input type="text" id="username_auth" name="username_auth" class="form-control" placeholder="Логин">
-                        <input type="password" id="password" name="password" class="form-control" placeholder="Пароль">
-                        <input type="submit" value="Войти" class="btn btn-dark">
+
+                      <input type="text" id="username_auth" name="username_auth"  class="form-control" placeholder="Логин" required>
+                       <input type="password" id="password" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*" name="password"  class="form-control" placeholder="Пароль" required>
+                        <input type="submit"  value="Войти" class="btn btn-dark">
+                       <div class="invalid-feedback">
+                           Неверный логин или пароль.
+                          </div>
                     </form>
 
                 </div>
@@ -50,10 +77,39 @@
     </div>
   </div>
 </div>
+
+
+
+
+<script>
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+
+
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+
+</script>
 Войдите, чтобы пользоваться сайтом
 {%else%}
 <p>Вас зовут: {{request.user.username}}</p>
 {%endif%}
+
+
 
                 <div class="container-fluid">
                     <div class="row">
@@ -64,6 +120,7 @@
                             <div class="text-md-right footer-links d-none d-sm-block">
                                 <a href="">О нас</a>
                                 <a href="">Поддержка</a>
+
                             </div>
                         </div>
                     </div>
