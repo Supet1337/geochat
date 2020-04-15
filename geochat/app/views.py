@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login, authenticate
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
+from django.core.mail import send_mail
 from .models import *
 from .forms import *
 import json
@@ -24,12 +25,14 @@ def ajax_load_messages(request, number):
         messages.append(message.json())
     return HttpResponse(json.dumps(messages))
 
+
 @login_required
-def ajax_maps_draw(request,number):
+def ajax_maps_draw(request, number):
     rooms = []
     for room in Room.objects.filter(author_id=number):
         rooms.append(room.json())
     return HttpResponse(json.dumps(rooms))
+
 
 @login_required
 def ajax_circle_draw(request):
@@ -54,6 +57,7 @@ def ajax_circle_draw(request):
     for room in rooms:
         rms.append(room.json())
     return HttpResponse(json.dumps(rms))
+
 
 @login_required
 def ajax_circle_draw_joined(request):
@@ -113,9 +117,11 @@ def room(request, number):
             context['rooms'] = rooms
             return render(request, "mess.html", context)
 
+
 def loggout(request):
     logout(request)
     return HttpResponseRedirect("/")
+
 
 def index(request):
     context = {}
@@ -132,6 +138,11 @@ def index(request):
                 new_Wallet.balance = 1000
                 new_Wallet.save()
                 login(request, user)
+
+                message = 'Здравствуйте! {}\nПоздравляем! Вы успешно зарегестрировали аккаунт Geochat.\nВперёд к ' \
+                          'новым приключениям!\n\n\n С уважением, команда Geochat  '.format(user.username)
+                send_mail('Регистрация аккаунта Geochat', message, 'shp.geochat@gmail.com', [user.email],
+                          fail_silently=False)
                 return render(request, 'index.html', context)
             else:
                 try:
@@ -185,8 +196,8 @@ def index(request):
                         new_room.is_place = True
                     else:
                         new_room.is_place = False
-                    if wallet.balance - (int(new_room.diametr)-50 + (int(new_room.max_members)-3)*10) >= 0:
-                        wallet.balance -= int(new_room.diametr)-50 + (int(new_room.max_members)-3)*10
+                    if wallet.balance - (int(new_room.diametr) - 50 + (int(new_room.max_members) - 3) * 10) >= 0:
+                        wallet.balance -= int(new_room.diametr) - 50 + (int(new_room.max_members) - 3) * 10
                         wallet.save()
                     else:
                         return HttpResponse('Не хватает денег')
@@ -238,7 +249,7 @@ def profile(request, number):
             ava = form.save(commit=False)
             ava.user = request.user
             ava.save()
-        return HttpResponseRedirect("../profile/"+str(number))
+        return HttpResponseRedirect("../profile/" + str(number))
     form = UploadImageForm()
     context = {}
     user = User.objects.get(id=number)
