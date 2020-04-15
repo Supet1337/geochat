@@ -6971,7 +6971,9 @@ Media Query
     padding: 17px 29px;}
 }
 
-
+.container-small, .container-large {
+  max-width: 100%;
+}
 
 
 /* Custom, iPhone Retina */
