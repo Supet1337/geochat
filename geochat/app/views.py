@@ -129,6 +129,12 @@ def index(request):
         form = RegisterForm(request.POST)
         context['form'] = form
         if not request.user.is_authenticated:
+            if len(User.objects.filter(email=form.data['email'])) > 0:
+                messages.error(request, "Пользователь с такой почтой уже существует.")
+                return HttpResponseRedirect("/")
+            if len(User.objects.filter(username=form.data['username'])) > 0:
+                messages.error(request, "Пользователь с таким логином уже существует.")
+                return HttpResponseRedirect("/")
             if form.is_valid():
                 user = form.save(commit=False)
                 user.email = form.data['email']
@@ -138,11 +144,11 @@ def index(request):
                 user_add.balance = 1000
                 user_add.save()
                 login(request, user)
-
                 message = 'Здравствуйте! {}\nПоздравляем! Вы успешно зарегестрировали аккаунт Geochat.\nВперёд к ' \
                           'новым приключениям!\n\n\n С уважением, команда Geochat  '.format(user.username)
                 send_mail('Регистрация аккаунта Geochat', message, 'shp.geochat@yandex.ru', [user.email],
                           fail_silently=False)
+
                 return render(request, 'index.html', context)
             else:
                 try:
