@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login, authenticate
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
+from django.core.mail import send_mail
 from .models import *
 from .forms import *
 import json
@@ -54,6 +55,7 @@ def ajax_circle_draw(request):
     for room in rooms:
         rms.append(room.json())
     return HttpResponse(json.dumps(rms))
+
 
 @login_required
 def ajax_circle_draw_joined(request):
@@ -115,9 +117,11 @@ def room(request, number):
             context['rooms'] = rooms
             return render(request, "mess.html", context)
 
+
 def loggout(request):
     logout(request)
     return HttpResponseRedirect("/")
+
 
 def index(request):
     context = {}
@@ -134,6 +138,11 @@ def index(request):
                 user_add.balance = 1000
                 user_add.save()
                 login(request, user)
+
+                message = 'Здравствуйте! {}\nПоздравляем! Вы успешно зарегестрировали аккаунт Geochat.\nВперёд к ' \
+                          'новым приключениям!\n\n\n С уважением, команда Geochat  '.format(user.username)
+                send_mail('Регистрация аккаунта Geochat', message, 'shp.geochat@yandex.ru', [user.email],
+                          fail_silently=False)
                 return render(request, 'index.html', context)
             else:
                 try:
@@ -148,6 +157,7 @@ def index(request):
                     return HttpResponseRedirect("/")
                 else:
                     messages.error(request, 'Неправильный логин или пароль.')
+
                 return HttpResponseRedirect("/")
         else:
             if request.POST.get('name') is None:

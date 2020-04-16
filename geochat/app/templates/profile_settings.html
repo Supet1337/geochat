@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 
 
 <head>
@@ -62,17 +62,19 @@
                             <!-- ============================================================== -->
                             <div class="card" style="width:1590px; height:700px; margin-top:80px">
                                 <div class="card-body">
-                                    <div class="user-avatar d-block">
+                                    <div class="user-avatar d-block" align="center">
                                         {% if image == -1 %}
-                                            <img alt="User Avatar" align="left" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %}>
+                                            <img alt="User Avatar" align="center" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %}>
                                         {% else %}
-                                            <img alt="User Avatar" align="left" class="rounded-circle user-avatar-xxl" src="{{image.url}}">
+                                            <img alt="User Avatar" align="center" class="rounded-circle user-avatar-xxl" src="{{image.url}}">
                                         {% endif %}
-                                        <div align="left">
+                                        <div>
                                         <form method="post" enctype="multipart/form-data">
                                         {%csrf_token%}
                                         {{form.image}}
-                                            <input type="submit" value="Сохранить картинку">
+                                            <div>
+                                            <input type="submit" class= "btn btn-primary" value="Сохранить картинку">
+                                            </div>
                                         </form>
                                         </div>
                                     </div>
@@ -85,7 +87,7 @@
                                         <ul class="list-unstyled mb-0">
                                         <li class="mb-2"><i class="fas fa-lock"></i>Сменить пароль</li>
                                         <li class="mb-0"><i class="fas fa-at"></i> Задать статус: </li>
-                                            <input type="text" id="status" name="status" value="{{status}}">
+                                            <input type="text" class="form-control" id="status" name="status" value="{{status}}">
                                     </ul>
                                     </div>
                                 </div>
@@ -99,12 +101,13 @@
 
                                         <li class="mb-0"><i class="fas fa-users"></i> Кто может видеть информацию обо мне
                                             <input type="checkbox" name="private_info" id="private_info" {{private_info}}>
+
                                         </li>
 
                                     </ul>
                                     </div>
                                 </div>
-                                    <input type="submit" value="Сохранить изменения">
+                                    <input type="submit" class= "btn btn-primary" style="width:100%" value="Сохранить изменения">
                                 </form>
 
                             </div>

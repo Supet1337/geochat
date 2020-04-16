@@ -133,3 +133,10 @@ STATICFILES_DIRS = ("app/static/static_local",)
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = "app/media"
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'shp.geochat@yandex.ru'
+EMAIL_HOST_PASSWORD = 'srgobbbgbhzoeias'
