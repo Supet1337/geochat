@@ -2,10 +2,10 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from .models import *
 
-class UploadImageForm(forms.ModelForm):
+class UserSettingsForm(forms.ModelForm):
 
     class Meta:
-        model = Image
+        model = UserAdditionals
         fields = ['image']
 
 class RegisterForm(UserCreationForm):

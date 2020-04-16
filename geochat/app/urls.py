@@ -11,4 +11,5 @@ urlpatterns = [
     path('ajax-circle-draw-joined',ajax_circle_draw_joined),
     path('ajax-load-messages/<int:number>',ajax_load_messages),
     path('profile/<int:number>',profile),
+    path('profile-settings',profile_settings),
 ]

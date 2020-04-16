@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en">
 
- 
+
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -62,39 +62,50 @@
                             <!-- ============================================================== -->
                             <div class="card" style="width:1590px; height:700px; margin-top:80px">
                                 <div class="card-body">
-                                    <div class="user-avatar text-center d-block">
-                                        {% if image_profile == -1 %}
-                                            <img alt="User Avatar" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %}>
+                                    <div class="user-avatar d-block">
+                                        {% if image == -1 %}
+                                            <img alt="User Avatar" align="left" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %}>
                                         {% else %}
-                                            <img alt="User Avatar" class="rounded-circle user-avatar-xxl" src="{{image_profile.url}}">
+                                            <img alt="User Avatar" align="left" class="rounded-circle user-avatar-xxl" src="{{image.url}}">
                                         {% endif %}
-                                    </div>
-                                    <div class="text-center">
-                                        <h2 class="font-24 mb-0">{{username}}</h2>
-                                        <p>{{status}}</p>
+                                        <div align="left">
+                                        <form method="post" enctype="multipart/form-data">
+                                        {%csrf_token%}
+                                        {{form.image}}
+                                            <input type="submit" value="Сохранить картинку">
+                                        </form>
+                                        </div>
                                     </div>
                                 </div>
+                                <form method="post">
+                                    {%csrf_token%}
                                 <div class="card-body border-top">
-                                    <h3 class="font-16">Информация о профиле</h3>
-                                    {% if private_info and request.user.id != id %}
-                                        Этот пользователь скрыл личную информацию о себе.
-                                    {% else %}
+                                    <h3 class="font-16">Основные настройки</h3>
                                     <div class="">
                                         <ul class="list-unstyled mb-0">
-                                        <li class="mb-2"><i class="fas fa-fw fa-envelope mr-2"></i>{{email}}</li>
-                                        <li class="mb-0"><i class="fas fa-fw fa-phone mr-2"></i>Дата регистрации:{{last_login}}</li>
+                                        <li class="mb-2"><i class="fas fa-lock"></i>Сменить пароль</li>
+                                        <li class="mb-0"><i class="fas fa-at"></i> Задать статус: </li>
+                                            <input type="text" id="status" name="status" value="{{status}}">
                                     </ul>
                                     </div>
-                                    {% endif %}
                                 </div>
                                 <div class="card-body border-top">
-                                    {% if private_info and request.user.id != id %}
-                                        Этот пользователь скрыл личную информацию о себе.
-                                    {% else %}
-                                    <h3 class="font-16">Баланс</h3>
-                                    <h1 class="mb-0" id="profile-balance">{{my_balance}}<img src={% static "images/geocoin.png" %} style="width: 40px;height: 40px"></h1>
-                                    {% endif %}
+                                    <h3 class="font-16">Настройки приватности</h3>
+                                    <div class="">
+                                        <ul class="list-unstyled mb-0">
+                                        <li class="mb-2"><i class="fas fa-minus-circle"></i> Кто может видеть мои чаты
+                                            <input type="checkbox" name="private_chats" id="private_chats" {{private_chats}}>
+                                        </li>
+
+                                        <li class="mb-0"><i class="fas fa-users"></i> Кто может видеть информацию обо мне
+                                            <input type="checkbox" name="private_info" id="private_info" {{private_info}}>
+                                        </li>
+
+                                    </ul>
+                                    </div>
                                 </div>
+                                    <input type="submit" value="Сохранить изменения">
+                                </form>
 
                             </div>
                             <!-- ============================================================== -->
@@ -118,24 +129,8 @@
 
                                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                                 <div class="section-block">
-                                                    <h3 class="section-title">Созданные чаты:</h3>
                                                 </div>
                                             </div>
-                                            {% if private_chats and request.user.id != id %}
-                                                Этот пользователь скрыл созданные чаты.
-                                            {% else %}
-                                            {% for room in created_rooms %}
-                                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <h1 class="mb-1">{{room.name}}</h1>
-                                                        <div id="map{{room.id}}" style="width: 333px; height: 300px"></div>
-                                                        <p id="addr{{room.id}}"></p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {% endfor %}
-                                            {% endif %}
                                 </div>
                         <!-- ============================================================== -->
                         <!-- end campaign data -->
@@ -176,42 +171,7 @@
     <!-- Optional JavaScript -->
     <!-- jquery 3.3.1  -->
 
-   <script>
-    function maps() {
-        $.ajax({
-            url: "/ajax-maps-draw/"+{{id}},
-            success: function (result) {
-                var json = $.parseJSON(result);
 
-                json.forEach(function(item, i, json) {
-                    ymaps.ready(function () {
-    var myMap = new ymaps.Map('map'+json[i].id+'', {
-        center: [json[i].x,json[i].y],
-        zoom:15,
-        controls: ['smallMapDefaultSet']
-    }, {
-        // Зададим ограниченную область прямоугольником,
-        restrictMapArea: true
-    });
-    getAddress(json[i].x,json[i].y,json[i].id)
-});
-
-                });
-
-            }
-
-        });
-
-    }
-    maps();
-    function getAddress(x,y,id) {
-    ymaps.geocode([x,y]).then(function(res) {
-        var firstGeoObject = res.geoObjects.get(0);
-        document.getElementById('addr'+id+'').innerHTML = firstGeoObject.getAddressLine();
-      }
-
-    )}
-   </script>
 </body>
- 
+
 </html>

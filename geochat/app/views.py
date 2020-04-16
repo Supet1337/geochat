@@ -11,7 +11,7 @@ import json
 
 @login_required
 def ajax_update_balance(request):
-    wallet = Wallet.objects.get(user=request.user)
+    wallet = UserAdditionals.objects.get(user=request.user)
     wallet.balance += 1
     wallet.save()
     return HttpResponse(json.dumps({'balance': wallet.balance}))
@@ -83,10 +83,12 @@ def room(request, number):
         new_message.save()
         return HttpResponseRedirect("/chat")
     if request.method == "GET":
-        try:
-            context['image'] = Image.objects.get(user=request.user)
-        except:
+        user_add = UserAdditionals.objects.get(user=request.user)
+        context['my_balance'] = user_add.balance
+        if user_add.image == '':
             context['image'] = -1
+        else:
+            context['image'] = user_add.image
         room = Room.objects.get(id=number)
         joins = JoinRoom.objects.filter(room_id=number)
         for join in joins:
@@ -127,10 +129,10 @@ def index(request):
                 user = form.save(commit=False)
                 user.email = form.data['email']
                 user.save()
-                new_Wallet = Wallet()
-                new_Wallet.user = user
-                new_Wallet.balance = 1000
-                new_Wallet.save()
+                user_add = UserAdditionals()
+                user_add.user = user
+                user_add.balance = 1000
+                user_add.save()
                 login(request, user)
                 return render(request, 'index.html', context)
             else:
@@ -169,7 +171,7 @@ def index(request):
             else:
                 if not request.POST.get('name') == '':
                     new_room = Room()
-                    wallet = Wallet.objects.get(user=request.user)
+                    wallet = UserAdditionals.objects.get(user=request.user)
                     new_room.author = request.user
                     new_room.name = request.POST.get('name')
                     new_room.password = request.POST.get('password')
@@ -216,44 +218,42 @@ def index(request):
             flag = False
         context['rooms'] = rooms
         if request.user.is_authenticated:
-            context['balance'] = Wallet.objects.get(user=request.user).balance
+            user_add = UserAdditionals.objects.get(user=request.user)
+            context['balance'] = user_add.balance
+            if user_add.image == '':
+                context['image'] = -1
+            else:
+                context['image'] = user_add.image
         else:
             context['balance'] = 0
-        try:
-            context['image'] = Image.objects.get(user=request.user)
-        except:
             context['image'] = -1
+
         return render(request, 'index.html', context)
 
-
+@login_required
 def profile(request, number):
-    if request.method == "POST":
-        form = UploadImageForm(request.POST, request.FILES)
-        if form.is_valid():
-            try:
-                image = Image.objects.get(user=request.user)
-                image.delete()
-            except:
-                pass
-            ava = form.save(commit=False)
-            ava.user = request.user
-            ava.save()
-        return HttpResponseRedirect("../profile/"+str(number))
-    form = UploadImageForm()
     context = {}
     user = User.objects.get(id=number)
-    context['form'] = form
-    try:
-        context['image'] = Image.objects.get(user=user)
-    except:
+    profile_user_add = UserAdditionals.objects.get(user=user)
+    user_add = UserAdditionals.objects.get(user=request.user)
+    if profile_user_add.image == '':
+        context['image_profile'] = -1
+    else:
+        context['image_profile'] = profile_user_add.image
+    if user_add.image == '':
         context['image'] = -1
+    else:
+        context['image'] = user_add.image
     context['username'] = user.username
     context['email'] = user.email
     context['last_login'] = user.last_login
     context['room'] = room
+    context['private_chats'] = profile_user_add.private_chats
+    context['private_info'] = profile_user_add.private_info
     context['id'] = number
+    context['status'] = profile_user_add.status
     context['created_rooms'] = Room.objects.filter(author_id=number)
-    context['balance'] = Wallet.objects.get(user_id=number).balance
+    context['my_balance'] = user_add.balance
     join_rooms = JoinRoom.objects.filter(user=request.user)
     rooms = []
     for join_room in join_rooms:
@@ -261,3 +261,59 @@ def profile(request, number):
     context['rooms'] = rooms
 
     return render(request, 'profile.html', context)
+
+@login_required
+def profile_settings(request):
+    if request.method == "POST":
+        form = UserSettingsForm(request.POST, request.FILES)
+        if form.is_valid():
+            old_user_add = UserAdditionals.objects.get(user=request.user)
+            user_add = form.save(commit=False)
+            if user_add.image != '':
+                try:
+                    image = UserAdditionals.objects.get(user=request.user).image
+                    image.delete()
+                except:
+                    pass
+                old_user_add.image = user_add.image
+                old_user_add.save()
+            else:
+                user_add = UserAdditionals.objects.get(user=request.user)
+                user_add.status = request.POST.get('status')
+                if request.POST.get('private_chats'):
+                    user_add.private_chats = True
+                else:
+                    user_add.private_chats = False
+                if request.POST.get('private_info'):
+                    user_add.private_info = True
+                else:
+                    user_add.private_info = False
+                user_add.save()
+        return HttpResponseRedirect("../profile-settings")
+
+    form = UserSettingsForm()
+    context = {}
+    context['form'] = form
+    user_add = UserAdditionals.objects.get(user=request.user)
+    if user_add.image == '':
+        context['image'] = -1
+    else:
+        context['image'] = user_add.image
+    context['username'] = request.user
+    context['email'] = request.user.email
+    context['last_login'] = request.user.last_login
+    context['room'] = room
+    context['id'] = request.user.id
+    context['created_rooms'] = Room.objects.filter(author_id=request.user.id)
+    context['my_balance'] = user_add.balance
+    context['status'] = user_add.status
+    if user_add.private_chats:
+        context['private_chats'] = 'checked'
+    if user_add.private_info:
+        context['private_info'] = 'checked'
+    join_rooms = JoinRoom.objects.filter(user=request.user)
+    rooms = []
+    for join_room in join_rooms:
+        rooms.append(Room.objects.get(id=join_room.room_id))
+    context['rooms'] = rooms
+    return render(request,'profile_settings.html',context)
