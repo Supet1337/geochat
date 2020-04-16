@@ -1,3 +1,4 @@
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 {% if messages %}
 {% for message in messages %}
 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -9,7 +10,8 @@
 
 {% endfor %}
 {% endif %}
-<div class="footer" style="width:1640px">
+<div class="footer" style="width:100%">
+
     {% if not request.user.is_authenticated %}
 <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
   Авторизация
