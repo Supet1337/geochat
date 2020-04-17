@@ -178,10 +178,42 @@ body {
 <div class="dashboard-wrapper">
 	<div class="container-fluid  dashboard-content">
 <div id="frame">
+	<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel1">Список пользователей</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+		<i style="margin-left: 25px;" class="fas fa-chess-king"></i>
+            <div class="container">
+              <div class="row">
+                <div class="w-100"></div>
+					<div class="col">
+					{% for user in user_list %}
+				  {% if user.image == "" %}
+					<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %} alt="" /><a>    {{user.user}}</p>
+				  {% else %}
+					<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="{{user.image.url}}" alt="" /><a>    {{user.user}}</p>
+				  {% endif %}
+						<hr>
+						{% endfor %}
+					</div>
+              </div>
+            </div>
+			<form method="post">
+				{% csrf_token %}
+				<button type="submit" class="btn btn-danger" style="width: 100%">Выйти из чата</button>
+			</form>
+    </div>
+  </div>
+</div>
 	<div class="content">
 		<div class="contact-profile">
 			<img src={% static "images/geocoin.png" %}>
-			<p>{{room.name}}</p>
+			<p>{{room.name}}<a style="margin-left: 1450px;" data-toggle="modal" data-target="#myModal1"><i class="fas fa-ellipsis-v"></i></a></p>
 		</div>
 		<div id="scroll" class="messages">
 			<ul id="kek">
@@ -191,7 +223,7 @@ body {
 		<div class="message-input">
 
 			<div class="wrap">
-				<input type="text" name="message" id="message" placeholder="Введите сообщение...">
+				<input type="text" autocomplete="off" name="message" id="message" placeholder="Введите сообщение...">
 				<button type="submit" id="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
 			</div>
 		</div>

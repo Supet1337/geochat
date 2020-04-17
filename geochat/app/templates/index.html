@@ -34,10 +34,10 @@
               <div class="row">
                 <div class="w-100"></div>
                 <div class="col">
-                     <form method="POST" action="">
+                     <form method="POST" action="" >
                         {% csrf_token %}
                          <br>
-                        <input type="text" id="name" name="name" class="form-control" placeholder="Название комнаты" readonly onfocus="this.removeAttribute('readonly')">
+                        <input type="text" autocomplete="off" id="name" name="name" class="form-control" placeholder="Название комнаты" readonly onfocus="this.removeAttribute('readonly')">
                          <input type="checkbox" id="is_place" name="is_place"> Виден только тем, кто находится поблизости
                          <br>
                          <input type="checkbox" id="is_private" name="is_private" onclick="private()"> С паролем
@@ -91,6 +91,17 @@
                         </div>
                     </div>
                 </div>
+                {% if messages %}
+{% for message in messages %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+{{message}}
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+
+{% endfor %}
+{% endif %}
                 {% if request.user.is_authenticated %}
                     <div id="map" style="width: 1600px; height: 700px"></div>
                 {%else%}

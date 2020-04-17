@@ -78,14 +78,8 @@ def ajax_circle_draw_joined(request):
 def room(request, number):
     context = {}
     if request.method == "POST":
-        text = request.POST.get('message')
-        if text == '':
-            return HttpResponseRedirect("/chat")
-        new_message = Message()
-        new_message.text = text
-        new_message.author = request.user
-        new_message.save()
-        return HttpResponseRedirect("/chat")
+        JoinRoom.objects.get(user=request.user).delete()
+        return HttpResponseRedirect('../')
     if request.method == "GET":
         user_add = UserAdditionals.objects.get(user=request.user)
         context['my_balance'] = user_add.balance
@@ -95,6 +89,10 @@ def room(request, number):
             context['image'] = user_add.image
         room = Room.objects.get(id=number)
         joins = JoinRoom.objects.filter(room_id=number)
+        user_list = []
+        for join in joins:
+            user_list.append(UserAdditionals.objects.get(user=join.user))
+        context['user_list'] = user_list
         for join in joins:
             if request.user == join.user:
                 context['room'] = room
@@ -105,7 +103,8 @@ def room(request, number):
                 context['rooms'] = rooms
                 return render(request, "mess.html", context)
         if room.is_private:
-            return HttpResponse('У вас нет доступа к этому чату')
+            messages.error(request, 'У вас нет доступа к этому чату')
+            return HttpResponseRedirect("../")
         else:
             new_join = JoinRoom()
             new_join.user = request.user
@@ -134,7 +133,6 @@ def index(request):
             if form.is_valid():
                 user = form.save(commit=False)
                 user.email = form.data['email']
-                user.save()
                 user_add = UserAdditionals()
                 user_add.user = user
                 user_add.balance = 1000
@@ -142,6 +140,7 @@ def index(request):
                     messages.error(request, "Пользователь с такой почтой уже существует.")
                     return HttpResponseRedirect("/")
                 else:
+                    user.save()
                     user_add.save()
                     login(request, user)
 
@@ -183,10 +182,11 @@ def index(request):
                         return HttpResponseRedirect(
                             '/room/' + str(request.POST.get('id')))
                     else:
-                        return HttpResponse('Неправильный пароль')
+                        messages.error(request, "Неправильный пароль.")
+                        return HttpResponseRedirect('/')
                 else:
-                    return HttpResponse(
-                        'В данном чате уже максимальное количество пользователей')
+                    messages.error(request, "В этом чате уже максимальное количество пользователей.")
+                    return HttpResponseRedirect('/')
             else:
                 if not request.POST.get('name') == '':
                     new_room = Room()
@@ -210,10 +210,11 @@ def index(request):
                         wallet.balance -= int(new_room.diametr)-50 + (int(new_room.max_members)-3)*10
                         wallet.save()
                     else:
-                        return HttpResponse('Не хватает денег')
+                        messages.error(request, "Вам не хватает монет для создания чата.")
+                        return HttpResponseRedirect('/')
                     new_room.save()
                 else:
-                    return HttpResponse('Название не может быть пустым')
+                    messages.error(request, "Название чата не может быть пустым.")
                 return HttpResponseRedirect('/')
 
     if request.method == "GET":
@@ -297,6 +298,7 @@ def profile_settings(request):
                     pass
                 old_user_add.image = user_add.image
                 old_user_add.save()
+                messages.success(request, "Аватарка успешно сохранена.")
             else:
                 user_add = UserAdditionals.objects.get(user=request.user)
                 user_add.status = request.POST.get('status')
@@ -309,6 +311,7 @@ def profile_settings(request):
                 else:
                     user_add.private_info = False
                 user_add.save()
+                messages.success(request, "Настройки успешно сохранены.")
         return HttpResponseRedirect("../profile-settings")
 
     form = UserSettingsForm()

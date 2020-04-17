@@ -1,14 +1,4 @@
-{% if messages %}
-{% for message in messages %}
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-{{message}}
-<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-<span aria-hidden="true">&times;</span>
-</button>
-</div>
 
-{% endfor %}
-{% endif %}
 <div class="footer" style="width:1640px">
     {% if not request.user.is_authenticated %}
 <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
