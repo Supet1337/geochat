@@ -57,7 +57,7 @@
                      <form method="POST" action="" >
                         {% csrf_token %}
                          <br>
-                        <input type="text" id="name" name="name" class="form-control" placeholder="Название комнаты" readonly onfocus="this.removeAttribute('readonly')" autocomplete="off">
+                        <input type="text" autocomplete="off" id="name" name="name" class="form-control" placeholder="Название комнаты" readonly onfocus="this.removeAttribute('readonly')">
                          <input type="checkbox" id="is_place" name="is_place"> Виден только тем, кто находится поблизости
                          <br>
                          <input type="checkbox" id="is_private" name="is_private" onclick="private()"> С паролем
@@ -111,9 +111,51 @@
                         </div>
                     </div>
                 </div>
+                {% if messages %}
+{% for message in messages %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+{{message}}
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+
+{% endfor %}
+{% endif %}
                 {% if request.user.is_authenticated %}
-                    <div id="map" style="width: 100%; height: 700px;"></div>
-                {% endif %}
+                    <div id="map" style="width: 100%; height: 700px"></div>
+                {%else%}
+<div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+    <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+    <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+  </ol>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src={% static "images/mountains (6).jpg"%}  class="d-block  w-100" alt="...">
+      <div class="carousel-caption d-none d-md-block">
+        <p>Добро пожаловать!</p>
+        <p>Зарегистрируйтесь на сайте Geochat и общайтесь с людьми из любой точки мира.</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img  src={% static "images/fon.jpg" %}  class="d-block  w-100" alt="...">
+      <div class="carousel-caption d-none d-md-block">
+        <p>Куча возможностей!</p>
+        <p>Создавайте сови чаты, общайтесь с друзьями, зарабатывайте монетки.</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src={% static "images/33.jpg" %} class="d-block w-100"  alt="...">
+      <div class="carousel-caption d-none d-md-block">
+          <p>Чего вы ждёте?</p>
+        <p>Вперёд к новым приключениям!</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
 <script type="text/javascript">
 if('{{request.user.is_authenticated}}' == 'True')
     ymaps.ready(init);

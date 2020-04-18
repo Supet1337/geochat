@@ -46,7 +46,7 @@
                                             <p id="balance">Ваш баланс: {{balance}}<img src={% static "images/geocoin.png" %} style="width: 20px;height: 20px"></p>
                                         </li>
                                         <li class="nav-item">
-                                            <button class="btn btn-secondary" style="width:220px" onclick="update_balance()">Клик</button>
+                                            <button onkeypress="if(event.keyCode == 13) return false;" class="btn btn-secondary" style="width:220px" onclick="update_balance()">Клик</button>
                                         </li>
                                         {% else %}
                                         <li class="nav-item">

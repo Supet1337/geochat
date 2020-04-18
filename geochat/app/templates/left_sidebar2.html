@@ -16,7 +16,7 @@
                                 <div id="submenu-1" class="collapse submenu" style="">
                                     <ul class="nav flex-column">
                                         <li class="nav-item">
-                                            <p id="balance">Ваш баланс: {{balance}}<img src={% static "images/geocoin.png" %} style="width: 20px;height: 20px"></p>
+                                            <p id="balance">Ваш баланс: {{my_balance}}<img src={% static "images/geocoin.png" %} style="width: 20px;height: 20px"></p>
                                         </li>
                                         <li class="nav-item">
                                             <button class="btn btn-secondary" style="width:220px" onclick="update_balance()">Клик</button>
@@ -78,7 +78,6 @@
             success: function (result) {
                 var json = $.parseJSON(result);
                 $("#balance").html('Ваш баланс: ' +json['balance']+'<img src={% static "images/geocoin.png" %} style="width: 20px;height: 20px">');
-                $("#profile-balance").html(json['balance']+'<img src={% static "images/geocoin.png" %} style="width: 40px;height: 40px">');
             }
         });
     }

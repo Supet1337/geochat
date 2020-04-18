@@ -36,7 +36,7 @@ class Message(models.Model):
         return  {'text':self.text, 'author': str(self.author), 'date':str(datef), 'id':self.author.id, 'image':str(self.get_image())}
     def get_image(self):
         try:
-            return Image.objects.get(user=self.author).image.url
+            return UserAdditionals.objects.get(user=self.author).image.url
         except:
             return -1
 
@@ -45,10 +45,10 @@ class JoinRoom(models.Model):
     room_id = models.IntegerField()
     date = models.DateTimeField(auto_now_add=True)
 
-class Image(models.Model):
+class UserAdditionals(models.Model):
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to=user_directory_path)
-
-class Wallet(models.Model):
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to=user_directory_path, blank=True)
     balance = models.IntegerField(default=1000)
+    status = models.CharField(max_length=50,default='Статус не указан')
+    private_chats = models.BooleanField(default=False)
+    private_info = models.BooleanField(default=False)
