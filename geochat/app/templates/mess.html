@@ -3,8 +3,9 @@
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
 <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
-    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
-    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
+<link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
+<link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
+<link rel="shortcut icon" href={% static "images/geocoin.png" %}  type="image/png">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 
@@ -187,7 +188,7 @@ body {
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-		<i style="margin-left: 25px;" class="fas fa-chess-king"></i>
+		<i style="margin-left: 25px; color:#ffe21f" class="fas fa-chess-king"></i>
             <div class="container">
               <div class="row">
                 <div class="w-100"></div>
@@ -230,7 +231,22 @@ body {
 	</div>
 </div>
 	</div>
-	{% include "footer.html" %}
+	<div class="footer" style="width:100%">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                             FS102/Geo chat©
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="text-md-right footer-links d-none d-sm-block">
+                                <a href="">О нас</a>
+                                <a href="">Поддержка</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 </div>
 
 <script >

@@ -1,5 +1,5 @@
 {% load static %}
-<div class="nav-left-sidebar sidebar-dark">
+<div class="nav-left-sidebar sidebar-dark" style="width">
             <div class="menu-list">
                 <nav class="navbar navbar-expand-lg navbar-light">
                     <a class="d-xl-none d-lg-none" href="#">Dashboard</a>
@@ -19,7 +19,7 @@
                                             <p id="balance">Ваш баланс: {{my_balance}}<img src={% static "images/geocoin.png" %} style="width: 20px;height: 20px"></p>
                                         </li>
                                         <li class="nav-item">
-                                            <button class="btn btn-secondary" style="width:220px" onclick="update_balance()">Клик</button>
+                                            <button class="btn btn-secondary" onkeypress="if(event.keyCode == 13) return false;" style="width:220px" onclick="update_balance()">Клик</button>
                                         </li>
                                     </ul>
                                 </div>
