@@ -6971,8 +6971,16 @@ Media Query
     padding: 17px 29px;}
 }
 
+.container-small, .container-large {
+  max-width: 100%;
+}
 
+@media (max-width: 1000px){
+  header{
+    flex-direction: column;
 
-
+    align-items: flex-start;
+  }
+}
 /* Custom, iPhone Retina */
 @media only screen and (max-width:320px) {}
