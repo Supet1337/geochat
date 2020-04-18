@@ -57,10 +57,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
         return User.objects.get(id=author).username
 
     def get_image(self,user):
-        try:
-            return Image.objects.get(user_id=user).image.url
-        except:
+        user_add = UserAdditionals.objects.get(user_id=user)
+        if user_add.image == '':
             return '-1'
+        else:
+            return user_add.image.url
+
 
     async def chat_message(self, event):
         message = event['message']
