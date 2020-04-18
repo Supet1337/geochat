@@ -25,7 +25,7 @@ SECRET_KEY = 'wnt)319w#i$1ug2x)v2q0i_ilx7bia=hk&*1b@j4i%g+fmazfr'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['geochat.savink.in','0.0.0.0','127.0.0.1']
+ALLOWED_HOSTS = ['geochat.savink.in','127.0.0.1']
 
 # Application definition
 
@@ -140,3 +140,4 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'shp.geochat@yandex.ru'
 EMAIL_HOST_PASSWORD = 'srgobbbgbhzoeias'
+DEFAULT_FROM_EMAIL = 'shp.geochat@yandex.ru'
