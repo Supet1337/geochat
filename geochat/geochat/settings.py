@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django_cleanup.apps.CleanupConfig',
     'channels',
     'app',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -127,10 +128,29 @@ DATE_FORMAT = 'd.m G:i'
 
 STATIC_URL = '/static/'
 
-STATIC_ROOT = "app/static/static_server"
-
-STATICFILES_DIRS = ("app/static/static_local",)
+STATIC_ROOT = "app/collectedstatic"
 
 MEDIA_URL = '/media/'
 
 MEDIA_ROOT = "app/media"
+
+
+SECURE_SSL_REDIRECT = True
+
+# s3 serve static
+
+
+AWS_ACCESS_KEY_ID = "SCWWC0NA79VBS7DQ1G0R"
+AWS_SECRET_ACCESS_KEY = "91d10a80-a8c2-49f0-ad3e-62fdad004c9d"
+AWS_STORAGE_BUCKET_NAME = "geochat-static"
+AWS_DEFAULT_ACL = 'public-read'
+AWS_S3_REGION_NAME = "nl-ams"
+AWS_S3_ENDPOINT_URL = "https://s3.nl-ams.scw.cloud"
+
+if not DEBUG:
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+if DEBUG:
+    # `debug` is only True in templates if the vistor IP is in INTERNAL_IPS.
+    INTERNAL_IPS = type(str('c'), (), {'__contains__': lambda *a: True})()

@@ -7,3 +7,5 @@ redis-server
 django-cleanup
 channels-redis
 gunicorn
+django-storages
+boto3

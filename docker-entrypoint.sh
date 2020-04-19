@@ -2,7 +2,11 @@
 
 cd geochat
 echo "======Собираем статику======"
+if [ "$DEBUG" == "False" ]; then
+    echo "======Загружаем в S3 облако, это займет некоторое время======"
+fi
 python manage.py collectstatic --noinput
+
 
 #echo "======Таки ждем, пока постгра поднимется======"
 #while ! curl http://web_db:5432/ 2>&1 | grep '52'
@@ -16,7 +20,13 @@ echo "======Накатываем миграции======"
 #python manage.py makemigrations
 python manage.py migrate
 
-echo "======Стартуем сервер======"
 
-gunicorn --certfile=../config/nginx/certs/localhost.crt --keyfile=../config/nginx/certs/localhost.key geochat.wsgi:application --bind 0.0.0.0:443
-#python manage.py runserver 0.0.0.0:80
+echo "======Стартуем сервер======"
+if [ "$DEBUG" == "True" ]; then
+    ./manage.py runserver 0.0.0.0:80
+else
+    #daphne -b 0.0.0.0 -p 80 shp_place.asgi:application
+
+    daphne -e ssl:443:privateKey=../config/ssl_keys/privkey.pem:certKey=../config/ssl_keys/fullchain.pem  -b 0.0.0.0 -p 80 geochat.asgi:application
+
+fi

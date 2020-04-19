@@ -8,15 +8,6 @@ services:
       - ./config/web/web-variables.env
     volumes:
       - ./:/web
-    expose:
-      - "443"
-  nginx:
-    image: nginx:latest
-    container_name: ng
     ports:
-      - "443:443"
       - "80:80"
-    volumes:
-      - ./config/nginx/:/etc/nginx/conf.d
-    depends_on:
-      - web
+      - "443:443"
