@@ -9,6 +9,13 @@ from .models import *
 from .forms import *
 import json
 
+def view_404(request, exception):
+
+    return render(request, "errors/404.html")
+
+def view_500(request):
+
+    return render(request, "errors/500.html")
 
 
 
