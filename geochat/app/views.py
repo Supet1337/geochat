@@ -4,14 +4,17 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login, authenticate
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
+from django.core.mail import send_mail
 from .models import *
 from .forms import *
 import json
 
 
+
+
 @login_required
 def ajax_update_balance(request):
-    wallet = Wallet.objects.get(user=request.user)
+    wallet = UserAdditionals.objects.get(user=request.user)
     wallet.balance += 1
     wallet.save()
     return HttpResponse(json.dumps({'balance': wallet.balance}))
@@ -55,6 +58,7 @@ def ajax_circle_draw(request):
         rms.append(room.json())
     return HttpResponse(json.dumps(rms))
 
+
 @login_required
 def ajax_circle_draw_joined(request):
     join_rooms = []
@@ -74,21 +78,42 @@ def ajax_circle_draw_joined(request):
 def room(request, number):
     context = {}
     if request.method == "POST":
-        text = request.POST.get('message')
-        if text == '':
-            return HttpResponseRedirect("/chat")
-        new_message = Message()
-        new_message.text = text
-        new_message.author = request.user
-        new_message.save()
-        return HttpResponseRedirect("/chat")
+        form = RoomSettingsForm(request.POST, request.FILES)
+        if form.is_valid():
+            old_room = Room.objects.get(id=number)
+            new_room = form.save(commit=False)
+            if new_room.image != '':
+                try:
+                    image = old_room.image
+                    image.delete()
+                except:
+                    pass
+                old_room.image = new_room.image
+                old_room.save()
+                messages.success(request, "Аватарка успешно изменена.")
+            else:
+                new_name = Room.objects.get(id=number)
+                new_name.name = request.POST.get('name')
+                new_name.save()
+                messages.success(request, "Изменения успешно сохранены.")
+            return HttpResponseRedirect("/room/"+str(number))
+        JoinRoom.objects.get(user=request.user).delete()
+        return HttpResponseRedirect('../')
     if request.method == "GET":
-        try:
-            context['image'] = Image.objects.get(user=request.user)
-        except:
+        form = RoomSettingsForm()
+        context['form'] = form
+        user_add = UserAdditionals.objects.get(user=request.user)
+        context['my_balance'] = user_add.balance
+        if user_add.image == '':
             context['image'] = -1
+        else:
+            context['image'] = user_add.image
         room = Room.objects.get(id=number)
         joins = JoinRoom.objects.filter(room_id=number)
+        user_list = []
+        for join in joins:
+            user_list.append(UserAdditionals.objects.get(user=join.user))
+        context['user_list'] = user_list
         for join in joins:
             if request.user == join.user:
                 context['room'] = room
@@ -99,7 +124,8 @@ def room(request, number):
                 context['rooms'] = rooms
                 return render(request, "mess.html", context)
         if room.is_private:
-            return HttpResponse('У вас нет доступа к этому чату')
+            messages.error(request, 'У вас нет доступа к этому чату')
+            return HttpResponseRedirect("../")
         else:
             new_join = JoinRoom()
             new_join.user = request.user
@@ -113,9 +139,11 @@ def room(request, number):
             context['rooms'] = rooms
             return render(request, "mess.html", context)
 
+
 def loggout(request):
     logout(request)
     return HttpResponseRedirect("/")
+
 
 def index(request):
     context = {}
@@ -126,18 +154,30 @@ def index(request):
             if form.is_valid():
                 user = form.save(commit=False)
                 user.email = form.data['email']
-                user.save()
-                new_Wallet = Wallet()
-                new_Wallet.user = user
-                new_Wallet.balance = 1000
-                new_Wallet.save()
-                login(request, user)
+                user_add = UserAdditionals()
+                user_add.user = user
+                user_add.balance = 1000
+                if len(User.objects.filter(email=form.data['email'])) > 0:
+                    messages.error(request, "Пользователь с такой почтой уже существует.")
+                    return HttpResponseRedirect("/")
+                else:
+                    user.save()
+                    user_add.save()
+                    login(request, user)
+
+                message = 'Здравствуйте! {}\nПоздравляем! Вы успешно зарегестрировали аккаунт Geochat.\nВперёд к ' \
+                          'новым приключениям!\n\n\n С уважением, команда Geochat  '.format(user.username)
+                send_mail('Регистрация аккаунта Geochat', message, 'shp.geochat@yandex.ru', [user.email],
+                          fail_silently=False)
                 return render(request, 'index.html', context)
             else:
                 try:
                     username = request.POST['username_auth']
                     password = request.POST['password']
                 except:
+                    if len(User.objects.filter(username=form.data['username'])) > 0:
+                        messages.error(request, "Пользователь с таким ником уже существует.")
+                        return HttpResponseRedirect("/")
                     messages.error(request, 'Пароли не совпадают.')
                     return HttpResponseRedirect("/")
                 user = authenticate(username=username, password=password)
@@ -146,6 +186,7 @@ def index(request):
                     return HttpResponseRedirect("/")
                 else:
                     messages.error(request, 'Неправильный логин или пароль.')
+
                 return HttpResponseRedirect("/")
         else:
             if request.POST.get('name') is None:
@@ -162,14 +203,15 @@ def index(request):
                         return HttpResponseRedirect(
                             '/room/' + str(request.POST.get('id')))
                     else:
-                        return HttpResponse('Неправильный пароль')
+                        messages.error(request, "Неправильный пароль.")
+                        return HttpResponseRedirect('/')
                 else:
-                    return HttpResponse(
-                        'В данном чате уже максимальное количество пользователей')
+                    messages.error(request, "В этом чате уже максимальное количество пользователей.")
+                    return HttpResponseRedirect('/')
             else:
                 if not request.POST.get('name') == '':
                     new_room = Room()
-                    wallet = Wallet.objects.get(user=request.user)
+                    wallet = UserAdditionals.objects.get(user=request.user)
                     new_room.author = request.user
                     new_room.name = request.POST.get('name')
                     new_room.password = request.POST.get('password')
@@ -189,10 +231,15 @@ def index(request):
                         wallet.balance -= int(new_room.diametr)-50 + (int(new_room.max_members)-3)*10
                         wallet.save()
                     else:
-                        return HttpResponse('Не хватает денег')
+                        messages.error(request, "Вам не хватает монет для создания чата.")
+                        return HttpResponseRedirect('/')
                     new_room.save()
+                    join_new_room = JoinRoom()
+                    join_new_room.user = request.user
+                    join_new_room.room_id = Room.objects.get(name=new_room.name).id
+                    join_new_room.save()
                 else:
-                    return HttpResponse('Название не может быть пустым')
+                    messages.error(request, "Название чата не может быть пустым.")
                 return HttpResponseRedirect('/')
 
     if request.method == "GET":
@@ -216,44 +263,43 @@ def index(request):
             flag = False
         context['rooms'] = rooms
         if request.user.is_authenticated:
-            context['balance'] = Wallet.objects.get(user=request.user).balance
+            user_add = UserAdditionals.objects.get(user=request.user)
+            context['balance'] = user_add.balance
+            if user_add.image == '':
+                context['image'] = -1
+            else:
+                context['image'] = user_add.image
         else:
             context['balance'] = 0
-        try:
-            context['image'] = Image.objects.get(user=request.user)
-        except:
             context['image'] = -1
+
         return render(request, 'index.html', context)
 
 
+@login_required
 def profile(request, number):
-    if request.method == "POST":
-        form = UploadImageForm(request.POST, request.FILES)
-        if form.is_valid():
-            try:
-                image = Image.objects.get(user=request.user)
-                image.delete()
-            except:
-                pass
-            ava = form.save(commit=False)
-            ava.user = request.user
-            ava.save()
-        return HttpResponseRedirect("../profile/"+str(number))
-    form = UploadImageForm()
     context = {}
     user = User.objects.get(id=number)
-    context['form'] = form
-    try:
-        context['image'] = Image.objects.get(user=user)
-    except:
+    profile_user_add = UserAdditionals.objects.get(user=user)
+    user_add = UserAdditionals.objects.get(user=request.user)
+    if profile_user_add.image == '':
+        context['image_profile'] = -1
+    else:
+        context['image_profile'] = profile_user_add.image
+    if user_add.image == '':
         context['image'] = -1
+    else:
+        context['image'] = user_add.image
     context['username'] = user.username
     context['email'] = user.email
     context['last_login'] = user.last_login
     context['room'] = room
+    context['private_chats'] = profile_user_add.private_chats
+    context['private_info'] = profile_user_add.private_info
     context['id'] = number
+    context['status'] = profile_user_add.status
     context['created_rooms'] = Room.objects.filter(author_id=number)
-    context['balance'] = Wallet.objects.get(user_id=number).balance
+    context['my_balance'] = user_add.balance
     join_rooms = JoinRoom.objects.filter(user=request.user)
     rooms = []
     for join_room in join_rooms:
@@ -261,3 +307,61 @@ def profile(request, number):
     context['rooms'] = rooms
 
     return render(request, 'profile.html', context)
+
+@login_required
+def profile_settings(request):
+    if request.method == "POST":
+        form = UserSettingsForm(request.POST, request.FILES)
+        if form.is_valid():
+            old_user_add = UserAdditionals.objects.get(user=request.user)
+            user_add = form.save(commit=False)
+            if user_add.image != '':
+                try:
+                    image = UserAdditionals.objects.get(user=request.user).image
+                    image.delete()
+                except:
+                    pass
+                old_user_add.image = user_add.image
+                old_user_add.save()
+                messages.success(request, "Аватарка успешно сохранена.")
+            else:
+                user_add = UserAdditionals.objects.get(user=request.user)
+                user_add.status = request.POST.get('status')
+                if request.POST.get('private_chats'):
+                    user_add.private_chats = True
+                else:
+                    user_add.private_chats = False
+                if request.POST.get('private_info'):
+                    user_add.private_info = True
+                else:
+                    user_add.private_info = False
+                user_add.save()
+                messages.success(request, "Настройки успешно сохранены.")
+        return HttpResponseRedirect("../profile-settings")
+
+    form = UserSettingsForm()
+    context = {}
+    context['form'] = form
+    user_add = UserAdditionals.objects.get(user=request.user)
+    if user_add.image == '':
+        context['image'] = -1
+    else:
+        context['image'] = user_add.image
+    context['username'] = request.user
+    context['email'] = request.user.email
+    context['last_login'] = request.user.last_login
+    context['room'] = room
+    context['id'] = request.user.id
+    context['created_rooms'] = Room.objects.filter(author_id=request.user.id)
+    context['my_balance'] = user_add.balance
+    context['status'] = user_add.status
+    if user_add.private_chats:
+        context['private_chats'] = 'checked'
+    if user_add.private_info:
+        context['private_info'] = 'checked'
+    join_rooms = JoinRoom.objects.filter(user=request.user)
+    rooms = []
+    for join_room in join_rooms:
+        rooms.append(Room.objects.get(id=join_room.room_id))
+    context['rooms'] = rooms
+    return render(request,'profile_settings.html',context)

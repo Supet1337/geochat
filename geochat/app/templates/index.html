@@ -10,12 +10,13 @@
     <!-- Bootstrap CSS -->
     {% load static %}
     <link rel="stylesheet" type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
+    <link rel="shortcut icon" href={% static "images/geocoin.png" %}  type="image/png">
     <link rel="stylesheet" type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
     <link rel="stylesheet" type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=7abcaac9-c988-4344-9b01-50d57672abf2&lang=ru_RU" type="text/javascript" width="100%"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-    <title>Main Page</title>
+    <title>Geochat</title>
     <style>
     .row.content {height: 1500px}
     .index {
@@ -57,7 +58,7 @@
                      <form method="POST" action="" >
                         {% csrf_token %}
                          <br>
-                        <input type="text" id="name" name="name" class="form-control" placeholder="Название комнаты" readonly onfocus="this.removeAttribute('readonly')" autocomplete="off">
+                        <input type="text" autocomplete="off" id="name" name="name" class="form-control" placeholder="Название комнаты" readonly onfocus="this.removeAttribute('readonly')">
                          <input type="checkbox" id="is_place" name="is_place"> Виден только тем, кто находится поблизости
                          <br>
                          <input type="checkbox" id="is_private" name="is_private" onclick="private()"> С паролем
@@ -107,13 +108,55 @@
                 <div class="row">
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                         <div class="page-header">
-                            <h3 class="mb-2">Geo chat</h3>
+                            <h3 class="mb-2">Карта</h3>
                         </div>
                     </div>
                 </div>
+                {% if messages %}
+{% for message in messages %}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+{{message}}
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+
+{% endfor %}
+{% endif %}
                 {% if request.user.is_authenticated %}
-                    <div id="map" style="width: 100%; height: 700px;"></div>
-                {% endif %}
+                    <div id="map" style="width: 100%; height: 700px"></div>
+                {%else%}
+<div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
+    <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
+    <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
+  </ol>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img src={% static "images/mountains (6).jpg"%}  class="d-block  w-100" alt="...">
+      <div class="carousel-caption d-none d-md-block">
+        <p>Добро пожаловать!</p>
+        <p>Зарегистрируйтесь на сайте Geochat и общайтесь с людьми из любой точки мира.</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img  src={% static "images/fon.jpg" %}  class="d-block  w-100" alt="...">
+      <div class="carousel-caption d-none d-md-block">
+        <p>Куча возможностей!</p>
+        <p>Создавайте сови чаты, общайтесь с друзьями, зарабатывайте монетки.</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img src={% static "images/33.jpg" %} class="d-block w-100"  alt="...">
+      <div class="carousel-caption d-none d-md-block">
+          <p>Чего вы ждёте?</p>
+        <p>Вперёд к новым приключениям!</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
 <script type="text/javascript">
 if('{{request.user.is_authenticated}}' == 'True')
     ymaps.ready(init);
@@ -149,7 +192,7 @@ function init () {
                         [json[i].x, json[i].y],
                         json[i].diametr
                     ], {
-                        balloonContentHeader: json[i].name,
+                        balloonContentHeader: '<img alt="User Avatar" style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'">'+json[i].name+'',
                         balloonContentBody:
                                                 '<div>'+
                                                     '<form method="post">'+
@@ -174,7 +217,7 @@ function init () {
                         [json[i].x, json[i].y],
                         json[i].diametr
                     ], {
-                        balloonContentHeader: json[i].name,
+                        balloonContentHeader: '<img alt="User Avatar" style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'">'+json[i].name+'',
                         balloonContentBody:
                                                 '<div>'+
                                                     '<a href="../../../../room/'+json[i].id+'"> <button type="button" class="btn btn-secondary">Присоединиться</button></a>'+
@@ -209,6 +252,7 @@ function init () {
                             if('+{{request.user.is_authenticated}}+'){
                                 if(json[i].is_private){
                                     $("#place-chat").append('<li class="nav-item">'+
+                                                    '<img alt="User Avatar" style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'">' +
                                                     '<a class="nav-link">'+json[i].name+'</a>'+
                                                     '<form method="post">'+
                                                     '{% csrf_token %}'+
@@ -219,7 +263,7 @@ function init () {
                                                 '</li>');
                                 }
                                 else{
-                                    $("#place-chat").append('<li class="nav-item"><a class="nav-link">'+json[i].name+'</a><a href="../../../../room/'+json[i].id+'"> <button type="button" class="btn btn-secondary">Присоединиться</button></a></li>');
+                                    $("#place-chat").append('<li class="nav-item"><img alt="User Avatar" style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'"><a class="nav-link">'+json[i].name+'</a><a href="../../../../room/'+json[i].id+'"> <button type="button" class="btn btn-secondary">Присоединиться</button></a></li>');
                                 }
                             }
                         }
@@ -238,9 +282,9 @@ $.ajax({
                 [json[i].x, json[i].y],
                 json[i].diametr
             ], {
-                balloonContentHeader: json[i].name,
+                balloonContentHeader: '<img alt="User Avatar" style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'">'+json[i].name+'',
                 balloonContentBody:'<div>'+
-                                    '<a href="../../../../room/'+json[i].id+'"><button class="btn btn-secondary" >Войти</button></a>'+
+                                    '<a href="../../../../room/'+json[i].id+'"><button style="width: 100%" class="btn btn-secondary" >Войти</button></a>'+
                                     '</div>',
                 balloonContentFooter: '<sup>Geo Chat</sup>',
                 hintContent:[ json[i].name]
