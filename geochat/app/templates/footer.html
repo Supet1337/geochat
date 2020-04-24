@@ -1,13 +1,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 {% if messages %}
 {% for message in messages %}
+{% if message.tags == 'error' %}
 <div class="alert alert-danger alert-dismissible fade show" role="alert">
 {{message}}
 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
 <span aria-hidden="true">&times;</span>
 </button>
 </div>
-
+{% endif %}
 {% endfor %}
 {% endif %}
 <div class="footer" style="width:100%">
@@ -40,7 +41,7 @@
                           </div>
                         <input type="email" id="email" name="email" class="form-control" placeholder="Email" required>
                          <div class="invalid-feedback">
-                           <small style="font-size:10.5px">Адресс электронной почты должен содеражть @</small>
+                           <small style="font-size:10.5px">Адрес электронной почты должен содеражть @</small>
                           </div>
                         <input type="password" id="password1"  pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*" name="password1" class="form-control" placeholder="Пароль" required>
                          <div class="invalid-feedback">

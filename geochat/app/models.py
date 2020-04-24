@@ -7,6 +7,9 @@ from django.contrib.auth.hashers import make_password
 def user_directory_path(instance, filename):
     return 'avatars/user_{0}/{1}'.format(instance.user.id, filename)
 
+def room_directory_path(instance, filename):
+    return 'room_images/room_{0}/{1}'.format(instance.id, filename)
+
 class Room(models.Model):
     name = models.CharField(max_length=50)
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
@@ -15,6 +18,7 @@ class Room(models.Model):
     is_private = models.BooleanField(default=False)
     is_place = models.BooleanField(default=False)
     max_members = models.IntegerField(default=10)
+    image = models.ImageField(upload_to=room_directory_path, blank=True)
     x = models.FloatField()
     y = models.FloatField()
     diametr = models.IntegerField(default=300)
@@ -24,7 +28,12 @@ class Room(models.Model):
         super().save(**kwargs)
 
     def json(self):
-        return  {'x':self.x, 'y':self.y,'name':self.name,'author':str(self.author),'is_private':self.is_private,'is_place':self.is_place,'id':str(self.id), 'diametr':self.diametr}
+        return  {'x':self.x, 'y':self.y,'name':self.name,'author':str(self.author),'is_private':self.is_private,'is_place':self.is_place,'id':str(self.id), 'diametr':self.diametr, 'image':self.get_image()}
+    def get_image(self):
+        try:
+            return str(self.image.url)
+        except:
+            return 'static/images/geocoin.png'
 class Message(models.Model):
     text = models.CharField(max_length=250)
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)

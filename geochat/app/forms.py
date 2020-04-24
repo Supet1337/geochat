@@ -8,6 +8,12 @@ class UserSettingsForm(forms.ModelForm):
         model = UserAdditionals
         fields = ['image']
 
+class RoomSettingsForm(forms.ModelForm):
+
+    class Meta:
+        model = Room
+        fields = ['image']
+
 class RegisterForm(UserCreationForm):
     email = forms.EmailField()
     def __init__(self, *args, **kwargs):

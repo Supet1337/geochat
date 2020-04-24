@@ -192,7 +192,7 @@ function init () {
                         [json[i].x, json[i].y],
                         json[i].diametr
                     ], {
-                        balloonContentHeader: json[i].name,
+                        balloonContentHeader: '<img alt="User Avatar" style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'">'+json[i].name+'',
                         balloonContentBody:
                                                 '<div>'+
                                                     '<form method="post">'+
@@ -217,7 +217,7 @@ function init () {
                         [json[i].x, json[i].y],
                         json[i].diametr
                     ], {
-                        balloonContentHeader: json[i].name,
+                        balloonContentHeader: '<img alt="User Avatar" style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'">'+json[i].name+'',
                         balloonContentBody:
                                                 '<div>'+
                                                     '<a href="../../../../room/'+json[i].id+'"> <button type="button" class="btn btn-secondary">Присоединиться</button></a>'+
@@ -252,6 +252,7 @@ function init () {
                             if('+{{request.user.is_authenticated}}+'){
                                 if(json[i].is_private){
                                     $("#place-chat").append('<li class="nav-item">'+
+                                                    '<img alt="User Avatar" style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'">' +
                                                     '<a class="nav-link">'+json[i].name+'</a>'+
                                                     '<form method="post">'+
                                                     '{% csrf_token %}'+
@@ -262,7 +263,7 @@ function init () {
                                                 '</li>');
                                 }
                                 else{
-                                    $("#place-chat").append('<li class="nav-item"><a class="nav-link">'+json[i].name+'</a><a href="../../../../room/'+json[i].id+'"> <button type="button" class="btn btn-secondary">Присоединиться</button></a></li>');
+                                    $("#place-chat").append('<li class="nav-item"><img alt="User Avatar" style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'"><a class="nav-link">'+json[i].name+'</a><a href="../../../../room/'+json[i].id+'"> <button type="button" class="btn btn-secondary">Присоединиться</button></a></li>');
                                 }
                             }
                         }
@@ -281,9 +282,9 @@ $.ajax({
                 [json[i].x, json[i].y],
                 json[i].diametr
             ], {
-                balloonContentHeader: json[i].name,
+                balloonContentHeader: '<img alt="User Avatar" style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'">'+json[i].name+'',
                 balloonContentBody:'<div>'+
-                                    '<a href="../../../../room/'+json[i].id+'"><button class="btn btn-secondary" >Войти</button></a>'+
+                                    '<a href="../../../../room/'+json[i].id+'"><button style="width: 100%" class="btn btn-secondary" >Войти</button></a>'+
                                     '</div>',
                 balloonContentFooter: '<sup>Geo Chat</sup>',
                 hintContent:[ json[i].name]

@@ -78,9 +78,30 @@ def ajax_circle_draw_joined(request):
 def room(request, number):
     context = {}
     if request.method == "POST":
+        form = RoomSettingsForm(request.POST, request.FILES)
+        if form.is_valid():
+            old_room = Room.objects.get(id=number)
+            new_room = form.save(commit=False)
+            if new_room.image != '':
+                try:
+                    image = old_room.image
+                    image.delete()
+                except:
+                    pass
+                old_room.image = new_room.image
+                old_room.save()
+                messages.success(request, "Аватарка успешно изменена.")
+            else:
+                new_name = Room.objects.get(id=number)
+                new_name.name = request.POST.get('name')
+                new_name.save()
+                messages.success(request, "Изменения успешно сохранены.")
+            return HttpResponseRedirect("/room/"+str(number))
         JoinRoom.objects.get(user=request.user).delete()
         return HttpResponseRedirect('../')
     if request.method == "GET":
+        form = RoomSettingsForm()
+        context['form'] = form
         user_add = UserAdditionals.objects.get(user=request.user)
         context['my_balance'] = user_add.balance
         if user_add.image == '':
@@ -213,6 +234,10 @@ def index(request):
                         messages.error(request, "Вам не хватает монет для создания чата.")
                         return HttpResponseRedirect('/')
                     new_room.save()
+                    join_new_room = JoinRoom()
+                    join_new_room.user = request.user
+                    join_new_room.room_id = Room.objects.get(name=new_room.name).id
+                    join_new_room.save()
                 else:
                     messages.error(request, "Название чата не может быть пустым.")
                 return HttpResponseRedirect('/')
