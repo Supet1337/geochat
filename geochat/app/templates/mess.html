@@ -1,17 +1,18 @@
 <!DOCTYPE html>
+<html lang="ru">
 {% load static %}
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
 <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
-    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
-    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
+<link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
+<link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
+<link rel="shortcut icon" href={% static "images/geocoin.png" %}  type="image/png">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-
 <style class="cp-pen-styles">
 body {
-  display: flex;
-  min-height: 100vh;
+  min-height: 300px;
   font-family: "proxima-nova", "Source Sans Pro", sans-serif;
   font-size: 1em;
   letter-spacing: 0.1px;
@@ -22,9 +23,9 @@ body {
 }
 
 #frame {
-  width: 95%;
-  min-width: 1610px;
-  max-width: 1500px;
+  width: 100%;
+  min-width: 340px;
+  max-width: 1610px;
   height: 92vh;
   min-height: 300px;
   max-height: 720px;
@@ -171,17 +172,89 @@ body {
   color: #f5f5f5;
 }
 
-</style></head><body>
-<div class="dashboard-main-wrapper" style="width:1700px">
+
+
+</style>
+
+</head>
+<body>
+<div class="dashboard-main-wrapper" >
 {% include "header.html" %}
 {% include "left_sidebar2.html" %}
+
 <div class="dashboard-wrapper">
 	<div class="container-fluid  dashboard-content">
-<div id="frame">
+		{% if messages %}
+{% for message in messages %}
+		<div class="alert alert-success alert-dismissible fade show" role="alert">
+{{message}}
+<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+<span aria-hidden="true">&times;</span>
+</button>
+</div>
+{% endfor %}
+{% endif %}
+<div id="frame" >
+	<div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+                                                <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel1">Список пользователей</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+		{% if request.user == room.author %}
+			<i style="margin-left: 358px; color:#ffe21f" class="fas fa-chess-king"></i>
+		{% else %}
+			<i style="margin-left: 25px; color:#ffe21f" class="fas fa-chess-king"></i>
+		{%endif%}
+            <div class="container">
+              <div class="row">
+				  {% if request.user == room.author %}
+				  <div class="col">
+					  <form method="post" enctype="multipart/form-data">
+						  {%csrf_token%}
+						  {{form.image}}
+							  <input type="submit" style="width: 305px" class= "btn btn-success" value="Сохранить картинку">
+					  </form>
+					  <form method="post">
+						  {%csrf_token%}
+						  <br>
+						  <p>Название чата:</p>
+						  <input class="form-control" type="text" name="name" value="{{room.name}}">
+							  <input type="submit" style="width: 305px" class= "btn btn-success" value="Сохранить изменения">
+					  </form>
+				  </div>
+				  {%endif%}
+					<div class="col">
+					{% for user in user_list %}
+				  {% if user.image == "" %}
+					<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %} alt="" /><a>    {{user.user}}</p>
+				  {% else %}
+					<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="{{user.image.url}}" alt="" /><a>    {{user.user}}</p>
+				  {% endif %}
+						<hr>
+						{% endfor %}
+					</div>
+
+              </div>
+            </div>
+			<form method="post">
+				{% csrf_token %}
+				<button type="submit" class="btn btn-danger" style="width: 100%">Выйти из чата</button>
+			</form>
+    </div>
+  </div>
+</div>
 	<div class="content">
 		<div class="contact-profile">
-			<img src={% static "images/geocoin.png" %}>
-			<p>{{room.name}}</p>
+			{% if room.image == "" %}
+				<img src={% static "images/geocoin.png" %} alt="" />
+			{% else %}
+				<img src="{{room.image.url}}" alt="" />
+			{% endif %}
+			<p>{{room.name}}<a style="" data-toggle="modal" data-target="#myModal1"><i style="margin: auto; position: absolute; right: 20px; top: 20px" class="fas fa-ellipsis-v"></i></a></p>
 		</div>
 		<div id="scroll" class="messages">
 			<ul id="kek">
@@ -191,14 +264,14 @@ body {
 		<div class="message-input">
 
 			<div class="wrap">
-				<input type="text" name="message" id="message" placeholder="Введите сообщение..." autocomplete="off">
+				<input type="text" autocomplete="off" name="message" id="message" placeholder="Введите сообщение...">
 				<button type="submit" id="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
 			</div>
 		</div>
 	</div>
 </div>
 	</div>
-	{% include "footer.html" %}
+{% include "footer.html" %}
 </div>
 
 <script >

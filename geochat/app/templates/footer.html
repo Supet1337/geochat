@@ -35,9 +35,9 @@
                      <form method="POST" class="needs-validation" action="" novalidate>
                         {% csrf_token %}
                          <br>
-                        <input type="text" id="username" name="username" class="form-control" placeholder="Логин" required>
+                        <input type="text" id="username" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{4,16}$" name="username" class="form-control" placeholder="Логин" required>
                           <div class="invalid-feedback">
-                           Заполните поле
+                           Логин должен состоять не менее чем из 4 символов и не более 16 символов
                           </div>
                         <input type="email" id="email" name="email" class="form-control" placeholder="Email" required>
                          <div class="invalid-feedback">
@@ -109,8 +109,6 @@
 
 </script>
 Войдите, чтобы пользоваться сайтом
-{%else%}
-<p>Вас зовут: {{request.user.username}}</p>
 {%endif%}
 
 
