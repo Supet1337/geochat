@@ -96,12 +96,19 @@ def room(request, number):
                 old_room.save()
                 messages.success(request, "Аватарка успешно изменена.")
             else:
-                new_name = Room.objects.get(id=number)
-                new_name.name = request.POST.get('name')
-                new_name.save()
-                messages.success(request, "Изменения успешно сохранены.")
-            return HttpResponseRedirect("/room/"+str(number))
-        JoinRoom.objects.get(user=request.user).delete()
+                try:
+                    new_name = Room.objects.get(id=number)
+                    new_name.name = request.POST.get('name')
+                    new_name.save()
+                    messages.success(request, "Изменения успешно сохранены.")
+                    return HttpResponseRedirect("/room/"+str(number))
+                except:
+                    us_id = request.POST.get('user-id')
+                    JoinRoom.objects.get(user_id=us_id, room_id = number).delete()
+                    if request.user.id != us_id:
+                        return HttpResponseRedirect('../')
+                    else:
+                        return HttpResponseRedirect("/room/"+str(number))
         return HttpResponseRedirect('../')
     if request.method == "GET":
         form = RoomSettingsForm()
