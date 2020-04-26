@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'wnt)319w#i$1ug2x)v2q0i_ilx7bia=hk&*1b@j4i%g+fmazfr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 # DEBUG = os.environ.get('DEBUG')
 
 ALLOWED_HOSTS = ['geochat.savink.in','0.0.0.0']
@@ -127,12 +127,10 @@ DATE_FORMAT = 'd.m G:i'
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-
-STATIC_ROOT = "app/collectedstatic"
-
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = "app/media"
+STATIC_ROOT = "./collectedstatic"
+MEDIA_ROOT = "./media/"
 
 
 SECURE_SSL_REDIRECT = True
