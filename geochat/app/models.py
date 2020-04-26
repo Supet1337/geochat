@@ -33,7 +33,7 @@ class Room(models.Model):
         try:
             return str(self.image.url)
         except:
-            return 'static/images/geocoin.png'
+            return 'https://s3.nl-ams.scw.cloud/geochat-static/images/geocoin.png'
 class Message(models.Model):
 
     text = models.CharField(max_length=250)
