@@ -11,6 +11,9 @@
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
+    <script type="text/javascript" src={% static "assets/vendor/jquery/jquery-3.3.1.min.js" %} ></script>
+    <script type="text/javascript" src={% static "assets/vendor/bootstrap/js/bootstrap.bundle.js" %} ></script>
+    <script type="text/javascript" src={% static "assets/libs/js/main-js.js" %} ></script>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=7abcaac9-c988-4344-9b01-50d57672abf2&lang=ru_RU" type="text/javascript"></script>
     <link rel="shortcut icon" href={% static "images/geocoin.png" %}  type="image/png">
 
@@ -79,8 +82,8 @@
                                     {% else %}
                                     <div class="">
                                         <ul class="list-unstyled mb-0">
-                                        <li class="mb-2"><i class="fas fa-fw fa-envelope mr-2"></i>{{email}}</li>
-                                        <li class="mb-0"><i class="fas fa-fw fa-phone mr-2"></i>Дата регистрации:{{last_login}}</li>
+                                        <li class="mb-2"><i class="fa fa-envelope"></i>{{email}}</li>
+                                        <li class="mb-0"><i class="fa fa-calendar"></i>Дата регистрации:{{last_login}}</li>
                                     </ul>
                                     </div>
                                     {% endif %}
@@ -211,7 +214,5 @@
     )}
    </script>
 </body>
- <script type="text/javascript" src={% static "assets/vendor/jquery/jquery-3.3.1.min.js" %} ></script>
-    <script type="text/javascript" src={% static "assets/vendor/bootstrap/js/bootstrap.bundle.js" %} ></script>
-    <script type="text/javascript" src={% static "assets/libs/js/main-js.js" %} ></script>
+
 </html>

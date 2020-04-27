@@ -9,6 +9,10 @@
 <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
 <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
 <link rel="shortcut icon" href={% static "images/geocoin.png" %}  type="image/png">
+<script type="text/javascript" src={% static "assets/vendor/jquery/jquery-3.3.1.min.js" %} ></script>
+<script type="text/javascript" src={% static "assets/vendor/bootstrap/js/bootstrap.bundle.js" %} ></script>
+<script type="text/javascript" src={% static "assets/vendor/slimscroll/jquery.slimscroll.js" %} ></script>
+<script type="text/javascript" src={% static "assets/libs/js/main-js.js" %} ></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <style class="cp-pen-styles">
 body {
@@ -214,7 +218,7 @@ resize: none !important;
         </button>
       </div>
 		{% if  request.user != room.author %}
-			<i style="margin-left: 25px; color:#ffe21f" class="fas fa-chess-king"></i>
+			<i style="margin-left: 25px; color:#ffe21f" class="fa fa-star"></i>
 		{%endif%}
             <div class="container">
 
@@ -235,16 +239,16 @@ resize: none !important;
 					  </form>
 
 				  {%endif%}
-					<i style="margin-left: 10px; color:#ffe21f" class="fas fa-chess-king"></i>
+					<i style="margin-left: 10px; color:#ffe21f" class="fa fa-star"></i>
 					{% for user in user_list %}
 						<form method="POST">
 							{%csrf_token%}
 							<input type="hidden" name="user-id" value="{{user.user.id}}">
 						{% if request.user == room.author %}
 							{% if user.image == "" %}
-							<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %} alt="" /><a>    {{user.user}}<button type="submit" aria-hidden="true" class="close" aria-label="Close"> <i aria-hidden="true" class="fas fa-trash-alt"></i></button></p>
+							<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %} alt="" /><a>    {{user.user}}<button type="submit" aria-hidden="true" class="close" aria-label="Close"> <i aria-hidden="true" class="fa fa-trash-o"></i></button></p>
 				  		{% else %}
-							<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="{{user.image.url}}" alt="" /><a>    {{user.user}} <button type="submit" class="close" aria-hidden="true" aria-label="Close"> <i aria-hidden="true" class="fas fa-trash-alt"></i></button></p>
+							<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="{{user.image.url}}" alt="" /><a>    {{user.user}} <button type="submit" class="close" aria-hidden="true" aria-label="Close"> <i aria-hidden="true" class="fa fa-trash-o"></i></button></p>
 				  		{% endif %}
 						{% else %}
 				  			{% if user.image == "" %}
@@ -275,7 +279,7 @@ resize: none !important;
 			{% else %}
 				<img src="{{room.image.url}}" alt="" />
 			{% endif %}
-			<p>{{room.name}}<a style="" data-toggle="modal" data-target="#myModal1"><i style="margin: auto; position: absolute; right: 20px; top: 20px" class="fas fa-ellipsis-v"></i></a></p>
+			<p>{{room.name}}<a style="" data-toggle="modal" data-target="#myModal1"><i style="margin: auto; position: absolute; right: 20px; top: 20px" class="fa fa-ellipsis-v"></i></a></p>
 		</div>
 		<div id="scroll" class="messages">
 			<ul id="kek">
@@ -386,8 +390,5 @@ function scrl(){
 </script>
 </div>
 </body>
-	<script type="text/javascript" src={% static "assets/vendor/jquery/jquery-3.3.1.min.js" %} ></script>
-    <script type="text/javascript" src={% static "assets/vendor/bootstrap/js/bootstrap.bundle.js" %} ></script>
-	<script type="text/javascript" src={% static "assets/vendor/slimscroll/jquery.slimscroll.js" %} ></script>
-    <script type="text/javascript" src={% static "assets/libs/js/main-js.js" %} ></script>
+
 </html>
