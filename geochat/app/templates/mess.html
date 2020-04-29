@@ -7,7 +7,6 @@
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
 <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
 <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
-<link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
 <link rel="shortcut icon" href={% static "images/geocoin.png" %}  type="image/png">
 <script type="text/javascript" src={% static "assets/vendor/jquery/jquery-3.3.1.min.js" %} ></script>
 <script type="text/javascript" src={% static "assets/vendor/bootstrap/js/bootstrap.bundle.js" %} ></script>
@@ -17,10 +16,8 @@
 <style class="cp-pen-styles">
 body {
   min-height: 300px;
-  font-family: "proxima-nova", "Source Sans Pro", sans-serif;
-  font-size: 1em;
+  font-family: 'Circular Std Book';
   letter-spacing: 0.1px;
-  color: #32465a;
   text-rendering: optimizeLegibility;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
   -webkit-font-smoothing: antialiased;
@@ -232,7 +229,7 @@ resize: none !important;
 					  <form method="post">
 						  {%csrf_token%}
 						  <br>
-						  <p>Название чата:</p>
+						  <strong><p>Название чата:</p></strong>
 						  <input class="form-control" type="text" name="name" value="{{room.name}}">
 							  <input type="submit" style="width: 100%" class= "btn btn-success" value="Сохранить изменения">
 
@@ -246,15 +243,15 @@ resize: none !important;
 							<input type="hidden" name="user-id" value="{{user.user.id}}">
 						{% if request.user == room.author %}
 							{% if user.image == "" %}
-							<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %} alt="" /><a>    {{user.user}}<button type="submit" aria-hidden="true" class="close" aria-label="Close"> <i aria-hidden="true" class="fa fa-trash-o"></i></button></p>
+							<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %} alt="" /><a>    <strong>{{user.user}}</strong><button type="submit" aria-hidden="true" class="close" aria-label="Close"> <i aria-hidden="true" class="fa fa-trash-o"></i></button></p>
 				  		{% else %}
-							<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="{{user.image.url}}" alt="" /><a>    {{user.user}} <button type="submit" class="close" aria-hidden="true" aria-label="Close"> <i aria-hidden="true" class="fa fa-trash-o"></i></button></p>
+							<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="{{user.image.url}}" alt="" /><a>    <strong>{{user.user}}</strong> <button type="submit" class="close" aria-hidden="true" aria-label="Close"> <i aria-hidden="true" class="fa fa-trash-o"></i></button></p>
 				  		{% endif %}
 						{% else %}
 				  			{% if user.image == "" %}
-								<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %} alt="" /><a>    {{user.user}}</p>
+								<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %} alt="" /><a>    <strong>{{user.user}}</strong></p>
 				  		{% else %}
-								<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="{{user.image.url}}" alt="" /><a>    {{user.user}}</p>
+								<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="{{user.image.url}}" alt="" /><a>    <strong>{{user.user}}</strong></p>
 				  		{% endif %}
 						{%endif%}
 						<hr>
@@ -279,7 +276,7 @@ resize: none !important;
 			{% else %}
 				<img src="{{room.image.url}}" alt="" />
 			{% endif %}
-			<p>{{room.name}}<a style="" data-toggle="modal" data-target="#myModal1"><i style="margin: auto; position: absolute; right: 20px; top: 20px" class="fa fa-ellipsis-v"></i></a></p>
+			<p>{{room.name}}<a style="" data-toggle="modal" data-target="#myModal1"><i style="margin: auto; position: absolute; right: 20px; top: 20px; font-size:19px" class="fa fa-ellipsis-v"></i></a></p>
 		</div>
 		<div id="scroll" class="messages">
 			<ul id="kek">
@@ -302,8 +299,8 @@ resize: none !important;
 <script >
 
         const chatSocket = new WebSocket(
-            'ws://'
-            + window.location.host
+            'wss://'
+            + '0.0.0.0'
             + '/ws/chat/'
             + '{{room.id}}'
             + '/'
