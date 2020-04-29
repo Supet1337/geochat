@@ -82,8 +82,8 @@
                                     {% else %}
                                     <div class="">
                                         <ul class="list-unstyled mb-0">
-                                        <li class="mb-2"><i class="fa fa-envelope"></i>{{email}}</li>
-                                        <li class="mb-0"><i class="fa fa-calendar"></i>Дата регистрации:{{last_login}}</li>
+                                        <li class="mb-2"><i class="fa fa-envelope"></i> {{email}}</li>
+                                        <li class="mb-0"><i class="fa fa-calendar"></i> Дата регистрации:{{last_login}}</li>
                                     </ul>
                                     </div>
                                     {% endif %}
@@ -147,22 +147,7 @@
             <!-- ============================================================== -->
             <!-- end content -->
             <!-- ============================================================== -->
-            <div class="footer" style="margin-left:0px; width:1640px">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                             FS102/Geo chat©
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="text-md-right footer-links d-none d-sm-block">
-                                <a href="">О нас</a>
-                                <a href="">Поддержка</a>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {%include "footer.html"%}
             <!-- ============================================================== -->
             <!-- end footer -->
             <!-- ============================================================== -->
