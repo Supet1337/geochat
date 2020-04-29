@@ -58,7 +58,7 @@
                      <form method="POST" action="" >
                         {% csrf_token %}
                          <br>
-                        <input type="text" autocomplete="off" id="name" name="name" class="form-control" placeholder="Название комнаты" readonly onfocus="this.removeAttribute('readonly')">
+                        <input type="text" autocomplete="off" id="name" name="name" class="form-control" placeholder="Название комнаты" readonly onfocus="this.removeAttribute('readonly')" >
                          <input type="checkbox" id="is_place" name="is_place"> Виден только тем, кто находится поблизости
                          <br>
                          <input type="checkbox" id="is_private" name="is_private" onclick="private()"> С паролем
@@ -66,8 +66,8 @@
 
                         </div>
                           <div class="form-row align-items-center">
-                            <div class="col-auto my-1">
-                              <select class="custom-select mr-sm-2" id="choose_diametr" name="choose_diametr">
+                            <div class="col-auto my-1"style="width:40%">
+                              <select class="custom-select mr-sm-2" id="choose_diametr" name="choose_diametr" style="width: 100%">
                                 <option value="50" selected>Выберите диаметр чата:</option>
                                 <option  value="50">50м</option>
                                 <option  value="150">150м</option>
@@ -77,9 +77,9 @@
                             </div>
                           </div>
                          <div class="form-row align-items-center">
-                            <div class="col-auto my-1">
-                              <select class="custom-select mr-sm-2" id="choose_max" name="choose_max">
-                                <option value="3" selected>Выберите максимальное количество пользователей:</option>
+                            <div class="col-auto my-1"style="width:100%">
+                              <select class="custom-select mr-sm-2" id="choose_max" name="choose_max" style="width:100%">
+                                <option  value="3" selected>Выберите максимальное количество пользователей:</option>
                                 <option  value="3">3 человека</option>
                                 <option  value="5">5 человек</option>
                                 <option  value="10">10 человек</option>
