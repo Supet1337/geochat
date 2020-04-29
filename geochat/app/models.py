@@ -62,3 +62,8 @@ class UserAdditionals(models.Model):
     status = models.CharField(max_length=50,default='Статус не указан')
     private_chats = models.BooleanField(default=False)
     private_info = models.BooleanField(default=False)
+
+class Report(models.Model):
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    report = models.CharField(max_length=250)
+    date = models.DateTimeField(auto_now_add=True)

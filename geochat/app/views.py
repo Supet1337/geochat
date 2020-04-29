@@ -16,6 +16,7 @@ def view_500(request):
     return render(request, "errors/500.html")
 
 
+
 @login_required
 def ajax_update_balance(request):
     wallet = UserAdditionals.objects.get(user=request.user)
@@ -159,10 +160,20 @@ def loggout(request):
 def index(request):
     context = {}
     if request.method == "POST":
+        if request.POST.get('report') != None:
+            report = Report()
+            report.user = request.user
+            report.report = request.POST.get('report')
+            if report.report != '' and len(report.report) >= 10:
+                report.save()
+                messages.success(request, "Наши модераторы уже решают вашу проблему, простите за принесённые вам "
+                                        "неудобства.")
+            else:
+                messages.error(request, "Собщение должно состоять не менее чем из 10 символов.")
+            return HttpResponseRedirect("/")
         form = RegisterForm(request.POST)
         context['form'] = form
         if not request.user.is_authenticated:
-
             if form.is_valid():
                 user = form.save(commit=False)
                 user.email = form.data['email']
