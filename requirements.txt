@@ -9,3 +9,4 @@ channels-redis
 gunicorn
 django-storages
 boto3
+sphinx
