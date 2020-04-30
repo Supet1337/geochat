@@ -17,7 +17,7 @@ python manage.py collectstatic --noinput
 #echo "Таки дождались..........."
 
 echo "======Накатываем миграции======"
-#python manage.py makemigrations
+python manage.py makemigrations
 python manage.py migrate
 
 
