@@ -14,7 +14,7 @@
    code.rst
 
 
-Indices and tables
+Дополения
 ==================
 
 * :ref:`genindex`

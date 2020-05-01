@@ -34,6 +34,12 @@ def ajax_load_messages(request, number):
 
 @login_required
 def ajax_maps_draw(request,number):
+    """
+
+    :param request:
+    :param number:
+    :return:
+    """
     rooms = []
     for room in Room.objects.filter(author_id=number):
         rooms.append(room.json())
@@ -312,6 +318,12 @@ def index(request):
 
 @login_required
 def profile(request, number):
+    '''
+
+    :param request:
+    :param number:
+    :return: render
+    '''
     context = {}
     if request.method == "POST":
         if request.POST.get('report') != None:

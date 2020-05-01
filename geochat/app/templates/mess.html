@@ -13,6 +13,7 @@
 <script type="text/javascript" src={% static "assets/vendor/slimscroll/jquery.slimscroll.js" %} ></script>
 <script type="text/javascript" src={% static "assets/libs/js/main-js.js" %} ></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<title>Чат</title>
 <style class="cp-pen-styles">
 body {
   min-height: 300px;
@@ -304,6 +305,7 @@ resize: none !important;
             + '/ws/chat/'
             + '{{room.id}}'
             + '/'
+
         );
 		$("#kek").html("");
         chatSocket.onmessage = function(e) {
