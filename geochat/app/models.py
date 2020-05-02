@@ -5,27 +5,12 @@ from django.conf import settings
 from django.contrib.auth.hashers import make_password
 
 def user_directory_path(instance, filename):
-    '''
-    Функция возврата пути изображения для профиля
-
-    :param instance: Пример
-    :param filename: Имя файла
-    :return: Возвращает путь к файлу
-    '''
     return 'avatars/user_{0}/{1}'.format(instance.user.id, filename)
 
 def room_directory_path(instance, filename):
-    '''
-    Функция возврата пути изображения для комнаты
-
-    :param instance: Пример
-    :param filename: Имя файла
-    :return: Возвращает путь к файлу
-    '''
     return 'room_images/room_{0}/{1}'.format(instance.id, filename)
 
 class Room(models.Model):
-
     name = models.CharField(max_length=50)
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
@@ -48,7 +33,7 @@ class Room(models.Model):
         try:
             return str(self.image.url)
         except:
-            return 'https://s3.nl-ams.scw.cloud/geochat-static/images/geocoin.png'
+            return 'static/images/geocoin.png'
 class Message(models.Model):
     text = models.CharField(max_length=250)
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
@@ -76,8 +61,3 @@ class UserAdditionals(models.Model):
     status = models.CharField(max_length=50,default='Статус не указан')
     private_chats = models.BooleanField(default=False)
     private_info = models.BooleanField(default=False)
-
-class Report(models.Model):
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    report = models.CharField(max_length=250)
-    date = models.DateTimeField(auto_now_add=True)

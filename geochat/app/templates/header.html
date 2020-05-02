@@ -24,9 +24,8 @@
                                     {%endif%}
                                 </div>
                                 {% if request.user.is_authenticated%}
-                                <a class="dropdown-item" href="../profile/{{request.user.id}}"><i class="fa fa-user"></i> Аккаунт</a>
-                                <a class="dropdown-item" href="../profile-settings"><i class="fa fa-cog"></i> Настройки</a>
-                                <a class="dropdown-item" href="../logout"><i class="fa fa-power-off "></i> Выйти</a>
+                                <a class="dropdown-item" href="../profile/{{request.user.id}}"><i class="fas fa-user mr-2"></i>Аккаунт</a>
+                                <a class="dropdown-item" href="../logout"><i class="fas fa-power-off mr-2"></i>Выйти</a>
                                 {%else%}
                                 {%endif%}
                             </div>
