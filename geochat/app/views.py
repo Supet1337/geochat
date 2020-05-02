@@ -9,15 +9,39 @@ from .models import *
 from .forms import *
 import json
 
+
+def doc(request):
+    return render(request, "docs/build/html/index.html")
+
 def view_404(request, exception):
+    '''
+Функция отображения ошибки 404.
+
+    :param request: запрос
+    :param exception: исключение
+    :return: render 404.html
+    '''
     return render(request, "errors/404.html")
 
 def view_500(request):
+    '''
+    Функция отображения ошибки 500.
+
+    :param request: запрос
+    :return: render 500.html
+    '''
     return render(request, "errors/500.html")
+
 
 
 @login_required
 def ajax_update_balance(request):
+    '''
+    Функция обновление баланса пользователя
+
+    :param request: запрос
+    :return: balance
+    '''
     wallet = UserAdditionals.objects.get(user=request.user)
     wallet.balance += 1
     wallet.save()
@@ -26,20 +50,42 @@ def ajax_update_balance(request):
 
 @login_required
 def ajax_load_messages(request, number):
+    '''
+    Функция загрузки сообщений
+
+    :param request: запрос
+    :param number: номер комнаты
+    :return: messages
+    '''
     messages = []
     for message in Message.objects.filter(room_id=number):
         messages.append(message.json())
     return HttpResponse(json.dumps(messages))
 
+
 @login_required
 def ajax_maps_draw(request,number):
+    """
+    Функция отрисовки карт в профиле через ajax
+
+    :param request: запрос
+    :param number: номер профиля
+    :return: room
+    """
     rooms = []
     for room in Room.objects.filter(author_id=number):
         rooms.append(room.json())
     return HttpResponse(json.dumps(rooms))
 
+
 @login_required
 def ajax_circle_draw(request):
+    '''
+    Функция отрисовки кругов через ajax
+
+    :param request: запрос
+    :return: rms
+    '''
     join_rooms = []
     if request.user.is_authenticated:
         join_rooms = JoinRoom.objects.filter(user=request.user)
@@ -65,6 +111,12 @@ def ajax_circle_draw(request):
 
 @login_required
 def ajax_circle_draw_joined(request):
+    '''
+    Фукция отрисовки кругов через ajax, в которые пользователь уже вошёл
+
+    :param request: запрос
+    :return: rms
+    '''
     join_rooms = []
     if request.user.is_authenticated:
         join_rooms = JoinRoom.objects.filter(user=request.user)
@@ -77,11 +129,41 @@ def ajax_circle_draw_joined(request):
         rms.append(room.json())
     return HttpResponse(json.dumps(rms))
 
+def report(request):
+    '''
+    Функция репорта
+
+    :param request: запрос
+    :return: redirect "/"
+    '''
+    if request.POST.get('report') != None:
+        report = Report()
+        report.user = request.user
+        report.report = request.POST.get('report')
+        if report.report != '' and len(report.report) >= 10:
+            report.save()
+            messages.success(request, "Наши модераторы уже решают вашу проблему, простите за принесённые вам "
+                                      "неудобства.")
+        else:
+            messages.error(request, "Собщение должно состоять не менее чем из 10 символов.")
+        return HttpResponseRedirect("/")
 
 @login_required
 def room(request, number):
+    """
+    Функция рендера страницы mess.html
+    1) Загрузка аватаров для чата
+    2) Загрузка предыдущий сообщений
+    3) Список участников чата
+
+    :param request: запрос
+    :param number: номер комнаты
+    :type number: int
+    :return: render mess.html
+    """
     context = {}
     if request.method == "POST":
+        report(request)
         form = RoomSettingsForm(request.POST, request.FILES)
         if form.is_valid():
             old_room = Room.objects.get(id=number)
@@ -152,13 +234,30 @@ def room(request, number):
 
 
 def loggout(request):
+    '''
+    Функция деавторизации пользователя
+
+    :param request: запрос
+    :return: redirect на главную станицу
+    '''
     logout(request)
     return HttpResponseRedirect("/")
 
 
 def index(request):
+    '''
+    Функция рендера главной страницы
+    1) Авторизация
+    2) Отправка email на эл.почту
+    3) Вход в комнату
+    4) Проверка на уникальность профиля
+
+    :param request: запрос
+    :return: render index.html
+    '''
     context = {}
     if request.method == "POST":
+        report(request)
         form = RegisterForm(request.POST)
         context['form'] = form
         if not request.user.is_authenticated:
@@ -289,7 +388,17 @@ def index(request):
 
 @login_required
 def profile(request, number):
+    '''
+    Функция рендера страницы профиля
+
+    :param request: запрос
+    :param number: номер профиля
+    :type number: int
+    :return: render profile.html
+    '''
     context = {}
+    if request.method == "POST":
+        report(request)
     user = User.objects.get(id=number)
     profile_user_add = UserAdditionals.objects.get(user=user)
     user_add = UserAdditionals.objects.get(user=request.user)
@@ -321,7 +430,16 @@ def profile(request, number):
 
 @login_required
 def profile_settings(request):
+    '''
+    Функция рендера настроек профиля
+    1) Загрузка аватара
+    2) Изменение настроек профиля
+
+    :param request: запрос
+    :return: render profile_settings.html
+    '''
     if request.method == "POST":
+        report(request)
         form = UserSettingsForm(request.POST, request.FILES)
         if form.is_valid():
             old_user_add = UserAdditionals.objects.get(user=request.user)

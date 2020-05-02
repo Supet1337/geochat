@@ -8,13 +8,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     {% load static %}
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
-    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
-    <script src="../static/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
-    <script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
     <link rel="shortcut icon" href={% static "images/geocoin.png" %}  type="image/png">
-    <script src="../static/assets/libs/js/main-js.js"></script>
+
     <title>Профиль</title>
 </head>
 
@@ -101,8 +99,8 @@
                                     <h3 class="font-16">Основные настройки</h3>
                                     <div class="">
                                         <ul class="list-unstyled mb-0">
-                                            <a href="../../accounts/password_reset"><li class="mb-2"><i class="fas fa-lock"></i>Сменить пароль</li></a>
-                                        <li class="mb-0"><i class="fas fa-at"></i> Задать статус: </li>
+                                            <a href="../../accounts/password_reset"><li class="mb-2"><i class="fa fa-lock"></i> Сменить пароль</li></a>
+                                        <li class="mb-0"><i class="fa fa-thumb-tack"></i> Задать статус: </li>
                                             <input type="text" class="form-control" id="status" name="status" value="{{status}}">
                                     </ul>
                                     </div>
@@ -111,11 +109,11 @@
                                     <h3 class="font-16">Настройки приватности</h3>
                                     <div class="">
                                         <ul class="list-unstyled mb-0">
-                                        <li class="mb-2"><i class="fas fa-minus-circle"></i> Не показывать мои чаты другим пользователям
+                                        <li class="mb-2"><i class="fa fa-ban"></i> Не показывать мои чаты другим пользователям
                                             <input type="checkbox" name="private_chats" id="private_chats" {{private_chats}}>
                                         </li>
 
-                                        <li class="mb-0"><i class="fas fa-users"></i> Не показывать мою личную информацию другим пользователям
+                                        <li class="mb-0"><i class="fa fa-users"></i> Не показывать мою личную информацию другим пользователям
                                             <input type="checkbox" name="private_info" id="private_info" {{private_info}}>
 
                                         </li>
@@ -160,22 +158,8 @@
             <!-- ============================================================== -->
             <!-- end content -->
             <!-- ============================================================== -->
-            <div class="footer" style="margin-left:0px; width:1640px">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                             FS102/Geo chat©
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="text-md-right footer-links d-none d-sm-block">
-                                <a href="">О нас</a>
-                                <a href=";">Поддержка</a>
+                {%include "footer.html"%}
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
             <!-- ============================================================== -->
             <!-- end footer -->
             <!-- ============================================================== -->
@@ -192,5 +176,7 @@
 
 
 </body>
-
+<script type="text/javascript" src={% static "assets/vendor/jquery/jquery-3.3.1.min.js" %} ></script>
+    <script type="text/javascript" src={% static "assets/vendor/bootstrap/js/bootstrap.bundle.js" %} ></script>
+    <script type="text/javascript" src={% static "assets/libs/js/main-js.js" %} ></script>
 </html>
