@@ -71,7 +71,7 @@
                                             {% if room.is_private %}
                                                 <li class="nav-item">
                                                     <a class="nav-link">{{room.name}}</a>
-                                                    <form method="post">
+                                                    <form method="post" action="/join-room">
                                                     {% csrf_token %}
                                                     <input type="password" name="password" class="form-control" placeholder="пароль">
                                                     <input type="hidden" name="id" value="{{room.id}}">
@@ -83,7 +83,11 @@
                                                 <li class="nav-item">
 
                                                     <a class="nav-link">{{room.name}}</a>
-                                                    <a href="../../../../room/{{room.id}}"> <button type="button" class="btn btn-secondary">Присоединиться</button></a>
+                                                    <form method="post" action="/join-room">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="id" value="{{room.id}}">
+                                                    <input type="submit" value="Присоединиться" class="btn btn-secondary">
+                                                </form>
                                                 </li>
                                             {% endif %}
                                         {% endif %}

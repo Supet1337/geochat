@@ -55,7 +55,7 @@
               <div class="row">
                 <div class="w-100"></div>
                 <div class="col">
-                     <form method="POST" action="" >
+                     <form method="POST" action="/create-room" >
                         {% csrf_token %}
                          <br>
                         <input type="text" autocomplete="off" id="name" name="name" class="form-control" placeholder="Название комнаты" readonly onfocus="this.removeAttribute('readonly')">
@@ -187,7 +187,7 @@ function init () {
                         balloonContentHeader: '<img alt="User Avatar" style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'">'+json[i].name+'',
                         balloonContentBody:
                                                 '<div>'+
-                                                    '<form method="post">'+
+                                                    '<form method="post" action="/join-room">'+
                                                     '{% csrf_token %}'+
                                                     '<input type="password" name="password" class="form-control" placeholder="пароль">'+
                                                     '<input type="hidden" name="id" value="'+json[i].id+'">'+
@@ -212,7 +212,11 @@ function init () {
                         balloonContentHeader: '<img alt="User Avatar" style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'">'+json[i].name+'',
                         balloonContentBody:
                                                 '<div>'+
-                                                    '<a href="../../../../room/'+json[i].id+'"> <button type="button" class="btn btn-secondary">Присоединиться</button></a>'+
+                                                    '<form method="post" action="/join-room">'+
+                                                    '{% csrf_token %}'+
+                                                    '<input type="hidden" name="id" value="'+json[i].id+'">'+
+                                                    '<input type="submit" value="Присоединиться" class="btn btn-secondary">'+
+                                                '</form>'+
                                                 '</div>',
                         balloonContentFooter: '<sup>Geo Chat</sup>',
                         hintContent:[ json[i].name]
@@ -246,7 +250,7 @@ function init () {
                                     $("#place-chat").append('<li class="nav-item">'+
                                                     '<img alt="User Avatar" style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'">' +
                                                     '<a class="nav-link">'+json[i].name+'</a>'+
-                                                    '<form method="post">'+
+                                                    '<form method="post" action="/join-room">'+
                                                     '{% csrf_token %}'+
                                                     '<input type="password" name="password" class="form-control" placeholder="пароль">'+
                                                     '<input type="hidden" name="id" value="'+json[i].id+'">'+
@@ -255,7 +259,15 @@ function init () {
                                                 '</li>');
                                 }
                                 else{
-                                    $("#place-chat").append('<li class="nav-item"><img alt="User Avatar" style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'"><a class="nav-link">'+json[i].name+'</a><a href="../../../../room/'+json[i].id+'"> <button type="button" class="btn btn-secondary">Присоединиться</button></a></li>');
+                                    $("#place-chat").append('<li class="nav-item">'+
+                                                            '<img alt="User Avatar" style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'">'+
+                                                            '<a class="nav-link">'+json[i].name+'</a>'+
+                                                            '<form method="post" action="/join-room">'+
+                                                            '{% csrf_token %}'+
+                                                            '<input type="hidden" name="id" value="'+json[i].id+'">'+
+                                                            '<input type="submit" value="Присоединиться" class="btn btn-secondary">'+
+                                                            '</form>'+
+                                                            '</li>');
                                 }
                             }
                         }

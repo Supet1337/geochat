@@ -222,12 +222,12 @@ resize: none !important;
 
 				  {% if request.user == room.author %}
 
-					  <form method="post" enctype="multipart/form-data">
+					  <form method="post" action="../update-room-picture/{{room.id}}" enctype="multipart/form-data">
 						  {%csrf_token%}
 						  {{form.image}}
 							  <input type="submit" style="width: 100%" class= "btn btn-success" value="Сохранить картинку">
 					  </form>
-					  <form method="post">
+					  <form method="post" action="../update-room-settings/{{room.id}}">
 						  {%csrf_token%}
 						  <br>
 						  <strong><p>Название чата:</p></strong>
@@ -235,25 +235,37 @@ resize: none !important;
 							  <input type="submit" style="width: 100%" class= "btn btn-success" value="Сохранить изменения">
 
 					  </form>
+						<form action="../delete-room/{{room.id}}" method="post">
+							{%csrf_token%}
+							<button type="submit" class="btn btn-danger" style="width: 100%">Удалить чат</button>
+						</form>
 
 				  {%endif%}
 					<i style="margin-left: 10px; color:#ffe21f" class="fa fa-star"></i>
 					{% for user in user_list %}
-						<form method="POST">
+						<form method="POST" action="../leave-chat/{{room.id}}">
 							{%csrf_token%}
 							<input type="hidden" name="user-id" value="{{user.user.id}}">
 						{% if request.user == room.author %}
-							{% if user.image == "" %}
-							<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %} alt="" /><a>    <strong>{{user.user}}</strong><button type="submit" aria-hidden="true" class="close" aria-label="Close"> <i aria-hidden="true" class="fa fa-trash-o"></i></button></p>
-				  		{% else %}
-							<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="{{user.image.url}}" alt="" /><a>    <strong>{{user.user}}</strong> <button type="submit" class="close" aria-hidden="true" aria-label="Close"> <i aria-hidden="true" class="fa fa-trash-o"></i></button></p>
-				  		{% endif %}
+							{% if user.id == room.author.id %}
+								{% if user.image == "" %}
+									<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %} alt="" /><a>    <strong>{{user.user}}</strong></p>
+				  				{% else %}
+									<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="{{user.image.url}}" alt="" /><a>    <strong>{{user.user}}</strong></p>
+				  				{% endif %}
+							{% else %}
+								{% if user.image == "" %}
+									<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %} alt="" /><a>    <strong>{{user.user}}</strong><button type="submit" aria-hidden="true" class="close" aria-label="Close"> <i aria-hidden="true" class="fa fa-trash-o"></i></button></p>
+				  				{% else %}
+									<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="{{user.image.url}}" alt="" /><a>    <strong>{{user.user}}</strong> <button type="submit" class="close" aria-hidden="true" aria-label="Close"> <i aria-hidden="true" class="fa fa-trash-o"></i></button></p>
+				  				{% endif %}
+							{% endif %}
 						{% else %}
 				  			{% if user.image == "" %}
 								<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %} alt="" /><a>    <strong>{{user.user}}</strong></p>
-				  		{% else %}
+				  			{% else %}
 								<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="{{user.image.url}}" alt="" /><a>    <strong>{{user.user}}</strong></p>
-				  		{% endif %}
+				  			{% endif %}
 						{%endif%}
 						<hr>
 						</form>
@@ -262,7 +274,7 @@ resize: none !important;
 
 
             </div>
-			<form method="post">
+			<form method="post" action="../leave-chat/{{room.id}}">
 				{% csrf_token %}
 				<input type="hidden" name="user-id" value="{{request.user.id}}">
 				<button type="submit" class="btn btn-danger" style="width: 100%">Выйти из чата</button>
