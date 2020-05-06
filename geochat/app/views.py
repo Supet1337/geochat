@@ -288,6 +288,9 @@ def profile(request, number):
     rooms = []
     find_joined_rooms(join_rooms, rooms)
     context['rooms'] = rooms
+    if len(Room.objects.filter(author_id=number)) == 0:
+        context['room_len'] = True
+
 
     return render(request, 'profile.html', context)
 
