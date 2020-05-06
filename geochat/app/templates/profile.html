@@ -16,6 +16,24 @@
     <script type="text/javascript" src={% static "assets/libs/js/main-js.js" %} ></script>
     <script src="https://api-maps.yandex.ru/2.1/?apikey=7abcaac9-c988-4344-9b01-50d57672abf2&lang=ru_RU" type="text/javascript" width="100%"></script>
     <link rel="shortcut icon" href={% static "images/geocoin.png" %}  type="image/png">
+    <style>.row.content {height: 1500px}
+    .profile {
+      background-color: #f2f2f2;
+      height: 100%;
+    }
+    footer {
+      background-color: #545;
+      color: white;
+      padding: 16px;
+      width:100%;
+    }
+    @media screen and (max-width: 767px) {
+      .profile {
+        height: auto;
+        padding: 16px;
+      }
+      .row.content {height: auto;}
+    }</style>
 
     <title>Профиль</title>
 </head>
@@ -23,6 +41,7 @@
 <body>
     <!-- ============================================================== -->
     <!-- main wrapper -->
+    <div class="dashboard-main-wrapper">
     <!-- ============================================================== -->
        <!-- ============================================================== -->
         <!-- navbar -->
@@ -42,7 +61,7 @@
         <!-- wrapper  -->
         <!-- ============================================================== -->
         <div class="dashboard-wrapper">
-            <div class="influence-profile">
+            <div class="influence-profile" style="width:100%">
                 <div class="container-fluid dashboard-content ">
                     <!-- ============================================================== -->
                     <!-- pageheader -->
@@ -153,6 +172,7 @@
         <!-- ============================================================== -->
         <!-- end wrapper -->
         <!-- ============================================================== -->
+    </div>
     </div>
     <!-- ============================================================== -->
     <!-- end main wrapper -->

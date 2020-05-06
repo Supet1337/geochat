@@ -5,20 +5,38 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap CSS -->
     {% load static %}
     <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
     <link rel="shortcut icon" href={% static "images/geocoin.png" %}  type="image/png">
-
+    <style>.row.content {height: 1500px}
+    .profile_settings {
+      background-color: #f2f2f2;
+      height: 100%;
+    }
+    footer {
+      background-color: #545;
+      color: white;
+      width: 100%;
+      padding: 16px;
+    }
+    @media screen and (max-width: 767px) {
+      .profile_settings {
+        height: auto;
+        padding: 16px;
+      }
+      .row.content {height: auto;}
+    }</style>
     <title>Профиль</title>
 </head>
 
 <body>
     <!-- ============================================================== -->
     <!-- main wrapper -->
+    <div class="dashboard-main-wrapper">
     <!-- ============================================================== -->
        <!-- ============================================================== -->
         <!-- navbar -->
@@ -54,11 +72,10 @@
                         <!-- ============================================================== -->
                         <!-- profile -->
                         <!-- ============================================================== -->
-                        <div class="col-xl-3 col-lg-3 col-md-5 col-sm-12 col-12">
                             <!-- ============================================================== -->
                             <!-- card profile -->
                             <!-- ============================================================== -->
-                            <div class="card" style="width:1590px; height:700px; margin-top:80px">
+                            <div class="card"  style="width:100%; height:700px; margin-top:80px; min-width:400px">
                                 <div class="card-body">
                                     {% if messages %}
 {% for message in messages %}
@@ -79,13 +96,13 @@
                                         {% endif %}
                                         <div>
                                             <br>
-                                        <div class="card" style="width: 20%;">
+                                        <div class="card" style="width: 20%;min-width:270px">
                                             <div class="card-body">
                                         <form method="post" action="../update-profile-picture" enctype="multipart/form-data">
                                         {%csrf_token%}
                                         {{form.image}}
                                             <div>
-                                            <input type="submit" style="width: 244px" class= "btn btn-success" value="Сохранить картинку">
+                                            <input type="submit" align="center" style="width: 244px" class= "btn btn-success" value="Сохранить картинку">
                                             </div>
                                         </form>
                                               </div>
