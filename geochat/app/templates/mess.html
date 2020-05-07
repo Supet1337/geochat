@@ -305,7 +305,7 @@ if (window.location.protocol == 'https:') {
 
         var chatSocket = new WebSocket(
             soc
-            + window.location.host
+            + window.location.host + ':80'
             + '/ws/chat/'
             + '{{room.id}}'
             + '/'
