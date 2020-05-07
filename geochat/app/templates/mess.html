@@ -13,6 +13,7 @@
 <script type="text/javascript" src={% static "assets/vendor/slimscroll/jquery.slimscroll.js" %} ></script>
 <script type="text/javascript" src={% static "assets/libs/js/main-js.js" %} ></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js' crossorigin="anonymous"></script>
 	<title>Чат</title>
 <style class="cp-pen-styles">
 body {
@@ -303,7 +304,7 @@ if (window.location.protocol == 'https:') {
      soc = 'wss://';
 }
 
-        var chatSocket = new WebSocket(
+        const chatSocket = new ReconnectingWebSocket(
             soc
             + window.location.host + ':80'
             + '/ws/chat/'
