@@ -310,10 +310,14 @@ resize: none !important;
 </div>
 
 <script >
+var soc = 'ws://';
+if (window.location.protocol == 'https:') {
+     soc = 'wss://';
+}
 
-        const chatSocket = new WebSocket(
-            'wss://'
-            + 'geochat.savink.in'
+        var chatSocket = new WebSocket(
+            soc
+            + window.location.host + ':80'
             + '/ws/chat/'
             + '{{room.id}}'
             + '/'

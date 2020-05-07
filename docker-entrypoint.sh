@@ -23,10 +23,10 @@ python manage.py migrate
 
 echo "======Стартуем сервер======"
 if [ "$DEBUG" == "True" ]; then
-    ./manage.py runserver 0.0.0.0:80
+    ./manage.py runserver 0.0.0.0:81
 else
-    #daphne -b 0.0.0.0 -p 80 shp_place.asgi:application
 
-    daphne -e ssl:443:privateKey=../config/ssl_keys/privkey.pem:certKey=../config/ssl_keys/fullchain.pem  -b 0.0.0.0 -p 80 geochat.asgi:application
+
+    daphne -e ssl:443:privateKey=../config/ssl_keys/privkey.pem:certKey=../config/ssl_keys/fullchain.pem  -b 0.0.0.0 -p 81 geochat.asgi:application
 
 fi

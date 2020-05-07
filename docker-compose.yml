@@ -9,5 +9,5 @@ services:
     volumes:
       - ./:/web
     ports:
-      - "80:80"
       - "443:443"
+      - "81:81"
