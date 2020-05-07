@@ -17,7 +17,7 @@
                                     <ul class="nav flex-column">
                                         {% if request.user.is_authenticated %}
                                         <li class="nav-item">
-                                            <p id="balance">Ваш баланс: {{balance}}<img src={% static "images/geocoin.png" %} style="width: 20px;height: 20px"></p>
+                                            <p id="balance">Ваш баланс: {{my_balance}}<img src={% static "images/geocoin.png" %} style="width: 20px;height: 20px"></p>
                                         </li>
                                         <li class="nav-item">
                                             <button onkeypress="if(event.keyCode == 13) return false;" class="btn btn-secondary" style="width:100%" onclick="update_balance()">Клик</button>

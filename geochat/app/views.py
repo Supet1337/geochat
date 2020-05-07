@@ -1,33 +1,39 @@
-from django.shortcuts import render, redirect
+import json
+
+from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login, authenticate
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.core.mail import send_mail
+
+# pylint: disable=redefined-outer-name, no-else-return, undefined-variable, unused-argument, inconsistent-return-statements, relative-beyond-top-level, wildcard-import, bare-except
+
 from .models import *
 from .forms import *
-import json
+
 
 def find_joined_rooms(join_rooms, roomsj):
-    '''
+    """
     Функция поиска чатов, в которые присоединился пользователь.
 
     :param join_rooms: Объекты JoinRoom
     :param roomsj: Массив
     :return: None
-    '''
+    """
     for join_room in join_rooms:
         roomsj.append(Room.objects.get(id=join_room.room_id))
 
+
 def room_sort(rooms, roomsj):
-    '''
+    """
     Функция распределения чатов.
 
     :param rooms: Массив
     :param roomsj: Объекты Room
     :return: None
-    '''
+    """
     flag = False
     for room in Room.objects.all():
         for roomj in roomsj:
@@ -38,51 +44,54 @@ def room_sort(rooms, roomsj):
             rooms.append(room)
         flag = False
 
-def find_image(context, user_add):
-    '''
+
+def find_image(context, user_add, name):
+    """
     Функция поиска аватара.
 
     :param context: Контекст
     :param user_add: Объект UserAdditionals
     :return: None
-    '''
+    """
     if user_add.image == '':
-        context['image'] = -1
+        context[name] = -1
     else:
-        context['image'] = user_add.image
+        context[name] = user_add.image
+
 
 def doc(request):
     return render(request, "docs/build/html/index.html")
 
+
 def view_404(request, exception):
-    '''
+    """
 Функция отображения ошибки 404.
 
     :param request: запрос
     :param exception: исключение
     :return: render 404.html
-    '''
+    """
     return render(request, "errors/404.html")
 
+
 def view_500(request):
-    '''
+    """
     Функция отображения ошибки 500.
 
     :param request: запрос
     :return: render 500.html
-    '''
+    """
     return render(request, "errors/500.html")
-
 
 
 @login_required
 def ajax_update_balance(request):
-    '''
+    """
     Функция обновление баланса пользователя
 
     :param request: запрос
     :return: balance
-    '''
+    """
     wallet = UserAdditionals.objects.get(user=request.user)
     wallet.balance += 1
     wallet.save()
@@ -91,13 +100,13 @@ def ajax_update_balance(request):
 
 @login_required
 def ajax_load_messages(request, number):
-    '''
+    """
     Функция загрузки сообщений
 
     :param request: запрос
     :param number: номер комнаты
     :return: messages
-    '''
+    """
     messages = []
     for message in Message.objects.filter(room_id=number):
         messages.append(message.json())
@@ -105,7 +114,7 @@ def ajax_load_messages(request, number):
 
 
 @login_required
-def ajax_maps_draw(request,number):
+def ajax_maps_draw(request, number):
     """
     Функция отрисовки карт в профиле через ajax
 
@@ -121,20 +130,20 @@ def ajax_maps_draw(request,number):
 
 @login_required
 def ajax_circle_draw(request):
-    '''
+    """
     Функция отрисовки кругов через ajax
 
     :param request: запрос
     :return: rms
-    '''
+    """
     join_rooms = []
     if request.user.is_authenticated:
         join_rooms = JoinRoom.objects.filter(user=request.user)
 
     roomsj = []
-    find_joined_rooms(join_rooms,roomsj)
+    find_joined_rooms(join_rooms, roomsj)
     rooms = []
-    room_sort(rooms,roomsj)
+    room_sort(rooms, roomsj)
     rms = []
     for room in rooms:
         rms.append(room.json())
@@ -143,12 +152,12 @@ def ajax_circle_draw(request):
 
 @login_required
 def ajax_circle_draw_joined(request):
-    '''
+    """
     Фукция отрисовки кругов через ajax, в которые пользователь уже вошёл
 
     :param request: запрос
     :return: rms
-    '''
+    """
     join_rooms = []
     if request.user.is_authenticated:
         join_rooms = JoinRoom.objects.filter(user=request.user)
@@ -163,23 +172,28 @@ def ajax_circle_draw_joined(request):
 
 @login_required
 def report(request):
-    '''
+    """
     Функция репорта
 
     :param request: запрос
     :return: redirect "/"
-    '''
+    """
     if request.method == "POST":
         report = Report()
         report.user = request.user
         report.report = request.POST.get('report')
         if report.report != '' and len(report.report) >= 10:
             report.save()
-            messages.success(request, "Наши модераторы уже решают вашу проблему, простите за принесённые вам "
-                                      "неудобства.")
+            messages.success(
+                request,
+                "Наши модераторы уже решают вашу проблему, простите за принесённые вам "
+                "неудобства.")
         else:
-            messages.error(request, "Собщение должно состоять не менее чем из 10 символов.")
+            messages.error(
+                request,
+                "Собщение должно состоять не менее чем из 10 символов.")
         return HttpResponseRedirect("/")
+
 
 @login_required
 def room(request, number):
@@ -191,9 +205,10 @@ def room(request, number):
     :type number: int
     :return: render mess.html
     """
-    if len(JoinRoom.objects.filter(room_id=number,user=request.user)) == 0:
-        messages.error(request, 'Вы пытаетесь войти в чат, в котором вы не находитесь,'
-                                ' или такого чата уже не существует.')
+    if len(JoinRoom.objects.filter(room_id=number, user=request.user)) == 0:
+        messages.error(
+            request, 'Вы пытаетесь войти в чат, в котором вы не находитесь,'
+                     ' или такого чата уже не существует.')
         return HttpResponseRedirect("../../")
     else:
         context = {}
@@ -201,7 +216,7 @@ def room(request, number):
         context['form'] = form
         user_add = UserAdditionals.objects.get(user=request.user)
         context['my_balance'] = user_add.balance
-        find_image(context, user_add)
+        find_image(context, user_add, "image")
         room = Room.objects.get(id=number)
         joins = JoinRoom.objects.filter(room_id=number)
         user_list = []
@@ -213,36 +228,36 @@ def room(request, number):
                 context['room'] = room
                 join_rooms = JoinRoom.objects.filter(user=request.user)
                 rooms = []
-                find_joined_rooms(join_rooms,rooms)
+                find_joined_rooms(join_rooms, rooms)
                 context['rooms'] = rooms
         return render(request, "mess.html", context)
 
 
 def loggout(request):
-    '''
+    """
     Функция деавторизации пользователя
 
     :param request: запрос
     :return: redirect на главную станицу
-    '''
+    """
     logout(request)
     return HttpResponseRedirect("/")
 
 
 def index(request):
-    '''
+    """
     Функция рендера главной страницы
 
     :param request: запрос
     :return: render index.html
-    '''
+    """
     context = {}
     join_rooms = []
     if request.user.is_authenticated:
         join_rooms = JoinRoom.objects.filter(user=request.user)
 
     roomsj = []
-    find_joined_rooms(join_rooms,roomsj)
+    find_joined_rooms(join_rooms, roomsj)
     context['roomsj'] = roomsj
     rooms = []
     room_sort(rooms, roomsj)
@@ -250,7 +265,7 @@ def index(request):
     if request.user.is_authenticated:
         user_add = UserAdditionals.objects.get(user=request.user)
         context['balance'] = user_add.balance
-        find_image(context,user_add)
+        find_image(context, user_add, "image")
     else:
         context['balance'] = 0
         context['image'] = -1
@@ -260,20 +275,20 @@ def index(request):
 
 @login_required
 def profile(request, number):
-    '''
+    """
     Функция рендера страницы профиля
 
     :param request: запрос
     :param number: номер профиля
     :type number: int
     :return: render profile.html
-    '''
+    """
     context = {}
     user = User.objects.get(id=number)
+    user_add = UserAdditionals.objects.get(user=request.user)
     profile_user_add = UserAdditionals.objects.get(user=user)
-    user_add = UserAdditionals.objects.get(user_id=number)
-    find_image(context,profile_user_add)
-    find_image(context,user_add)
+    find_image(context, profile_user_add, "profile_image")
+    find_image(context, user_add, "image")
     context['username'] = user.username
     context['email'] = user.email
     context['last_login'] = user.last_login
@@ -284,6 +299,7 @@ def profile(request, number):
     context['status'] = profile_user_add.status
     context['created_rooms'] = Room.objects.filter(author_id=number)
     context['my_balance'] = user_add.balance
+    context['balance'] = profile_user_add.balance
     join_rooms = JoinRoom.objects.filter(user=request.user)
     rooms = []
     find_joined_rooms(join_rooms, rooms)
@@ -295,21 +311,19 @@ def profile(request, number):
     return render(request, 'profile.html', context)
 
 
-
-
 @login_required
 def profile_settings(request):
-    '''
+    """
     Функция рендера настроек профиля
 
     :param request: запрос
     :return: render profile_settings.html
-    '''
+    """
     form = UserSettingsForm()
     context = {}
     context['form'] = form
     user_add = UserAdditionals.objects.get(user=request.user)
-    find_image(context,user_add)
+    find_image(context, user_add, "image")
     context['username'] = request.user
     context['email'] = request.user.email
     context['last_login'] = request.user.last_login
@@ -326,30 +340,34 @@ def profile_settings(request):
     rooms = []
     find_joined_rooms(join_rooms, rooms)
     context['rooms'] = rooms
-    return render(request,'profile_settings.html',context)
+    return render(request, 'profile_settings.html', context)
+
 
 @login_required
-def delete_room(request,number):
-    '''
-    Функция удаления комнаты.
+def delete_room(request, number):
+    """
+    Функция удаления чата.
 
     :param request: Запрос
     :param number: id комнаты
     :return: redirect to main page
-    '''
+    """
     if request.method == "POST":
         Room.objects.get(id=number).delete()
         for join in JoinRoom.objects.filter(room_id=number):
             join.delete()
+        messages.success(
+            request, "Вы успешно удалили чат.")
         return HttpResponseRedirect('../../')
 
+
 def register_user(request):
-    '''
+    """
     Функция регистрации пользователя.
 
     :param request: Запрос
     :return: redirect to main page
-    '''
+    """
     if request.method == "POST":
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -359,31 +377,37 @@ def register_user(request):
             user_add.user = user
             user_add.balance = 1000
             if len(User.objects.filter(email=form.data['email'])) > 0:
-                messages.error(request, "Пользователь с такой почтой уже существует.")
+                messages.error(
+                    request, "Пользователь с такой почтой уже существует.")
                 return HttpResponseRedirect("../")
             elif len(User.objects.filter(username=form.data['username'])) > 0:
-                messages.error(request, "Пользователь с таким ником уже существует.")
+                messages.error(
+                    request, "Пользователь с таким ником уже существует.")
                 return HttpResponseRedirect("/")
-            elif check_password(request.POST.get('password1'),request.POST.get('password2')):
+            elif check_password(request.POST.get('password1'), request.POST.get('password2')):
                 messages.error(request, 'Пароли не совпадают.')
                 return HttpResponseRedirect("/")
             else:
                 user.save()
                 user_add.save()
                 login(request, user)
-                message = 'Здравствуйте! {}\nПоздравляем! Вы успешно зарегестрировали аккаунт Geochat.\nВперёд к ' \
-                          'новым приключениям!\n\n\n С уважением, команда Geochat  '.format(user.username)
-                send_mail('Регистрация аккаунта Geochat', message, 'shp.geochat@yandex.ru', [user.email],
-                          fail_silently=False)
+                message = "Здравствуйте! {}\nПоздравляем!" \
+                          " Вы успешно зарегестрировали аккаунт Geochat.\nВперёд к " \
+                          "новым приключениям!\n\n\n" \
+                          " С уважением, команда Geochat  ".format(user.username)
+                send_mail(
+                    'Регистрация аккаунта Geochat', message, 'shp.geochat@yandex.ru', [
+                        user.email], fail_silently=False)
         return HttpResponseRedirect('../')
 
+
 def login_user(request):
-    '''
+    """
     Функция логина пользователя.
 
     :param request: запрос
     :return: redirect to main page
-    '''
+    """
     if request.method == "POST":
         username = request.POST['username_auth']
         password = request.POST['password']
@@ -395,14 +419,15 @@ def login_user(request):
             messages.error(request, 'Неправильный логин или пароль.')
             return HttpResponseRedirect("/")
 
+
 @login_required
 def create_room(request):
-    '''
+    """
     Функция создания чата.
 
     :param request: Запрос
     :return: redirect to main page
-    '''
+    """
     if request.method == "POST":
         if not request.POST.get('name') == '':
             new_room = Room()
@@ -422,11 +447,14 @@ def create_room(request):
                 new_room.is_place = True
             else:
                 new_room.is_place = False
-            if wallet.balance - (int(new_room.diametr) - 50 + (int(new_room.max_members) - 3) * 10) >= 0:
-                wallet.balance -= int(new_room.diametr) - 50 + (int(new_room.max_members) - 3) * 10
+            if wallet.balance - (int(new_room.diametr) - \
+                                 50 + (int(new_room.max_members) - 3) * 10) >= 0:
+                wallet.balance -= int(new_room.diametr) - \
+                                  50 + (int(new_room.max_members) - 3) * 10
                 wallet.save()
             else:
-                messages.error(request, "Вам не хватает монет для создания чата.")
+                messages.error(
+                    request, "Вам не хватает монет для создания чата.")
                 return HttpResponseRedirect('/')
             new_room.save()
             join_new_room = JoinRoom()
@@ -437,25 +465,29 @@ def create_room(request):
             messages.error(request, "Название чата не может быть пустым.")
         return HttpResponseRedirect('/')
 
+
 @login_required
 def join_room(request):
-    '''
+    """
     Функция входа в чат.
 
     :param request: Запрос
     :return: redirect to room/room.id
-    '''
+    """
     if request.method == "POST":
         room_enter = Room.objects.get(id=request.POST.get('id'))
         joins = JoinRoom.objects.filter(room_id=request.POST.get('id'))
         if len(joins) < room_enter.max_members:
             if room_enter.is_private:
-                if check_password(request.POST.get('password'),room_enter.password):
+                if check_password(
+                        request.POST.get('password'),
+                        room_enter.password):
                     new_join = JoinRoom()
                     new_join.user = request.user
                     new_join.room_id = request.POST.get('id')
                     new_join.save()
-                    return HttpResponseRedirect('/room/' + str(request.POST.get('id')))
+                    return HttpResponseRedirect(
+                        '/room/' + str(request.POST.get('id')))
                 else:
                     messages.error(request, "Неправильный пароль.")
                     return HttpResponseRedirect('/')
@@ -464,19 +496,23 @@ def join_room(request):
                 new_join.user = request.user
                 new_join.room_id = request.POST.get('id')
                 new_join.save()
-                return HttpResponseRedirect('/room/' + str(request.POST.get('id')))
+                return HttpResponseRedirect(
+                    '/room/' + str(request.POST.get('id')))
         else:
-            messages.error(request, "В этом чате уже максимальное количество пользователей.")
+            messages.error(
+                request,
+                "В этом чате уже максимальное количество пользователей.")
             return HttpResponseRedirect('/')
+
 
 @login_required
 def update_profile_settings(request):
-    '''
+    """
     Функция обновления настроек профиля.
 
     :param request: Запрос
     :return: redirect to /profile-settings
-    '''
+    """
     if request.method == "POST":
         user_add = UserAdditionals.objects.get(user=request.user)
         user_add.status = request.POST.get('status')
@@ -492,14 +528,15 @@ def update_profile_settings(request):
         messages.success(request, "Настройки успешно сохранены.")
         return HttpResponseRedirect("../profile-settings")
 
+
 @login_required
 def update_profile_picture(request):
-    '''
+    """
     Функция обновления аватарки профиля.
 
     :param request: Запрос
     :return: redirect to /profile-settings
-    '''
+    """
     if request.method == "POST":
         form = UserSettingsForm(request.POST, request.FILES)
         if form.is_valid():
@@ -507,7 +544,8 @@ def update_profile_picture(request):
             user_add = form.save(commit=False)
             if user_add.image != "":
                 try:
-                    image = UserAdditionals.objects.get(user=request.user).image
+                    image = UserAdditionals.objects.get(
+                        user=request.user).image
                     image.delete()
                 except:
                     pass
@@ -520,15 +558,16 @@ def update_profile_picture(request):
             messages.error(request, "Произошла ошибка.")
         return HttpResponseRedirect("../profile-settings")
 
+
 @login_required
-def update_room_picture(request,number):
-    '''
+def update_room_picture(request, number):
+    """
     Функция обновления аватара чата.
 
     :param request: Запрос
     :param number: id чата
     :return: redirect to room/room.id
-    '''
+    """
     if request.method == "POST":
         form = RoomSettingsForm(request.POST, request.FILES)
         if form.is_valid():
@@ -547,17 +586,18 @@ def update_room_picture(request,number):
                 messages.error(request, "Выберите картинку.")
         else:
             messages.error(request, "Произошла ошибка.")
-        return HttpResponseRedirect("../room/"+str(number))
+        return HttpResponseRedirect("../room/" + str(number))
+
 
 @login_required
-def update_room_settings(request,number):
-    '''
+def update_room_settings(request, number):
+    """
     Функция обновления настроек чата.
 
     :param request: Запрос
     :param number: id чата
     :return: redirect to room/room.id
-    '''
+    """
     if request.method == "POST":
         new_name = Room.objects.get(id=number)
         new_name.name = request.POST.get('name')
@@ -565,15 +605,16 @@ def update_room_settings(request,number):
         messages.success(request, "Изменения успешно сохранены.")
         return HttpResponseRedirect("../room/" + str(number))
 
+
 @login_required
 def leave_chat(request, number):
-    '''
+    """
     Функция выхода из чата.
 
     :param request: Запрос
     :param number: id чата
     :return: redirect to main page
-    '''
+    """
     if request.method == "POST":
         us_id = request.POST.get('user-id')
         JoinRoom.objects.get(user_id=us_id, room_id=number).delete()

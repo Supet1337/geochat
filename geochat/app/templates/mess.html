@@ -188,19 +188,9 @@ resize: none !important;
 <div class="dashboard-main-wrapper" >
 {% include "header.html" %}
 {% include "left_sidebar2.html" %}
-
+{% include "messages.html" %}
 <div class="dashboard-wrapper">
 	<div class="container-fluid  dashboard-content">
-		{% if messages %}
-{% for message in messages %}
-		<div class="alert alert-success alert-dismissible fade show" role="alert">
-{{message}}
-<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-<span aria-hidden="true">&times;</span>
-</button>
-</div>
-{% endfor %}
-{% endif %}
 <div id="frame" >
 	<div class="modal fade"  id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
 		    <div class="modal-dialog" role="document">
@@ -315,7 +305,7 @@ if (window.location.protocol == 'https:') {
 
         var chatSocket = new WebSocket(
             soc
-            + window.location.host + ':80'
+            + window.location.host
             + '/ws/chat/'
             + '{{room.id}}'
             + '/'

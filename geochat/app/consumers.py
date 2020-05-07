@@ -3,6 +3,8 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
 from .models import *
 from datetime import datetime
+
+
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.room_id = self.scope['url_route']['kwargs']['room_id']
@@ -22,13 +24,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-#Получение сообщения клиента, Сохранение в БД, Отправка на сервер
+# Получение сообщения клиента, Сохранение в БД, Отправка на сервер
+
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
         author_id = text_data_json['author_id']
         room = text_data_json['room_id']
-        await database_sync_to_async(self.save_message)(message,author_id,room)
+        await database_sync_to_async(self.save_message)(message, author_id, room)
         author_name = await database_sync_to_async(self.get_name)(author_id)
         author_image = await database_sync_to_async(self.get_image)(author_id)
         now = datetime.now()
@@ -45,7 +48,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
 # Сохранение сообщений в БД
-    def save_message(self,message,author,room):
+    def save_message(self, message, author, room):
         new_message = Message()
         new_message.author = User.objects.get(id=author)
         new_message.room = Room.objects.get(id=room)
@@ -53,16 +56,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
         new_message.save()
 
     # Получить имя
-    def get_name(self,author):
+    def get_name(self, author):
         return User.objects.get(id=author).username
 
-    def get_image(self,user):
+    def get_image(self, user):
         user_add = UserAdditionals.objects.get(user_id=user)
         if user_add.image == '':
             return '-1'
         else:
             return user_add.image.url
-
 
     async def chat_message(self, event):
         message = event['message']
