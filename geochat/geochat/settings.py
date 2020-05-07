@@ -88,7 +88,7 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [('redis', 6379)],
         },
     },
 }
@@ -134,7 +134,7 @@ MEDIA_ROOT = "./media/"
 
 
 SECURE_SSL_REDIRECT = True
-
+LOGIN_URL = "/"
 # s3 serve static
 
 

@@ -215,9 +215,7 @@ resize: none !important;
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-		{% if  request.user != room.author %}
-			<i style="margin-left: 25px; color:#ffe21f" class="fa fa-star"></i>
-		{%endif%}
+
             <div class="container">
 
 				  {% if request.user == room.author %}

@@ -271,7 +271,7 @@ def profile(request, number):
     context = {}
     user = User.objects.get(id=number)
     profile_user_add = UserAdditionals.objects.get(user=user)
-    user_add = UserAdditionals.objects.get(user=request.user)
+    user_add = UserAdditionals.objects.get(user_id=number)
     find_image(context,profile_user_add)
     find_image(context,user_add)
     context['username'] = user.username

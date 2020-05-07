@@ -157,6 +157,7 @@
                                             <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="margin-right: 190px">
                                                 <div class="card" style="width: 100%; height: 420px; min-width:350px">
                                                     <div class="card-body">
+                                                       <!-- <a href="../room/{{room.id}}"><h1 class="mb-1">{{room.name}}</h1></a> -->
                                                         <h1 class="mb-1">{{room.name}}</h1>
                                                         <div id="map{{room.id}}" style="width: 100%; height: 300px; min-width:300px"></div>
                                                         <p id="addr{{room.id}}"></p>
@@ -205,10 +206,24 @@
         center: [json[i].x,json[i].y],
         zoom:15,
         controls: ['smallMapDefaultSet']
-    }, {
+    },
+
+    {
         // Зададим ограниченную область прямоугольником,
         restrictMapArea: true
     });
+       myPlacemark1 = new ymaps.Placemark([json[i].x,json[i].y], {
+
+            balloonContent: '<img alt="User Avatar" style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'">'+json[i].name+'',
+            hintContent: '<a>'+json[i].name+'</a>'
+        }, {
+
+            preset: 'islands#greenCircleIcon'
+        }),
+
+
+    myMap.geoObjects.add(myPlacemark1);
+
     getAddress(json[i].x,json[i].y,json[i].id)
 });
 
@@ -225,7 +240,6 @@
         var firstGeoObject = res.geoObjects.get(0);
         document.getElementById('addr'+id+'').innerHTML = firstGeoObject.getAddressLine();
       }
-
     )}
    </script>
 </body>
