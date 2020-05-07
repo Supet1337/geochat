@@ -306,7 +306,7 @@ if (window.location.protocol == 'https:') {
 
         const chatSocket = new ReconnectingWebSocket(
             soc
-            + window.location.host + ':80'
+            + window.location.host
             + '/ws/chat/'
             + '{{room.id}}'
             + '/'
