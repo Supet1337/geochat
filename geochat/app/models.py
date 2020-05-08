@@ -57,13 +57,18 @@ class Room(models.Model):
             'id': str(
                 self.id),
             'diametr': self.diametr,
-            'image': self.get_image()}
+            'image': self.get_image(),
+            'members': str(self.members()),
+            'max_members': str(self.max_members)}
 
     def get_image(self):
         try:
             return str(self.image.url)
         except BaseException:
             return 'https://s3.nl-ams.scw.cloud/geochat-static/images/geocoin.png'
+
+    def members(self):
+        return len(JoinRoom.objects.filter(room_id=self.id))
 
 
 class Message(models.Model):

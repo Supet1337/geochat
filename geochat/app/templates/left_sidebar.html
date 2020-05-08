@@ -70,7 +70,7 @@
                                             {% else %}
                                             {% if room.is_private %}
                                                 <li class="nav-item">
-                                                    <a class="nav-link">{{room.name}}</a>
+                                                    <a class="nav-link">{{room.name}} <span class="border border-primary" style="border-radius: 5px;border-color: #50537e !important;"> {{room.members}}/{{room.max_members}}</span></a>
                                                     <form method="post" action="/join-room">
                                                     {% csrf_token %}
                                                     <input type="password" name="password" class="form-control" placeholder="пароль">
@@ -82,7 +82,7 @@
                                             {% else %}
                                                 <li class="nav-item">
 
-                                                    <a class="nav-link">{{room.name}}</a>
+                                                    <a class="nav-link">{{room.name}} <span class="border border-primary" style="border-radius: 5px;border-color: #50537e !important;"> {{room.members}}/{{room.max_members}}</span></a>
                                                     <form method="post" action="/join-room">
                                                     {% csrf_token %}
                                                     <input type="hidden" name="id" value="{{room.id}}">
@@ -109,7 +109,7 @@
                                         {% for room in roomsj %}
                                                 <li class="nav-item">
 
-                                                    <a class="nav-link" href="../../../../room/{{room.id}}">{{room.name}}</a>
+                                                    <a class="nav-link" href="../../../../room/{{room.id}}">{{room.name}} <span class="border border-primary" style="border-radius: 5px;border-color: #50537e !important;"> {{room.members}}/{{room.max_members}}</span></a>
                                                 </li>
                                         {% endfor %}
                                         {% else %}

@@ -23,7 +23,7 @@ python manage.py migrate
 
 echo "======Стартуем сервер======"
 if [ "$DEBUG" == "True" ]; then
-    ./manage.py runserver 0.0.0.0:81
+    ./manage.py runserver 0.0.0.0:80
 else
 
 

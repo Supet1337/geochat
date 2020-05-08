@@ -11,3 +11,28 @@ services:
     ports:
       - "443:443"
       - "80:80"
+    depends_on:
+      - celery
+      - celery-beat
+      - redis
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "127.0.0.1:6379:6379"
+
+  celery:
+    build: .
+    command: celery -A geochat worker -l info
+    volumes:
+      - ./:/web
+    depends_on:
+      - redis
+
+  celery-beat:
+    build: .
+    command: celery -A geochat beat -l info
+    volumes:
+      - ./:/web
+    depends_on:
+      - redis
