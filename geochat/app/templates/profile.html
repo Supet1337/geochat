@@ -81,7 +81,7 @@
                             <!-- ============================================================== -->
                             <!-- card profile -->
                             <!-- ============================================================== -->
-                            <div class="card" style="width:100%; height:700px; margin-top:80px; min-width:400px">
+                            <div class="card" style="width:100%; height:700px; margin-top:80px; min-width:310px">
                                 <div class="card-body">
                                     <div class="user-avatar text-center d-block">
                                         {% if image == -1 %}
@@ -147,19 +147,20 @@
                                                 Этот пользователь скрыл созданные чаты.
                                             {% else %}
                                             {% if room_len == True %}
-                                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                                    <div class="col">
                                                 <div class="section-block">
                                                     <h3 class="section-title">Этот пользователь не создал ни одного чата.</h3>
                                                 </div>
                                             </div>
+                                            <div class="w-100"></div>
                                                 {% else %}
                                             {% for room in created_rooms %}
-                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="margin-right: 190px">
-                                                <div class="card" style="width: 100%; height: 420px; min-width:350px">
+                                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" >
+                                                <div class="card" style="width: 100%; height: 420px; min-width:260px; max-width:350px">
                                                     <div class="card-body">
                                                        <!-- <a href="../room/{{room.id}}"><h1 class="mb-1">{{room.name}}</h1></a> -->
                                                         <h1 class="mb-1">{{room.name}}</h1>
-                                                        <div id="map{{room.id}}" style="width: 100%; height: 300px; min-width:300px"></div>
+                                                        <div id="map{{room.id}}" style="width: 100%; height: 300px; min-width:210px; max-width:350px"></div>
                                                         <p id="addr{{room.id}}"></p>
                                                     </div>
                                                 </div>
@@ -167,6 +168,7 @@
                                             {% endfor %}
                                             {% endif %}
                                             {% endif %}
+
                                 </div>
                                         </div>
                         <!-- ============================================================== -->
