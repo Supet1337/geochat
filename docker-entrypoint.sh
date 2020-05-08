@@ -27,6 +27,6 @@ if [ "$DEBUG" == "True" ]; then
 else
 
 
-    daphne -e ssl:443:privateKey=../config/ssl_keys/privkey.pem:certKey=../config/ssl_keys/fullchain.pem  -b 0.0.0.0 -p 81 geochat.asgi:application
+    daphne -e ssl:443:privateKey=../config/ssl_keys/privkey.pem:certKey=../config/ssl_keys/fullchain.pem  -b 0.0.0.0 -p 80 geochat.asgi:application
 
 fi

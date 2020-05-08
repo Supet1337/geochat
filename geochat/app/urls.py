@@ -3,7 +3,7 @@ from django.urls import path
 
 urlpatterns = [
     path('room/<int:number>', room),
-    path('',index),
+    path('',index,name='index'),
     path('logout',loggout),
     path('ajax-update-balance',ajax_update_balance),
     path('ajax-maps-draw/<int:number>',ajax_maps_draw),

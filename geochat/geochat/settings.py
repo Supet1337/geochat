@@ -26,7 +26,7 @@ SECRET_KEY = 'wnt)319w#i$1ug2x)v2q0i_ilx7bia=hk&*1b@j4i%g+fmazfr'
 DEBUG = False
 # DEBUG = os.environ.get('DEBUG')
 
-ALLOWED_HOSTS = ['geochat.savink.in','0.0.0.0']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
