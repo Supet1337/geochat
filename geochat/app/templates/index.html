@@ -153,6 +153,7 @@
 <script type="text/javascript">
 if('{{request.user.is_authenticated}}' == 'True')
     ymaps.ready(init);
+var myMap;
 function init () {
     var geolocation = ymaps.geolocation,
     myMap = new ymaps.Map("map", {
@@ -329,6 +330,14 @@ function create(x,y){
     document.getElementById('x').value = x;
     document.getElementById('y').value = y;
 }
+
+function open_balloon(x,y){
+        var myAction = new ymaps.map.action.Single({
+          center: [x, y],
+          zoom: 15
+    });
+    myMap.action.execute(myAction);
+    }
 </script>
 {% include "footer.html" %}
 
