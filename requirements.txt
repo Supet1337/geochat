@@ -11,3 +11,4 @@ django-storages
 boto3
 sphinx
 Celery
+django-allauth
