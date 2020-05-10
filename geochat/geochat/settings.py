@@ -60,11 +60,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
-SOCIALACCOUNT_QUERY_EMAIL = True
-ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_LOGIN_ATTEMPTS_TIMEOUT = 60
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

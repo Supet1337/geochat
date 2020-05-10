@@ -1,5 +1,6 @@
 from .views import *
-from django.urls import path, re_path, include
+from django.conf.urls import include
+from django.urls import path
 
 urlpatterns = [
     path('room/<int:number>', room),
@@ -24,5 +25,5 @@ urlpatterns = [
     path('update-room-settings/<int:number>',update_room_settings),
     path('leave-chat/<int:number>',leave_chat),
     path('doc',doc),
-    re_path(r'^accounts/', include('allauth.urls')),
+
 ]
