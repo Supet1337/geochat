@@ -82,7 +82,9 @@
                                             {% else %}
                                                 <li class="nav-item">
 
-                                                    <a onclick="open_balloon({{room.x}},{{room.y}})" class="nav-link">{{room.name}} <span class="border border-primary" style="border-radius: 5px;border-color: #50537e !important;"> {{room.members}}/{{room.max_members}}</span></a>
+
+                                                    <a class="nav-link" onclick="open_balloon({{room.x}},{{room.y}})">{{room.name}} <span class="border border-primary" style="border-radius: 5px;border-color: #50537e !important;"> {{room.members}}/{{room.max_members}}</span></a>
+
                                                     <form method="post" action="/join-room">
                                                     {% csrf_token %}
                                                     <input type="hidden" name="id" value="{{room.id}}">

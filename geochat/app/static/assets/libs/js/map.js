@@ -1,161 +1,8 @@
-<!doctype html>
-<html lang="ru">
-
-
-<head>
-    <!-- Required meta tags -->
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta charset="utf-8">
-
-    <!-- Bootstrap CSS -->
-    {% load static %}
-    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
-    <link rel="stylesheet" type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
-    <link rel="shortcut icon" href={% static "images/geocoin.png" %}  type="image/png">
-    <link rel="stylesheet" type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
-    <script src="https://api-maps.yandex.ru/2.1/?apikey=7abcaac9-c988-4344-9b01-50d57672abf2&lang=ru_RU" type="text/javascript" width="100%"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-    <title>Geochat</title>
-    <style>
-    .row.content {height: 1500px}
-    .index {
-      background-color: #f2f2f2;
-      height: 100%;
-    }
-    footer {
-      background-color: #545;
-      color: white;
-      padding: 16px;
-    }
-    @media screen and (max-width: 767px) {
-      .index {
-        height: auto;
-        padding: 16px;
-      }
-      .row.content {height: auto;}
-    }
-  </style>
-</head>
-
-<body>
-    <div class="dashboard-main-wrapper">
-        {% include "header.html" %}
-        {% include "left_sidebar.html" %}
-        {% include "messages.html" %}
-        <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-           <div class="modal-content">
-          <div class="modal-header">
-          <h4 class="modal-title" id="myModalLabel1">Создать чат</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-            <div class="container">
-              <div class="row">
-                <div class="w-100"></div>
-                <div class="col">
-                     <form method="POST" action="/create-room" >
-                        {% csrf_token %}
-                         <br>
-                        <input type="text" autocomplete="off" id="name" name="name" class="form-control" placeholder="Название комнаты" readonly onfocus="this.removeAttribute('readonly')">
-                         <input type="checkbox" id="is_place" name="is_place"> Виден только тем, кто находится поблизости
-                         <br>
-                         <input type="checkbox" id="is_private" name="is_private" onclick="private()"> С паролем
-                         <div id="insert-password">
-
-                        </div>
-                          <div class="form-row align-items-center">
-                             <div class="col-auto my-1" style="width:40%">
-                             <select class="custom-select mr-sm-2" id="choose_diametr" name="choose_diametr" style="width: 100%">
-                                <option value="50" selected>Выберите диаметр чата:</option>
-                                <option  value="50">50м</option>
-                                <option  value="150">150м</option>
-                                <option  value="300">300м</option>
-                                <option  value="450">450м</option>
-                              </select>
-                            </div>
-                          </div>
-                         <div class="form-row align-items-center">
-                            <div class="col-auto my-1" style="width:100%">
-                             <select class="custom-select mr-sm-2" id="choose_max" name="choose_max" style="width:100%">
-                             <option  value="3" selected>Выберите максимальное количество пользователей:</option>
-                                <option  value="3">3 человека</option>
-                                <option  value="5">5 человек</option>
-                                <option  value="10">10 человек</option>
-                                <option  value="15">15 человек</option>
-                              </select>
-                            </div>
-                         </div>
-                         <input type="hidden" id="x" name="x">
-                         <input type="hidden" id="y" name="y">
-                        <input type="submit" value="Создать" class="btn btn-dark">
-                         <br>
-                         <br>
-                    </form>
-
-
-
-
-                </div>
-              </div>
-            </div>
-    </div>
-  </div>
-</div>
-        <div class="dashboard-wrapper">
-            <div class="container-fluid  dashboard-content">
-                <div class="row">
-                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                        <div class="page-header">
-                            {% if request.user.is_authenticated %}
-                            <h3 class="mb-2">Карта</h3>
-                            {%endif%}
-                        </div>
-                    </div>
-                </div>
-
-                {% if request.user.is_authenticated %}
-                    <div id="map" style="width: 100%; height: 700px"></div>
-                {%else%}
-<div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
-  <ol class="carousel-indicators">
-    <li data-target="#carouselExampleCaptions" data-slide-to="0" class="active"></li>
-    <li data-target="#carouselExampleCaptions" data-slide-to="1"></li>
-    <li data-target="#carouselExampleCaptions" data-slide-to="2"></li>
-  </ol>
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img src={% static "images/mountains (6).jpg"%}  class="d-block  w-100" alt="...">
-      <div class="carousel-caption d-none d-md-block">
-        <p>Добро пожаловать!</p>
-        <p>Зарегистрируйтесь на сайте Geochat и общайтесь с людьми из любой точки мира.</p>
-      </div>
-    </div>
-    <div class="carousel-item">
-      <img  src={% static "images/fon.jpg" %}  class="d-block  w-100" alt="...">
-      <div class="carousel-caption d-none d-md-block">
-        <p>Куча возможностей!</p>
-        <p>Создавайте сови чаты, общайтесь с друзьями, зарабатывайте монетки.</p>
-      </div>
-    </div>
-    <div class="carousel-item">
-      <img src={% static "images/33.jpg" %} class="d-block w-100"  alt="...">
-      <div class="carousel-caption d-none d-md-block">
-          <p>Чего вы ждёте?</p>
-        <p>Вперёд к новым приключениям!</p>
-      </div>
-    </div>
-  </div>
-</div>
-{% endif %}
-<script type="text/javascript">
-if('{{request.user.is_authenticated}}' == 'True')
-    ymaps.ready(init);
+ymaps.ready(init);
 var myMap;
 function init () {
-    var geolocation = ymaps.geolocation,
+geolocation = ymaps.geolocation;
+
     myMap = new ymaps.Map("map", {
         center: [55.76, 37.64],
         zoom: 11
@@ -167,6 +14,7 @@ function init () {
         url: "/ajax-circle-draw",
         success: function (result) {
             var json = $.parseJSON(result);
+
             geolocation.get({
                 provider: 'browser',
                 mapStateAutoApply: true
@@ -331,27 +179,14 @@ function create(x,y){
     document.getElementById('y').value = y;
 }
 
-function open_balloon(x,y){
+function open_balloon(x1,x2,y1,y2){
+        var x = parseFloat(x1+'.'+x2);
+        var y = parseFloat(y1+'.'+y2);
         var myAction = new ymaps.map.action.Single({
           center: [x, y],
           zoom: 15
     });
     myMap.action.execute(myAction);
     }
-</script>
-{% include "footer.html" %}
-
-        </div>
-    </div>
-
-    </div>
-</body>
-        <script type="text/javascript" src={% static "assets/libs/js/map.js" %} ></script>
-        <script type="text/javascript" src={% static "assets/vendor/bootstrap/js/bootstrap.bundle.js" %} ></script>
-        <script type="text/javascript" src={% static "assets/vendor/slimscroll/jquery.slimscroll.js" %} ></script>
-        <script type="text/javascript" src={% static "assets/libs/js/main-js.js" %} ></script>
 
 
-
-
-</html>
