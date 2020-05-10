@@ -291,7 +291,7 @@ def profile(request, number):
     find_image(context, user_add, "image")
     context['username'] = user.username
     context['email'] = user.email
-    context['last_login'] = user.last_login
+    context['date_joined'] = user.date_joined
     context['room'] = room
     context['private_chats'] = profile_user_add.private_chats
     context['private_info'] = profile_user_add.private_info

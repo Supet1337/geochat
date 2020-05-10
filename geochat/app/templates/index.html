@@ -6,7 +6,6 @@
     <!-- Required meta tags -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
-
     <!-- Bootstrap CSS -->
     {% load static %}
     <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
@@ -150,12 +149,15 @@
   </div>
 </div>
 {% endif %}
-<script type="text/javascript">
-if('{{request.user.is_authenticated}}' == 'True')
+<script>
+    if('+{{request.user.is_authenticated}}+'){
     ymaps.ready(init);
+}
 var myMap;
+
 function init () {
-    var geolocation = ymaps.geolocation,
+geolocation = ymaps.geolocation;
+
     myMap = new ymaps.Map("map", {
         center: [55.76, 37.64],
         zoom: 11
@@ -167,6 +169,7 @@ function init () {
         url: "/ajax-circle-draw",
         success: function (result) {
             var json = $.parseJSON(result);
+
             geolocation.get({
                 provider: 'browser',
                 mapStateAutoApply: true
@@ -191,10 +194,10 @@ function init () {
                         balloonContentBody:
                                                 '<div>'+
                                                     '<form method="post" action="/join-room">'+
-                                                    '{% csrf_token %}'+
                                                     '<input type="password" name="password" class="form-control" placeholder="пароль">'+
                                                     '<input type="hidden" name="id" value="'+json[i].id+'">'+
-                                                    '<input type="submit" value="Присоединиться" class="btn btn-secondary">'+
+                                                    '{%csrf_token%}' +
+                                                    '<input style="width:100%" type="submit" value="Присоединиться" class="btn btn-secondary">'+
                                                 '</form>'+
                                                 '</div>',
                         balloonContentFooter: '<sup>Geo Chat</sup>',
@@ -217,8 +220,8 @@ function init () {
                         balloonContentBody:
                                                 '<div>'+
                                                     '<form method="post" action="/join-room">'+
-                                                    '{% csrf_token %}'+
                                                     '<input type="hidden" name="id" value="'+json[i].id+'">'+
+                                                    '{%csrf_token%}' +
                                                     '<input type="submit" value="Присоединиться" class="btn btn-secondary">'+
                                                 '</form>'+
                                                 '</div>',
@@ -256,10 +259,10 @@ function init () {
                                                     '<a class="nav-link">'+json[i].name+'</a>'+
                                                     '<p> Участники: '+json[i].members+'/'+json[i].max_members+'</p>' +
                                                     '<form method="post" action="/join-room">'+
-                                                    '{% csrf_token %}'+
+                                                    '{%csrf_token%}' +
                                                     '<input type="password" name="password" class="form-control" placeholder="пароль">'+
                                                     '<input type="hidden" name="id" value="'+json[i].id+'">'+
-                                                    '<input type="submit" value="Присоединиться" class="btn btn-secondary">'+
+                                                    '<input type="submit" style="width:100%" value="Присоединиться" class="btn btn-secondary">'+
                                                     '</form>'+
                                                 '</li>');
                                 }
@@ -269,8 +272,8 @@ function init () {
                                                             '<a class="nav-link">'+json[i].name+'</a>'+
                                                             '<p> Участники: '+json[i].members+'/'+json[i].max_members+'</p>' +
                                                             '<form method="post" action="/join-room">'+
-                                                            '{% csrf_token %}'+
                                                             '<input type="hidden" name="id" value="'+json[i].id+'">'+
+                                                            '{%csrf_token%}' +
                                                             '<input type="submit" value="Присоединиться" class="btn btn-secondary">'+
                                                             '</form>'+
                                                             '</li>');
@@ -331,10 +334,12 @@ function create(x,y){
     document.getElementById('y').value = y;
 }
 
-function open_balloon(x,y){
+function open_balloon(x1,x2,y1,y2){
+        var x = parseFloat(x1+'.'+x2);
+        var y = parseFloat(y1+'.'+y2);
         var myAction = new ymaps.map.action.Single({
           center: [x, y],
-          zoom: 15
+          zoom: 16
     });
     myMap.action.execute(myAction);
     }
@@ -346,6 +351,7 @@ function open_balloon(x,y){
 
     </div>
 </body>
+        <script src="https://vk.com/js/api/openapi.js?168" type="text/javascript"></script>
         <script type="text/javascript" src={% static "assets/libs/js/map.js" %} ></script>
         <script type="text/javascript" src={% static "assets/vendor/bootstrap/js/bootstrap.bundle.js" %} ></script>
         <script type="text/javascript" src={% static "assets/vendor/slimscroll/jquery.slimscroll.js" %} ></script>

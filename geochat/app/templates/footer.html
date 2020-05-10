@@ -48,6 +48,7 @@
 
 
                 </div>
+
                 <div class="col">
 
                    <form class="needs-validation" method="POST" action="/login-user" novalidate>
@@ -62,6 +63,14 @@
                           </div>
                     </form>
                     <p><a href="accounts/password_reset">Забыли пароль?</a></p>
+                    <a onclick="vk()"><i style="font-size: 40px;" class="fa fa-vk"></i></a>
+                    <div id="vk_auth"></div>
+<script type="text/javascript">
+function vk(){
+ VK.init({apiId: 7414816});
+ VK.Widgets.Auth("vk_auth", {"width":300,"onAuth":function(data) {alert('user '+data['uid']+' authorized');}});
+}
+</script>
 
                 </div>
               </div>

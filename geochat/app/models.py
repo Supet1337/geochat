@@ -114,7 +114,9 @@ class UserAdditionals(models.Model):
 
 
 class Report(models.Model):
-
+    """
+    Модель для хранения Репортов.
+    """
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     report = models.CharField(max_length=250)
     date = models.DateTimeField(auto_now_add=True)
