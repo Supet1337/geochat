@@ -28,7 +28,9 @@ def room_directory_path(instance, filename):
 
 
 class Room(models.Model):
-
+    """
+    Модель для хранения чатов.
+    """
     name = models.CharField(max_length=50)
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)

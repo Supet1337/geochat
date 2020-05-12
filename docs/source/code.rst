@@ -5,14 +5,14 @@
 *******
 Функции
 *******
-.. automodule:: views
+.. automodule:: app.views
     :members:
 
 ******
 Модели
 ******
 
-.. automodule:: models
+.. automodule:: app.models
     :members:
 
 
