@@ -17,7 +17,6 @@ from celery.schedules import crontab
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
@@ -29,7 +28,6 @@ DEBUG = False
 # DEBUG = os.environ.get('DEBUG')
 
 ALLOWED_HOSTS = ['*']
-
 
 TEST_MODE = 'pytest' in sys.modules
 # Application definition
@@ -59,8 +57,6 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
-
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -84,20 +80,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-        
-                
+
             ],
         },
     },
 ]
 
-
-
-
-
-
 WSGI_APPLICATION = 'geochat.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -136,7 +125,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -157,10 +145,15 @@ MEDIA_URL = '/media/'
 
 STATIC_ROOT = "./collectedstatic"
 MEDIA_ROOT = "./media/"
-
+SOCIALACCOUNT_AUTO_SIGNUP = False
+SOCIALACCOUNT_ADAPTER = 'app.adapter.SocialAccountAdapter'
+SOCIALACCOUNT_PROVIDERS = {
+    'vk': {
+        'SCOPE': ['email', 'photo']
+    }
+}
 
 SECURE_SSL_REDIRECT = True
-LOGIN_URL = "accounts/vk/login/callback"
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 # s3 serve static
@@ -172,12 +165,11 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 
 CELERY_BEAT_SCHEDULE = {
-    'update_points_cache': {
+    'update_geocoin_cache': {
         'task': 'back.tasks.geocoin_daily_bonus',
         'schedule': crontab(minute='*/1')
     }
 }
-
 
 AWS_ACCESS_KEY_ID = "SCWWC0NA79VBS7DQ1G0R"
 AWS_SECRET_ACCESS_KEY = "91d10a80-a8c2-49f0-ad3e-62fdad004c9d"

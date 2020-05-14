@@ -31,23 +31,46 @@ class Room(models.Model):
     """
     Модель для хранения чатов.
     """
+
     name = models.CharField(max_length=50)
+    """Название комнаты"""
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    """Автор комнаты"""
     date = models.DateTimeField(auto_now_add=True)
+    """Дата создания комнаты"""
     password = models.CharField(max_length=50)
+    """Пароль комнаты"""
     is_private = models.BooleanField(default=False)
+    """Параметр приватности комнаты"""
     is_place = models.BooleanField(default=False)
+    """Параметр отображения комнаты (If True, Комната будет видна тем, кто находится поблизости)"""
     max_members = models.IntegerField(default=10)
+    """Максимальное количество пользователей комнаты"""
     image = models.ImageField(upload_to=room_directory_path, blank=True)
+    """Аватар комнаты"""
     x = models.FloatField()
+    """Координата Х комнаты"""
     y = models.FloatField()
+    """Координата У комнаты"""
     diametr = models.IntegerField(default=300)
+    """Диматер комнаты"""
 
     def save(self, **kwargs):
+        """
+        Функция сохранения пароля комнаты (если is_private==True)
+
+        :param kwargs:
+        :return:
+        """
         self.password = make_password(self.password)
         super().save(**kwargs)
 
     def json(self):
+        """
+        Функция передачи комнаты сообщения через AJAX.
+
+        :return: x, y, name, author, is_private, is_place, id, diametr, image, members, max_members,
+        """
         return {
             'x': self.x,
             'y': self.y,
@@ -64,23 +87,44 @@ class Room(models.Model):
             'max_members': str(self.max_members)}
 
     def get_image(self):
+        """
+        Функция получения изображения для чата.
+
+        :return: image.url(если у чата есть аватар), иначе geocoin.png(default)
+        """
         try:
             return str(self.image.url)
         except BaseException:
             return 'https://s3.nl-ams.scw.cloud/geochat-static/images/geocoin.png'
 
     def members(self):
+        """
+        Функция получения количества пользователей, которые вошли в чат.
+
+        :return: len()
+        """
         return len(JoinRoom.objects.filter(room_id=self.id))
 
 
 class Message(models.Model):
-
+    """
+    Модель для хранения сообщений.
+    """
     text = models.CharField(max_length=250)
+    """Текст сообщения"""
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    """Автор сообщения"""
     date = models.DateTimeField(auto_now_add=True)
+    """Дата сообщения"""
     room = models.ForeignKey(to=Room, on_delete=models.CASCADE)
+    """Комната, куда отправляется сообщение"""
 
     def json(self):
+        """
+        Функция передачи данных сообщения через AJAX.
+        
+        :return: text, author, date, image, id
+        """
         datef = dateformat.format(self.date, settings.DATE_FORMAT)
         return {
             'text': self.text,
@@ -92,6 +136,11 @@ class Message(models.Model):
                 self.get_image())}
 
     def get_image(self):
+        """
+        Функция получения изображения для пользователя.
+        
+        :return: image.url(если у пользователя есть аватар), иначе -1(default_ava.png) 
+        """
         try:
             return UserAdditionals.objects.get(user=self.author).image.url
         except BaseException:
@@ -99,26 +148,44 @@ class Message(models.Model):
 
 
 class JoinRoom(models.Model):
-
+    """
+    Модель для хранения чатов, в которые вступил пользователь.
+    """
+    
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    """Пользователь"""
     room_id = models.IntegerField()
+    """Id комнаты"""
     date = models.DateTimeField(auto_now_add=True)
+    """Дата"""
 
 
 class UserAdditionals(models.Model):
+    """
+    Модель для дополнительных настроек пользователя.
+    """
 
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    """Пользователь"""
     image = models.ImageField(upload_to=user_directory_path, blank=True)
+    """Аватар пользователя"""
     balance = models.IntegerField(default=1000)
+    """Баланс пользователя (geocoin)"""
     status = models.CharField(max_length=50, default='Статус не указан')
+    """Статус пользователя"""
     private_chats = models.BooleanField(default=False)
+    """Параметр приватности пользователя (Не будут показываться чаты другим пользователям)"""
     private_info = models.BooleanField(default=False)
-
+    """Параметр приватности пользователя (Не будут показываться статус и баланс другим пользователям)"""
 
 class Report(models.Model):
     """
     Модель для хранения Репортов.
     """
+    
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    """Пользователь"""
     report = models.CharField(max_length=250)
+    """Сообщение репорта"""
     date = models.DateTimeField(auto_now_add=True)
+    """Дата отправки репорта"""

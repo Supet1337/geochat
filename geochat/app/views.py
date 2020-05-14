@@ -361,7 +361,8 @@ def delete_room(request, number):
         return HttpResponseRedirect('../../')
 
 
-def register_user(request):
+
+def register_user(request, backend='django.contrib.auth.backends.ModelBackend'):
     """
     Функция регистрации пользователя.
 
@@ -390,7 +391,7 @@ def register_user(request):
             else:
                 user.save()
                 user_add.save()
-                login(request, user)
+                login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                 message = "Здравствуйте! {}\nПоздравляем!" \
                           " Вы успешно зарегестрировали аккаунт Geochat.\nВперёд к " \
                           "новым приключениям!\n\n\n" \

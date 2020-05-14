@@ -6,6 +6,7 @@
     <!-- Required meta tags -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
+
     <!-- Bootstrap CSS -->
     {% load static %}
     <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
@@ -149,15 +150,12 @@
   </div>
 </div>
 {% endif %}
-<script>
-    if('+{{request.user.is_authenticated}}+'){
+<script type="text/javascript">
+if('{{request.user.is_authenticated}}' == 'True')
     ymaps.ready(init);
-}
 var myMap;
-
 function init () {
 geolocation = ymaps.geolocation;
-
     myMap = new ymaps.Map("map", {
         center: [55.76, 37.64],
         zoom: 11
