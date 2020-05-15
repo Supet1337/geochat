@@ -149,12 +149,13 @@ SOCIALACCOUNT_AUTO_SIGNUP = False
 SOCIALACCOUNT_ADAPTER = 'app.adapter.SocialAccountAdapter'
 SOCIALACCOUNT_PROVIDERS = {
     'vk': {
-        'SCOPE': ['email', 'photo']
+        'SCOPE': ['email']
     }
 }
 
 SECURE_SSL_REDIRECT = True
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 # s3 serve static
 
@@ -190,6 +191,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
+ACCOUNT_EMAIL_VERIFICATION = "none"
 EMAIL_HOST_USER = 'shp.geochat@yandex.ru'
 EMAIL_HOST_PASSWORD = 'srgobbbgbhzoeias'
 DEFAULT_FROM_EMAIL = 'shp.geochat@yandex.ru'
+
