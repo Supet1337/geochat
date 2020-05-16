@@ -67,7 +67,7 @@ class Room(models.Model):
 
     def json(self):
         """
-        Функция передачи комнаты сообщения через AJAX.
+        Функция передачи комнат через AJAX.
 
         :return: x, y, name, author, is_private, is_place, id, diametr, image, members, max_members,
         """

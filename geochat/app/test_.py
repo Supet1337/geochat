@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.http import request
 from django.urls import reverse, resolve
-#TODO Разобраться нашей бд в pytest
+
 
 def create_test_user_and_force_login(client, username='Test'):
     user = get_user_model().objects.create_user(username=username, password='Asdfgh12345')

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     {% load static %}
-    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css'>
     <link rel="stylesheet" type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
     <link rel="shortcut icon" href={% static "images/geocoin.png" %}  type="image/png">
     <link rel="stylesheet" type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
@@ -33,10 +33,8 @@
 
                                     {% load socialaccount %}
 
-                                    {% get_providers as socialaccount_providers %}
-                                    {% for provider in socialaccount_providers %}
-                                    <p>Вход через {{provider_name}}</p>
-                                    {% endfor %}
+
+                                    <p>Вход</p>
 
                                         <form class="splash-container" id="signup_form" method="POST"  action="{% url 'socialaccount_signup' %}">
                                     {% csrf_token %}
@@ -68,7 +66,10 @@
                                                     {% for provider in socialaccount_providers %}
                                                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
                                                         {% if provider.name == 'VK' %}
-                                                        <a href="{% provider_login_url provider.id process='login' scope=scope auth_params=auth_params %}"><span style="font-size:40px; color:#4a76a8" class="fa fa-vk"></span></a>
+                                                        <a href="{% provider_login_url provider.id process='login' scope=scope auth_params=auth_params %}"><span style="font-size:40px; color:#4a76a8" class="fab fa-vk"></span></a>
+                                                        {% endif %}
+                                                        {% if provider.name == 'Discord' %}
+                                                        <a href="{% provider_login_url provider.id process='login' scope=scope auth_params=auth_params %}"><span style="font-size:40px; color:#6a84c6" class="fab fa-discord"></span></a>
                                                         {% endif %}
                                                     </div>
                                                         {% endfor %}
