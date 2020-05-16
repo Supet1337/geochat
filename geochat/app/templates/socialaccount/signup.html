@@ -12,7 +12,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 
-    <title>Авторизация</title>
+    <title>Авторизация через социальную сеть</title>
 </head>
 <body>
      {%load static%}
@@ -27,15 +27,8 @@
 <div class="dashboard-wrapper">
             <div class="influence-profile">
                 <div class="container-fluid dashboard-content ">
-
+                    {% load socialaccount %}
                     <div class="row">
-
-
-                                    {% load socialaccount %}
-
-
-                                    <p>Вход</p>
-
                                         <form class="splash-container" id="signup_form" method="POST"  action="{% url 'socialaccount_signup' %}">
                                     {% csrf_token %}
                                         <div class="card">
@@ -62,17 +55,6 @@
                                                     <button type="submit" class="btn btn-block btn-primary">Войти</button>
 
                                                 <div class="form-group row pt-0">
-                                                     {% get_providers as socialaccount_providers %}
-                                                    {% for provider in socialaccount_providers %}
-                                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12 mb-2">
-                                                        {% if provider.name == 'VK' %}
-                                                        <a href="{% provider_login_url provider.id process='login' scope=scope auth_params=auth_params %}"><span style="font-size:40px; color:#4a76a8" class="fab fa-vk"></span></a>
-                                                        {% endif %}
-                                                        {% if provider.name == 'Discord' %}
-                                                        <a href="{% provider_login_url provider.id process='login' scope=scope auth_params=auth_params %}"><span style="font-size:40px; color:#6a84c6" class="fab fa-discord"></span></a>
-                                                        {% endif %}
-                                                    </div>
-                                                        {% endfor %}
                                                 </div>
                                             </div>
                                             <div class="card-footer bg-white">
