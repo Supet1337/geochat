@@ -4,6 +4,8 @@ from django.urls import path
 
 urlpatterns = [
     path('room/<int:number>', room),
+    path('accounts/login', redirect_login),
+    path('accounts/signup', redirect_signup),
     path('',index,name='index'),
     path('logout',loggout),
     path('ajax-update-balance',ajax_update_balance),

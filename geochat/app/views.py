@@ -13,6 +13,11 @@ from django.core.mail import send_mail
 from .models import *
 from .forms import *
 
+def redirect_login(request):
+    return HttpResponseRedirect('../../')
+
+def redirect_signup(request):
+    return HttpResponseRedirect('../../')
 
 def find_joined_rooms(join_rooms, roomsj):
     """
