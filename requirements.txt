@@ -1,5 +1,4 @@
 Django
-docker
 redis
 channels
 Pillow
