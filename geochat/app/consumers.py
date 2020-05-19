@@ -1,3 +1,4 @@
+"""Consumers.py"""
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
@@ -5,10 +6,13 @@ from .models import *
 from datetime import datetime
 
 
+# pylint: disable=wildcard-import, wildcard-import
+
 class ChatConsumer(AsyncWebsocketConsumer):
     """
     Консумер чата.
     """
+
     async def connect(self):
         """
         Функция подключения к вебсокету чата.
@@ -38,7 +42,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room_group_name,
             self.channel_name
         )
-# Получение сообщения клиента, Сохранение в БД, Отправка на сервер
+
+    # Получение сообщения клиента, Сохранение в БД, Отправка на сервер
 
     async def receive(self, text_data):
         """
@@ -67,7 +72,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             }
         )
 
-# Сохранение сообщений в БД
+    # Сохранение сообщений в БД
     def save_message(self, message, author, room):
         """
         Функция сохранения сообщений в базу данных.

@@ -9,7 +9,8 @@ from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.core.mail import send_mail
 
-# pylint: disable=redefined-outer-name, no-else-return, undefined-variable, unused-argument, inconsistent-return-statements, relative-beyond-top-level, wildcard-import, bare-except
+# pylint: disable=redefined-outer-name, no-else-return, undefined-variable, unused-argument,
+# inconsistent-return-statements, relative-beyond-top-level, wildcard-import, bare-except
 
 from .models import *
 from .forms import *
