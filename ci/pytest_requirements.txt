@@ -1,3 +1,4 @@
+Django
 pytest
 pytest-django
 django-debug-toolbar
