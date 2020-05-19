@@ -32,7 +32,7 @@ pytest:
     DEBUG: "True"
     TEST_MODE: "True"
   before_script:
-    - ./ci/preparations.sh
+    - pip install -r ./ci/pytest_requirements.txt
   script:
     - ./ci/pytest.sh
   after_script:
