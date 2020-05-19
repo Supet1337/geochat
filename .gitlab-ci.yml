@@ -9,7 +9,6 @@ before_script:
   - python -V
 
 stages:
-  - build
   - lint
   - test
   - deploy
