@@ -1,9 +1,4 @@
-
 image: python:latest
-
-cache:
-  paths:
-  - .cache/pip/
 
 before_script:
   - python -V
@@ -16,7 +11,7 @@ stages:
 pylint:
   stage: lint
   before_script:
-    - ./ci/preparations.sh
+    - pip install -r ./ci/pylint_requirements.txt
   script:
     - ./ci/pylint_runner.sh
   after_script:
