@@ -9,12 +9,13 @@ before_script:
   - python -V
 
 stages:
-  - pylint
+  - build
+  - lint
   - test
   - deploy
 
 pylint:
-  stage: pylint
+  stage: lint
   before_script:
     - ./ci/preparations.sh
   script:
