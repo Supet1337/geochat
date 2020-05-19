@@ -6,23 +6,12 @@ cache:
   - .cache/pip/
 
 before_script:
-  - python -V
+  - pip install -r requirements.txt
+  - pip install -r ci/pylint_requirements.txt
 
-stages:
-  - lint
-  - test
-  - deploy
 
 pylint:
-  stage: lint
-  before_script:
-    - ./ci/preparations.sh
   script:
-    - ./ci/pylint_runner.sh
-  after_script:
-    - mkdir -p .cache
-    - cp -r ~/.cache/pip ./.cache/pip
-  artifacts:
-    paths:
-      - pylint.txt
+  - ci/pylint_runner.sh
+
 
