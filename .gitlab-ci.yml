@@ -16,7 +16,7 @@ stages:
 pylint:
   stage: lint
   before_script:
-    - pip install -r pylint_requirements.txt
+    - ./ci/preparations.sh
   script:
     - ./ci/pylint_runner.sh
   after_script:
@@ -37,7 +37,7 @@ pytest:
     DEBUG: "True"
     TEST_MODE: "True"
   before_script:
-    - pip install -r pylint_requirements.txt
+    - ./ci/preparations.sh
   script:
     - ./ci/pytest.sh
   after_script:
