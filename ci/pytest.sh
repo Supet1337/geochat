@@ -1,8 +1,8 @@
 #!/bin/bash
 
 echo "Накатываем миграции"
-python ../geochat/manage.py makemigrations
-python ../geochat/manage.py migrate
+python geochat/geochat/manage.py makemigrations
+python geochat/geochat/manage.py migrate
 
 
 echo "Запускаем тесты"
