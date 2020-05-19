@@ -10,16 +10,21 @@ services:
       - ./:/web
     ports:
       - "443:443"
-      - "80:80"
+      - "81:81"
     depends_on:
       - celery
       - celery-beat
       - redis
+      - redis_coin
 
   redis:
     image: "redis:alpine"
     ports:
-      - "127.0.0.1:6379:6379"
+      - "127.0.0.1:6378:6378"
+  redis_coin:
+    image: "redis:alpine"
+    ports:
+      - "127.0.0.1:6377:6377"
 
   celery:
     build: .
@@ -27,7 +32,7 @@ services:
     volumes:
       - ./:/web
     depends_on:
-      - redis
+      - redis_coin
 
   celery-beat:
     build: .
@@ -35,4 +40,4 @@ services:
     volumes:
       - ./:/web
     depends_on:
-      - redis
+      - redis_coin
