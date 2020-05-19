@@ -1,4 +1,5 @@
 import json
+import redis
 
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
@@ -210,6 +211,7 @@ def room(request, number):
     :type number: int
     :return: render mess.html
     """
+    bonus_geocoin(request)
     if len(JoinRoom.objects.filter(room_id=number, user=request.user)) == 0:
         messages.error(
             request, 'Вы пытаетесь войти в чат, в котором вы не находитесь,'
@@ -248,6 +250,18 @@ def loggout(request):
     logout(request)
     return HttpResponseRedirect("/")
 
+def bonus_geocoin(request):
+    if request.user.is_authenticated:
+        red = redis.Redis(host='redis', port=6379) #TODO 6379
+        user = request.user
+        red_name = user.username
+        user_add = UserAdditionals.objects.get(user=user)
+        if red.get(red_name) is not None:
+             user_add.balance += int(red.get(red_name))
+             red.delete(red_name)
+             user_add.save()
+             messages.success(request, "С возвращением! Вам начислено 200 геокоинов.")
+
 
 def index(request):
     """
@@ -256,6 +270,7 @@ def index(request):
     :param request: запрос
     :return: render index.html
     """
+    bonus_geocoin(request)
     context = {}
     join_rooms = []
     if request.user.is_authenticated:
@@ -288,6 +303,7 @@ def profile(request, number):
     :type number: int
     :return: render profile.html
     """
+    bonus_geocoin(request)
     context = {}
     user = User.objects.get(id=number)
     user_add = UserAdditionals.objects.get(user=request.user)
@@ -324,6 +340,7 @@ def profile_settings(request):
     :param request: запрос
     :return: render profile_settings.html
     """
+    bonus_geocoin(request)
     form = UserSettingsForm()
     context = {}
     context['form'] = form
@@ -453,14 +470,12 @@ def create_room(request):
                 new_room.is_place = True
             else:
                 new_room.is_place = False
-            if wallet.balance - (int(new_room.diametr) - \
-                                 50 + (int(new_room.max_members) - 3) * 10) >= 0:
-                wallet.balance -= int(new_room.diametr) - \
-                                  50 + (int(new_room.max_members) - 3) * 10
+            if wallet.balance - (int(new_room.diametr)*10 + int(new_room.max_members) * 100) >= 0:
+                wallet.balance -= (int(new_room.diametr)*10 + int(new_room.max_members) * 100)
                 wallet.save()
             else:
                 messages.error(
-                    request, "Вам не хватает монет для создания чата.")
+                    request, "Вам не хватает "+str(-(wallet.balance-(int(new_room.diametr)*10 + int(new_room.max_members) * 100)))+" геокоинов для создания чата.")
                 return HttpResponseRedirect('/')
             new_room.save()
             join_new_room = JoinRoom()

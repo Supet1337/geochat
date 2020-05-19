@@ -1,8 +1,11 @@
 import pytest
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.http import request
 from django.urls import reverse, resolve
+
+
 
 def create_test_user_and_force_login(client, username='Test'):
     user = get_user_model().objects.create_user(username=username, password='Asdfgh12345')
@@ -62,6 +65,14 @@ class TestIndex:
         response = client.get('/')
         me = User.objects.get(username='Test')
         assert me.is_active == 1
+        assert response.status_code == 301
+
+    def test_visit_index_authorized_check_balance(self, client):
+        fixtures = ['../fixtures/fixtures.json']
+        user = create_test_user_and_force_login(client)
+        response = client.get('/')
+        me = UserAdditionals.objects.get(user_id=2)
+        assert me.balance == 1200
         assert response.status_code == 301
 
     def test_visit_index_anonymous(self, client):
