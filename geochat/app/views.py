@@ -51,7 +51,7 @@ def room_sort(rooms, roomsj):
         flag = False
 
 
-def find_image(context, user_add, name):
+def find_image(context, user_add, nameeee):
     """
     Функция поиска аватара.
 
