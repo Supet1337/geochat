@@ -26,24 +26,3 @@ pylint:
     paths:
       - pylint.txt
 
-pytest:
-  stage: test
-  services:
-    - name: redis:alpine
-      alias: redis
-    - name: redis:alpine
-      alias: redis_coin
-  variables:
-    DEBUG: "True"
-    TEST_MODE: "True"
-  before_script:
-    - ./ci/preparations.sh
-  script:
-    - ./ci/pytest.sh
-  after_script:
-    - mkdir -p .cache
-    - cp -r ~/.cache/pip ./.cache/pip
-  artifacts:
-    paths:
-      - pytest.txt
-      - htmlcov
