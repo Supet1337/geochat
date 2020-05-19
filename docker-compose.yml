@@ -3,11 +3,36 @@ version: '3.1'
 services:
   web:
     build: ./
-    command: ./docker-entrypoint.sh
+    command: ../docker-entrypoint.sh
     env_file:
       - ./config/web/web-variables.env
     volumes:
       - ./:/web
     ports:
       - "443:443"
-      - "81:81"
+      - "80:80"
+    depends_on:
+      - celery
+      - celery-beat
+      - redis
+
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "127.0.0.1:6379:6379"
+
+  celery:
+    build: .
+    command: celery -A geochat worker -l info
+    volumes:
+      - ./:/web
+    depends_on:
+      - redis
+
+  celery-beat:
+    build: .
+    command: celery -A geochat beat -l info
+    volumes:
+      - ./:/web
+    depends_on:
+      - redis

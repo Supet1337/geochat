@@ -1,9 +1,12 @@
 from .views import *
+from django.conf.urls import include
 from django.urls import path
 
 urlpatterns = [
     path('room/<int:number>', room),
-    path('',index),
+    path('accounts/login', redirect_login),
+    path('accounts/signup', redirect_signup),
+    path('',index,name='index'),
     path('logout',loggout),
     path('ajax-update-balance',ajax_update_balance),
     path('ajax-maps-draw/<int:number>',ajax_maps_draw),
@@ -24,4 +27,5 @@ urlpatterns = [
     path('update-room-settings/<int:number>',update_room_settings),
     path('leave-chat/<int:number>',leave_chat),
     path('doc',doc),
+
 ]

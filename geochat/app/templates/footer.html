@@ -1,23 +1,4 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-{% if messages %}
-{% for message in messages %}
-{% if message.tags == 'error' %}
-<div class="alert alert-danger alert-dismissible fade show" role="alert">
-{{message}}
-<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-<span aria-hidden="true">&times;</span>
-</button>
-</div>
-{% else %}
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-{{message}}
-<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-<span aria-hidden="true">&times;</span>
-</button>
-</div>
-{% endif %}
-{% endfor %}
-{% endif %}
 <div class="footer" style="width:100%">
 
     {% if not request.user.is_authenticated %}
@@ -67,6 +48,7 @@
 
 
                 </div>
+
                 <div class="col">
 
                    <form class="needs-validation" method="POST" action="/login-user" novalidate>
@@ -81,6 +63,12 @@
                           </div>
                     </form>
                     <p><a href="accounts/password_reset">Забыли пароль?</a></p>
+                    {% load socialaccount %}
+
+                    <a href="/accounts/vk/login/?process=login"><span style="font-size:40px; color:#4a76a8" class="fab fa-vk"></span></a>
+                    <a href="/accounts/discord/login/?process=login"><span style="font-size:40px; color:#6a84c6" class="fab fa-discord"></span></a>
+
+
 
                 </div>
               </div>

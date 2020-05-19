@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <!-- Bootstrap CSS -->
     {% load static %}
-    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css'>
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
     <link rel="stylesheet" type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
     <link rel="shortcut icon" href={% static "images/geocoin.png" %}  type="image/png">
     <link rel="stylesheet" type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
 
-    <title>Сброс пароля</title>
+    <title>Ошибка</title>
 </head>
 <body>
      {%load static%}
@@ -32,19 +32,7 @@
 
                             <div class="card" style="max-width:1590px; height:70px; margin-top:80px; width:100%">
                                 <div class="auth" align="center">
-                                    <form action="" method="post">
-                                        {% csrf_token %}
-                                        <input type="text" id="email" name="email" class="form-control"  placeholder="Ваш Email" style="width:100%">
-                                        <input type="submit" class="btn btn-primary" style="width:100%"  value="Восстановить пароль" style="width:100%">
-                                        {% if form.email.errors %}
-                                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                                    {{ form.email.errors }}
-                                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                      </button>
-                                    </div>
-                                        {% endif %}
-                                    </form>
+                                    <h6>Вы отменили вход</h6>
                                  </div>
                         </div>
                         <!-- ============================================================== -->

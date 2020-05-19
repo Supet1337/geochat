@@ -12,9 +12,10 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('../../geochat/app'))
-
-
+import django
+sys.path.insert(0, os.path.join(os.path.abspath('.'), '../../geochat'))
+os.environ['DJANGO_SETTINGS_MODULE'] = 'geochat.settings'
+django.setup()
 
 # -- Project information -----------------------------------------------------
 

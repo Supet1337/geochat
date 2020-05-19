@@ -23,6 +23,7 @@ handler404 = 'app.views.view_404'
 handler500 = 'app.views.view_500'
 urlpatterns = [
     path('admin/', admin.site.urls),
+    url(r'^accounts/', include('allauth.urls')),
     path('', include('app.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
