@@ -6,12 +6,45 @@ cache:
   - .cache/pip/
 
 before_script:
-  - pip install -r requirements.txt
-  - pip install -r ci/pylint_requirements.txt
+  - python -V
 
+stages:
+  - build
+  - lint
+  - test
+  - deploy
 
 pylint:
+  stage: pylint
+  before_script:
+    - ./ci/preparations.sh
   script:
-  - ci/pylint_runner.sh
+    - ./ci/pylint_runner.sh
+  after_script:
+    - mkdir -p .cache
+    - cp -r ~/.cache/pip ./.cache/pip
+  artifacts:
+    paths:
+      - pylint.txt
 
-
+pytest:
+  stage: test
+  services:
+    - name: redis:alpine
+      alias: redis
+    - name: redis:alpine
+      alias: redis_coin
+  variables:
+    DEBUG: "True"
+    TEST_MODE: "True"
+  before_script:
+    - ./ci/preparations.sh
+  script:
+    - ./ci/pytest.sh
+  after_script:
+    - mkdir -p .cache
+    - cp -r ~/.cache/pip ./.cache/pip
+  artifacts:
+    paths:
+      - pytest.txt
+      - htmlcov
