@@ -1,0 +1,49 @@
+
+image: python:latest
+
+cache:
+  paths:
+  - .cache/pip/
+
+before_script:
+  - python -V
+
+stages:
+  - pylint
+  - test
+  - deploy
+
+pylint:
+  stage: pylint
+  before_script:
+    - ./ci/preparations.sh
+  script:
+    - ./ci/pylint_runner.sh
+  after_script:
+    - mkdir -p .cache
+    - cp -r ~/.cache/pip ./.cache/pip
+  artifacts:
+    paths:
+      - pylint.txt
+
+pytest:
+  stage: test
+  services:
+    - name: redis:alpine
+      alias: redis
+    - name: redis:alpine
+      alias: redis_coin
+  variables:
+    DEBUG: "True"
+    TEST_MODE: "True"
+  before_script:
+    - ./ci/preparations.sh
+  script:
+    - ./ci/pytest.sh
+  after_script:
+    - mkdir -p .cache
+    - cp -r ~/.cache/pip ./.cache/pip
+  artifacts:
+    paths:
+      - pytest.txt
+      - htmlcov
