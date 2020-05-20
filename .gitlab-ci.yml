@@ -49,8 +49,8 @@ docs:
   stage: docs
   before_script:
     - pip install sphinx
-  script:
     - cd docs
+  script:
       - make html
   after_script:
     - mkdir -p .cache
