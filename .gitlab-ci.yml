@@ -49,6 +49,7 @@ docs:
   stage: docs
   before_script:
     - pip install -r requirements.txt
+    - pip install sphinx_rtd_theme
     - cd docs
   script:
       - make html
