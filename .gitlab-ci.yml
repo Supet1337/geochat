@@ -17,7 +17,7 @@ pylint:
   after_script:
     - mkdir -p .cache
     - cp -r ~/.cache/pip ./.cache/pip
-    - mkdir pylint.txt
+    - nano pylint.txt
   artifacts:
     paths:
       - pylint.txt
@@ -58,4 +58,4 @@ docs:
     - cp -r ~/.cache/pip ./.cache/pip
   artifacts:
     paths:
-      - docs.txt
+      - index.html
