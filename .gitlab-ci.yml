@@ -4,9 +4,9 @@ before_script:
   - python -V
 
 stages:
+  - docs
   - lint
   - test
-  - docs
 
 pylint:
   stage: lint
@@ -50,6 +50,7 @@ docs:
   before_script:
     - pip install sphinx
   script:
+    - cd docs
       - make html
   after_script:
     - mkdir -p .cache
