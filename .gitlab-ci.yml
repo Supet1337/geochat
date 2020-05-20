@@ -48,7 +48,7 @@ test:
 docs:
   stage: docs
   before_script:
-    - pip install sphinx Django
+    - pip install sphinx Django celery
     - cd docs
   script:
       - make html
