@@ -17,11 +17,12 @@ pylint:
   after_script:
     - mkdir -p .cache
     - cp -r ~/.cache/pip ./.cache/pip
+    - mkdir pylint.txt
   artifacts:
     paths:
       - pylint.txt
 
-ytest:
+test:
   stage: test
   services:
     - name: redis:alpine
@@ -49,7 +50,6 @@ docs:
   before_script:
     - pip install sphinx
   script:
-      - cd ../docs
       - make html
   after_script:
     - mkdir -p .cache
