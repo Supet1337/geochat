@@ -11,27 +11,27 @@ stages:
 pylint:
   stage: lint
   before_script:
-    - mkdir -p ~/.cache
-    - cp -r ./.cache/pip ~/.cache/pip
     - pip install -r ./ci/pylint_requirements.txt
   script:
     - ./ci/pylint_runner.sh
   after_script:
+    - mkdir -p .cache
     - cp -r ~/.cache/pip ./.cache/pip
   artifacts:
     paths:
       - pylint.txt
 
-pytest:
+ytest:
   stage: test
   services:
     - name: redis:alpine
       alias: redis
     - name: redis:alpine
       alias: redis_coin
+  variables:
+    DEBUG: "True"
+    TEST_MODE: "True"
   before_script:
-    - mkdir -p ~/.cache
-    - cp -r ./.cache/pip ~/.cache/pip
     - pip install -r ./ci/pytest_requirements.txt
   script:
     - ./ci/pytest.sh
@@ -42,6 +42,7 @@ pytest:
     paths:
       - pytest.txt
       - htmlcov
+
 
 docs:
   stage: docs
