@@ -54,7 +54,7 @@ docs:
       - make html
   after_script:
     - mkdir -p .cache
-    - cp ../docs/build ./.cache/pip
+    - cp -r ../docs/build ./.cache/pip
     - cp -r ~/.cache/pip ./.cache/pip
   artifacts:
     paths:
