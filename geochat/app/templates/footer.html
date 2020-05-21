@@ -115,7 +115,7 @@
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                             <div class="text-md-right footer-links d-none d-sm-block">
-                                <a href=""><button class="btn btn-primary">О нас <i style="color:#ffffff" class="fa fa-info-circle"></i></button></a>
+                                <a><button data-toggle="modal" data-target="#ModalDocs" class="btn btn-primary">О нас <i style="color:#ffffff" class="fa fa-info-circle"></i></button></a>
                                 {% if request.user.is_authenticated %}
                                 <a><button  type="button" style="margin: auto" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                                   Поддержка
@@ -143,6 +143,24 @@
         <input type="submit" class="btn btn-primary" style="width:100%" value="Отправить">
       </div>
       </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="ModalDocs" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ModalDocsLabel">О нас</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <div class="modal-footer">
+      </div>
       </div>
     </div>
   </div>
