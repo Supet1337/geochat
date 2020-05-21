@@ -7,7 +7,7 @@ from django.http import request
 from django.urls import reverse, resolve
 
 
-# pylint:disable=import-error,wrong-import-order, invalid-name, missing-function-docstring, no-member, undefined-variable, no-self-use, unused-variable, missing-class-docstring
+# pylint:disable=import-error, unused-argument, wrong-import-order, invalid-name, missing-function-docstring, no-member, undefined-variable, no-self-use, unused-variable, missing-class-docstring
 
 def create_test_user_and_force_login(client, username='Test'):
     user = get_user_model().objects.create_user(username=username, password='Asdfgh12345')
