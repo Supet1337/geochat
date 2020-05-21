@@ -206,4 +206,6 @@ EMAIL_HOST_USER = 'shp.geochat@yandex.ru'
 EMAIL_HOST_PASSWORD = 'srgobbbgbhzoeias'
 DEFAULT_FROM_EMAIL = 'shp.geochat@yandex.ru'
 
-FIXTURE_DIRS = ['app/fixtures', 'geochat/app/fixtures', 'geochat/geochat/app/fixtures', './geochat/geochat/app/fixtures', '.././app/fixtures']
+FIXTURE_DIRS = ['app/fixtures', 'geochat/app/fixtures',
+                'geochat/geochat/app/fixtures',
+                './geochat/geochat/app/fixtures', '.././app/fixtures']
