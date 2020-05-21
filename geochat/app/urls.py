@@ -5,8 +5,8 @@ from .views import *
 
 urlpatterns = [
     path('room/<int:number>', room),
-    path('accounts/login', redirect_login,  name='accounts/login'),
-    path('accounts/signup', redirect_signup,  name='accounts/signup'),
+    path('accounts/login', redirect_login, name='accounts/login'),
+    path('accounts/signup', redirect_signup, name='accounts/signup'),
     path('', index, name='index'),
     path('logout', loggout, name='logout'),
     path('ajax-update-balance', ajax_update_balance, name='ajax-update-balance'),
@@ -20,7 +20,7 @@ urlpatterns = [
     path('register-user', register_user, name='register-user'),
     path('login-user', login_user, name='login-user'),
     path('send-report', report, name='send-report'),
-    path('create-room', create_room,  name='create-room'),
+    path('create-room', create_room, name='create-room'),
     path('join-room', join_room, name='join-room'),
     path('update-profile-settings', update_profile_settings, name='update-profile-settings'),
     path('update-profile-picture', update_profile_picture, name='update-profile-picture'),
