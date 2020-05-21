@@ -1,12 +1,13 @@
 """tests.py"""
 import pytest
-# pylint:disable=import-error, invalid-name, missing-function-docstring, no-member, undefined-variable, no-self-use, unused-variable
+
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.http import request
 from django.urls import reverse, resolve
 
 
+# pylint:disable=import-error,wrong-import-order, invalid-name, missing-function-docstring, no-member, undefined-variable, no-self-use, unused-variable, missing-class-docstring
 
 def create_test_user_and_force_login(client, username='Test'):
     user = get_user_model().objects.create_user(username=username, password='Asdfgh12345')
@@ -265,4 +266,3 @@ class TestForms:
         me.image.url = 'https://medialeaks.ru/wp-content/uploads/2020/02/EPyWlBbWkAEL4du.jpeg'
         assert response.status_code == 301
         assert me.image.url != user_image_old
-
