@@ -1,6 +1,6 @@
 """tests.py"""
 import pytest
-# pylint:disable=import-error, invalid-name, missing-function-docstring, no-member, undefined-variable
+# pylint:disable=import-error, invalid-name, missing-function-docstring, no-member, undefined-variable, no-self-use, unused-variable
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from django.http import request
