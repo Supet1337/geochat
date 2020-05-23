@@ -323,9 +323,9 @@ if (window.location.protocol == 'https:') {
             }
             else{
             	if( data.author_name == '{{request.user}}' )
-                	$("#kek").append('<li class="replies"> <a href="../profile/'+data.id+'"><img src="'+data.author_image+'" alt="" /><a><p style="word-wrap: break-word">'+data.author_name+':<br>'+data.message+'</p><div class="data">'+data.date+'</div></li>');
+                	$("#kek").append('<li class="replies"> <a href="../profile/'+data.id+'"><img style="width: 50px; height: 50px;" class="rounded-circle user-avatar-xxl" src="'+data.author_image+'" alt="" /><a><p style="word-wrap: break-word">'+data.author_name+':<br>'+data.message+'</p><div class="data">'+data.date+'</div></li>');
             	else
-                	$("#kek").append('<li class="sent"> <a href="../profile/'+data.id+'"><img src="'+data.author_image+'" alt="" /><a><p style="word-wrap: break-word"">'+data.author_name+':<br>'+data.message+'</p><div class="data">'+data.date+'</div></li>');
+                	$("#kek").append('<li class="sent"> <a href="../profile/'+data.id+'"><img style="width: 50px; height: 50px;" class="rounded-circle user-avatar-xxl" src="'+data.author_image+'" alt="" /><a><p style="word-wrap: break-word"">'+data.author_name+':<br>'+data.message+'</p><div class="data">'+data.date+'</div></li>');
             }
             scrl();
         };
@@ -377,9 +377,9 @@ if (window.location.protocol == 'https:') {
                 	}
                 	else{
 					    if( json[i].author == '{{request.user}}' )
-						    $("#kek").append('<li class="replies"> <a href="../profile/'+json[i].id+'"><img src="'+json[i].image+'" alt="" /><a><p style="word-wrap: break-word"">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+						    $("#kek").append('<li class="replies"> <a href="../profile/'+json[i].id+'"><img style="width: 50px; height: 50px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'" alt="" /><a><p style="word-wrap: break-word"">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
 					    else
-						    $("#kek").append('<li class="sent"> <a href="../profile/'+json[i].id+'"><img src="'+json[i].image+'" alt="" /><a><p style="word-wrap: break-word">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+						    $("#kek").append('<li class="sent"> <a href="../profile/'+json[i].id+'"><img style="width: 50px; height: 50px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'" alt="" /><a><p style="word-wrap: break-word">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
                   }
                   scrl();
 
