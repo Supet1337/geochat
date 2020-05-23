@@ -1,23 +1,33 @@
+"""views.py"""
 import json
+import redis
 
 from django.shortcuts import render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login, authenticate
 from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.core.mail import send_mail
 
-# pylint: disable=redefined-outer-name, no-else-return, undefined-variable, unused-argument, inconsistent-return-statements, relative-beyond-top-level, wildcard-import, bare-except
+# pylint: disable=redefined-outer-name, no-else-return, undefined-variable, unused-argument, invalid-name, inconsistent-return-statements, relative-beyond-top-level, wildcard-import, bare-except, unused-wildcard-import
 
 from .models import *
 from .forms import *
 
 def redirect_login(request):
+    """
+    Функция редиректа из сатндартного логина Django
+    """
     return HttpResponseRedirect('../../')
 
+
 def redirect_signup(request):
+    """
+    Функция редиректа из сатндартной регистрации Django
+    """
     return HttpResponseRedirect('../../')
+
 
 def find_joined_rooms(join_rooms, roomsj):
     """
@@ -65,6 +75,10 @@ def find_image(context, user_add, name):
 
 
 def doc(request):
+    """
+    Функция рендера страницы документации.
+    :return: docs.html
+    """
     return render(request, "docs/build/html/index.html")
 
 
@@ -100,7 +114,7 @@ def ajax_update_balance(request):
     wallet = UserAdditionals.objects.get(user=request.user)
     wallet.balance += 1
     wallet.save()
-    return HttpResponse(json.dumps({'balance': wallet.balance}))
+    return JsonResponse({'balance': wallet.balance})
 
 
 @login_required
@@ -115,7 +129,7 @@ def ajax_load_messages(request, number):
     messages = []
     for message in Message.objects.filter(room_id=number):
         messages.append(message.json())
-    return HttpResponse(json.dumps(messages))
+    return JsonResponse(json.dumps(messages))
 
 
 @login_required
@@ -130,7 +144,7 @@ def ajax_maps_draw(request, number):
     rooms = []
     for room in Room.objects.filter(author_id=number):
         rooms.append(room.json())
-    return HttpResponse(json.dumps(rooms))
+    return JsonResponse(json.dumps(rooms))
 
 
 @login_required
@@ -152,7 +166,7 @@ def ajax_circle_draw(request):
     rms = []
     for room in rooms:
         rms.append(room.json())
-    return HttpResponse(json.dumps(rms))
+    return JsonResponse(json.dumps(rms))
 
 
 @login_required
@@ -172,7 +186,7 @@ def ajax_circle_draw_joined(request):
     rms = []
     for room in roomsj:
         rms.append(room.json())
-    return HttpResponse(json.dumps(rms))
+    return JsonResponse(json.dumps(rms))
 
 
 @login_required
@@ -210,6 +224,7 @@ def room(request, number):
     :type number: int
     :return: render mess.html
     """
+    bonus_geocoin(request)
     if len(JoinRoom.objects.filter(room_id=number, user=request.user)) == 0:
         messages.error(
             request, 'Вы пытаетесь войти в чат, в котором вы не находитесь,'
@@ -249,6 +264,25 @@ def loggout(request):
     return HttpResponseRedirect("/")
 
 
+def bonus_geocoin(request):
+    """
+    Функция зачисления геокоинов каждый день.
+
+    :param request: запрос
+    :return: None
+    """
+    if request.user.is_authenticated:
+        red = redis.Redis(host='redis', port=6379)
+        user = request.user
+        red_name = user.username
+        user_add = UserAdditionals.objects.get(user=user)
+        if red.get(red_name) is not None:
+            user_add.balance += int(red.get(red_name))
+            red.delete(red_name)
+            user_add.save()
+            messages.success(request, "С возвращением! Вам начислено 200 геокоинов.")
+
+
 def index(request):
     """
     Функция рендера главной страницы
@@ -256,6 +290,7 @@ def index(request):
     :param request: запрос
     :return: render index.html
     """
+    bonus_geocoin(request)
     context = {}
     join_rooms = []
     if request.user.is_authenticated:
@@ -288,6 +323,7 @@ def profile(request, number):
     :type number: int
     :return: render profile.html
     """
+    bonus_geocoin(request)
     context = {}
     user = User.objects.get(id=number)
     user_add = UserAdditionals.objects.get(user=request.user)
@@ -312,7 +348,6 @@ def profile(request, number):
     if len(Room.objects.filter(author_id=number)) == 0:
         context['room_len'] = True
 
-
     return render(request, 'profile.html', context)
 
 
@@ -324,6 +359,7 @@ def profile_settings(request):
     :param request: запрос
     :return: render profile_settings.html
     """
+    bonus_geocoin(request)
     form = UserSettingsForm()
     context = {}
     context['form'] = form
@@ -366,12 +402,12 @@ def delete_room(request, number):
         return HttpResponseRedirect('../../')
 
 
-
 def register_user(request, backend='django.contrib.auth.backends.ModelBackend'):
     """
     Функция регистрации пользователя.
 
     :param request: Запрос
+    :param backend: Модель
     :return: redirect to main page
     """
     if request.method == "POST":
@@ -453,14 +489,14 @@ def create_room(request):
                 new_room.is_place = True
             else:
                 new_room.is_place = False
-            if wallet.balance - (int(new_room.diametr) - \
-                                 50 + (int(new_room.max_members) - 3) * 10) >= 0:
-                wallet.balance -= int(new_room.diametr) - \
-                                  50 + (int(new_room.max_members) - 3) * 10
+            if wallet.balance - (int(new_room.diametr) * 10 + int(new_room.max_members) * 100) >= 0:
+                wallet.balance -= (int(new_room.diametr) * 10 + int(new_room.max_members) * 100)
                 wallet.save()
             else:
                 messages.error(
-                    request, "Вам не хватает монет для создания чата.")
+                    request, "Вам не хватает " + str(-(wallet.balance - (int(new_room.diametr) * 10
+                                                                         + int(
+                                new_room.max_members) * 100))) + " геокоинов для создания чата.")  # pylint:disable=bad-continuation
                 return HttpResponseRedirect('/')
             new_room.save()
             join_new_room = JoinRoom()

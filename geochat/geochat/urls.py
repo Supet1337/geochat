@@ -19,6 +19,8 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+# pylint: disable=bad-continuation
+
 handler404 = 'app.views.view_404'
 handler500 = 'app.views.view_500'
 urlpatterns = [

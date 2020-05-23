@@ -1,9 +1,12 @@
+"""models.py"""
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import dateformat
 from django.conf import settings
 from django.contrib.auth.hashers import make_password
 
+
+# pylint:disable=too-many-instance-attributes
 
 def user_directory_path(instance, filename):
     """
@@ -55,12 +58,17 @@ class Room(models.Model):
     diametr = models.IntegerField(default=300)
     """Диматер комнаты"""
 
-    def save(self, **kwargs):
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None, **kwargs, ):
         """
         Функция сохранения пароля комнаты (если is_private==True)
 
         :param kwargs:
-        :return:
+        :param force_insert: False
+        :param force_update: False
+        :param update_fields: None
+        :param using: None
+        :return: None
         """
         self.password = make_password(self.password)
         super().save(**kwargs)
@@ -94,7 +102,7 @@ class Room(models.Model):
         """
         try:
             return str(self.image.url)
-        except BaseException:
+        except BaseException:  # pylint:disable=bare-except, broad-except
             return 'https://s3.nl-ams.scw.cloud/geochat-static/images/geocoin.png'
 
     def members(self):
@@ -122,7 +130,7 @@ class Message(models.Model):
     def json(self):
         """
         Функция передачи данных сообщения через AJAX.
-        
+
         :return: text, author, date, image, id
         """
         datef = dateformat.format(self.date, settings.DATE_FORMAT)
@@ -138,12 +146,12 @@ class Message(models.Model):
     def get_image(self):
         """
         Функция получения изображения для пользователя.
-        
-        :return: image.url(если у пользователя есть аватар), иначе -1(default_ava.png) 
+
+        :return: image.url(если у пользователя есть аватар), иначе -1(default_ava.png)
         """
         try:
             return UserAdditionals.objects.get(user=self.author).image.url
-        except BaseException:
+        except BaseException: # pylint:disable=broad-except
             return -1
 
 
@@ -151,7 +159,7 @@ class JoinRoom(models.Model):
     """
     Модель для хранения чатов, в которые вступил пользователь.
     """
-    
+
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     """Пользователь"""
     room_id = models.IntegerField()
@@ -174,15 +182,16 @@ class UserAdditionals(models.Model):
     status = models.CharField(max_length=50, default='Статус не указан')
     """Статус пользователя"""
     private_chats = models.BooleanField(default=False)
-    """Параметр приватности пользователя (Не будут показываться чаты другим пользователям)"""
+    """Параметр приватности (Не будут показываться чаты другим пользователям)"""
     private_info = models.BooleanField(default=False)
-    """Параметр приватности пользователя (Не будут показываться статус и баланс другим пользователям)"""
+    """Параметр приватности (Не будут показываться статус и баланс другим пользователям)"""
+
 
 class Report(models.Model):
     """
     Модель для хранения Репортов.
     """
-    
+
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
     """Пользователь"""
     report = models.CharField(max_length=250)

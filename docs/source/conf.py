@@ -1,3 +1,4 @@
+"""conf.py"""
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -9,10 +10,11 @@
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#
+# pylint:disable=import-error, invalid-name, missing-function-docstring, no-member, undefined-variable
 import os
 import sys
 import django
+
 sys.path.insert(0, os.path.join(os.path.abspath('.'), '../../geochat'))
 os.environ['DJANGO_SETTINGS_MODULE'] = 'geochat.settings'
 django.setup()
@@ -22,7 +24,6 @@ django.setup()
 project = 'geochat'
 copyright = '2020, geochat team'
 author = 'geochat team'
-
 
 # -- General configuration ---------------------------------------------------
 
@@ -45,8 +46,6 @@ language = 'ru'
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
-
-
 
 # -- Options for HTML output -------------------------------------------------
 
