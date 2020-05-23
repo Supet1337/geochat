@@ -1,0 +1,60 @@
+image: python:latest
+
+before_script:
+  - python -V
+
+stages:
+  - lint
+  - test
+  - docs
+
+pylint:
+  stage: lint
+  before_script:
+    - pip install -r ./ci/pylint_requirements.txt
+  script:
+    - ./ci/pylint_runner.sh
+  after_script:
+    - mkdir -p .cache
+    - cp -r ~/.cache/pip ./.cache/pip
+  artifacts:
+    paths:
+      - pylint.txt
+
+test:
+  stage: test
+  services:
+    - name: redis:alpine
+      alias: redis
+    - name: redis:alpine
+      alias: redis_coin
+  variables:
+    DEBUG: "True"
+    TEST_MODE: "True"
+  before_script:
+    - pip install -r ./ci/pytest_requirements.txt
+  script:
+    - ./ci/pytest.sh
+  after_script:
+    - mkdir -p .cache
+    - cp -r ~/.cache/pip ./.cache/pip
+  artifacts:
+    paths:
+      - pytest.txt
+      - htmlcov
+
+
+docs:
+  stage: docs
+  before_script:
+    - pip install -r requirements.txt
+    - pip install sphinx_rtd_theme
+    - cd docs
+  script:
+      - make html
+  after_script:
+    - mkdir -p .cache
+    - cp -r ~/.cache/pip ./.cache/pip
+  artifacts:
+    paths:
+      - docs

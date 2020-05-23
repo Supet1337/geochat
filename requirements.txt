@@ -11,3 +11,10 @@ boto3
 sphinx
 Celery
 django-allauth
+pylint
+pytest
+pytest-django
+django-debug-toolbar
+pylint-django
+pylint-json2html
+anybadge

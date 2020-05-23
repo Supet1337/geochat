@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 import sys
 from celery.schedules import crontab
+# pylint: no-name-in-module,
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -107,6 +108,15 @@ CHANNEL_LAYERS = {
         },
     },
 }
+REDIS = {
+    'second': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis_coin', 6379)],
+        },
+    },
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -168,8 +178,8 @@ CELERY_RESULT_SERIALIZER = 'json'
 
 CELERY_BEAT_SCHEDULE = {
     'update_geocoin_cache': {
-        'task': 'back.tasks.geocoin_daily_bonus',
-        'schedule': crontab(minute='*/1')
+        'task': 'app.tasks.geocoin_daily_bonus',
+        'schedule': crontab(minute='*/1440')
     }
 }
 
@@ -197,3 +207,6 @@ EMAIL_HOST_USER = 'shp.geochat@yandex.ru'
 EMAIL_HOST_PASSWORD = 'srgobbbgbhzoeias'
 DEFAULT_FROM_EMAIL = 'shp.geochat@yandex.ru'
 
+FIXTURE_DIRS = ['app/fixtures', 'geochat/app/fixtures',
+                'geochat/geochat/app/fixtures',
+                './geochat/geochat/app/fixtures', '.././app/fixtures']

@@ -1,0 +1,6 @@
+Django
+django-debug-toolbar
+pylint
+pylint-django
+pylint-json2html
+anybadge
