@@ -3,7 +3,7 @@ import json
 import redis
 
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import logout, login, authenticate
 from django.contrib import messages
@@ -114,7 +114,7 @@ def ajax_update_balance(request):
     wallet = UserAdditionals.objects.get(user=request.user)
     wallet.balance += 1
     wallet.save()
-    return JsonResponse({'balance': wallet.balance})
+    return HttpResponse(json.dumps({'balance': wallet.balance}))
 
 
 @login_required
@@ -129,7 +129,7 @@ def ajax_load_messages(request, number):
     messages = []
     for message in Message.objects.filter(room_id=number):
         messages.append(message.json())
-    return JsonResponse(json.dumps(messages))
+    return HttpResponse(json.dumps(messages))
 
 
 @login_required
@@ -144,7 +144,7 @@ def ajax_maps_draw(request, number):
     rooms = []
     for room in Room.objects.filter(author_id=number):
         rooms.append(room.json())
-    return JsonResponse(json.dumps(rooms))
+    return HttpResponse(json.dumps(rooms))
 
 
 @login_required
@@ -166,7 +166,7 @@ def ajax_circle_draw(request):
     rms = []
     for room in rooms:
         rms.append(room.json())
-    return JsonResponse(json.dumps(rms))
+    return HttpResponse(json.dumps(rms))
 
 
 @login_required
@@ -186,7 +186,7 @@ def ajax_circle_draw_joined(request):
     rms = []
     for room in roomsj:
         rms.append(room.json())
-    return JsonResponse(json.dumps(rms))
+    return HttpResponse(json.dumps(rms))
 
 
 @login_required

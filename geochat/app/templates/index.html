@@ -69,11 +69,13 @@
                           <div class="form-row align-items-center">
                              <div class="col-auto my-1" style="width:40%">
                              <select class="custom-select mr-sm-2" id="choose_diametr" name="choose_diametr" style="width: 100%">
-                                <option value="50" selected>Выберите диаметр чата:</option>
+                                <option value="25" selected>Выберите радиус чата:</option>
+                                 <option  value="25">25м (-250 геок.)</option>
                                 <option  value="50">50м (-500 геок.)</option>
                                 <option  value="150">150м (-1500 геок.)</option>
                                 <option  value="300">300м (-3000 геок.)</option>
                                 <option  value="450">450м (-4500 геок.)</option>
+                                 <option  value="750">750м (-7500 геок.)</option>
                               </select>
                             </div>
                           </div>
@@ -85,6 +87,7 @@
                                 <option  value="5">5 человек (-500 геок.)</option>
                                 <option  value="10">10 человек (-1000 геок.)</option>
                                 <option  value="15">15 человек (-1500 геок.)</option>
+                                 <option  value="30">30 человек (-3000 геок.)</option>
                               </select>
                             </div>
                          </div>
@@ -350,7 +353,6 @@ function open_balloon(x1,x2,y1,y2){
     </div>
 </body>
         <script src="https://vk.com/js/api/openapi.js?168" type="text/javascript"></script>
-        <script type="text/javascript" src={% static "assets/libs/js/map.js" %} ></script>
         <script type="text/javascript" src={% static "assets/vendor/bootstrap/js/bootstrap.bundle.js" %} ></script>
         <script type="text/javascript" src={% static "assets/vendor/slimscroll/jquery.slimscroll.js" %} ></script>
         <script type="text/javascript" src={% static "assets/libs/js/main-js.js" %} ></script>
