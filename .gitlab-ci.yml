@@ -19,7 +19,8 @@ pylint:
     - cp -r ~/.cache/pip ./.cache/pip
   artifacts:
     paths:
-      - pylint.txt
+      - pylint.svg
+      - pylint.html
 
 test:
   stage: test
