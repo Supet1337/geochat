@@ -62,11 +62,11 @@ docs:
       - docs
 
 pages:
- stage: deploy
- script:
-    - echo 'Publish pages data'
- artifacts:
- paths:
-    - public
- only:
+  stage: deploy
+  script:
+      - echo 'Publish pages data'
+  artifacts:
+    paths:
+      - public
+  only:
     - master
