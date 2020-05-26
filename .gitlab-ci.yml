@@ -7,6 +7,7 @@ stages:
   - lint
   - test
   - docs
+  - deploy
 
 pylint:
   stage: lint
@@ -48,7 +49,7 @@ test:
 docs:
   stage: docs
   before_script:
-    - pip install -r requirements.txt
+    - pip install Django django-debug-toolbar Sphinx
     - pip install sphinx_rtd_theme
     - cd docs
   script:
@@ -59,3 +60,13 @@ docs:
   artifacts:
     paths:
       - docs
+
+pages:
+ stage: deploy
+ script:
+    - echo 'Publish pages data'
+ artifacts:
+ paths:
+    - public
+ only:
+    - master
