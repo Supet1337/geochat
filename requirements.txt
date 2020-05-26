@@ -18,3 +18,4 @@ django-debug-toolbar
 pylint-django
 pylint-json2html
 anybadge
+pytest-cov

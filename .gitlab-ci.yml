@@ -25,16 +25,11 @@ pylint:
 
 test:
   stage: test
-  services:
-    - name: redis:alpine
-      alias: redis
-    - name: redis:alpine
-      alias: redis_coin
   variables:
     DEBUG: "True"
     TEST_MODE: "True"
   before_script:
-    - pip install -r ./ci/pytest_requirements.txt
+    - pip install -r requirements.txt
   script:
     - ./ci/pytest.sh
   after_script:
