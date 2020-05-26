@@ -1,9 +1,9 @@
 #!/bin/bash
 
 echo "Накатываем миграции"
-python3 ../geochat/manage.py makemigrations
-python3 ../geochat/manage.py migrate
-cd ../geochat/
+python3 geochat/manage.py makemigrations
+python3 geochat/manage.py migrate
+cd geochat/
 
 echo "Запускаем тесты"
 pytest --cov -v -x | tee pytest.txt
