@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="ru">
+
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap CSS -->
+    {% load static %}
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css'>
+    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
+    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
+    <link rel="shortcut icon" href={% static "images/geocoin.png" %}  type="image/png">
+    <title>Профиль</title>
+    <style>
+    .row.content {height: 1500px}
+    .profile_settings {
+      background-color: #f2f2f2;
+      height: 100%;
+    }
+    footer {
+      background-color: #545;
+      color: white;
+      padding: 16px;
+    }
+    @media screen and (max-width: 767px) {
+      .profile_settings {
+        height: auto;
+        padding: 16px;
+      }
+      .row.content {height: auto;}
+    }
+  </style>
+</head>
+
+<body>
+    <!-- ============================================================== -->
+    <!-- main wrapper -->
+    <div class="dashboard-main-wrapper">
+    <!-- ============================================================== -->
+       <!-- ============================================================== -->
+        <!-- navbar -->
+        {% include "header.html" %}
+        <!-- ============================================================== -->
+        {% include "left_sidebar2.html" %}
+        {% include "messages.html" %}
+        <!-- ============================================================== -->
+        <!-- end navbar -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- left sidebar -->
+        <!-- ============================================================== -->
+
+        <!-- ============================================================== -->
+        <!-- end left sidebar -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- wrapper  -->
+        <!-- ============================================================== -->
+        <div class="dashboard-wrapper">
+            <div class="influence-profile">
+                <div class="container-fluid dashboard-content ">
+                    <!-- ============================================================== -->
+                    <!-- pageheader -->
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- end pageheader -->
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- content -->
+                    <!-- ============================================================== -->
+                    <div class="row">
+                        <!-- ============================================================== -->
+                        <!-- profile -->
+                        <!-- ============================================================== -->
+                            <!-- ============================================================== -->
+                            <!-- card profile -->
+                            <!-- ============================================================== -->
+                            <div class="card" style="width:100%; height:700px; margin-top:80px; min-width:310px">
+                                <div class="card-body">
+
+                                    <div class="user-avatar d-block" align="center">
+                                        {% if image == -1 %}
+                                            <img alt="User Avatar" align="center" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %}>
+                                        {% else %}
+                                            <img alt="User Avatar" align="center" class="rounded-circle user-avatar-xxl" src="{{image.url}}">
+                                        {% endif %}
+                                        <div>
+                                            <br>
+                                        <div class="card" style="width: 20%;min-width:270px">
+                                            <div class="card-body">
+                                        <form method="post" action="../update-profile-picture" enctype="multipart/form-data">
+                                        {%csrf_token%}
+                                        {{form.image}}
+                                            <div>
+                                            <input type="submit" align="center" style="width: 244px" class= "btn btn-success" value="Сохранить картинку">
+                                            </div>
+                                        </form>
+                                              </div>
+                                        </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <form method="post" action="../update-profile-settings">
+                                    {%csrf_token%}
+                                <div class="card-body border-top">
+                                    <h3 class="font-16">Основные настройки</h3>
+                                    <div class="">
+                                        <ul class="list-unstyled mb-0">
+                                            <a href="../../accounts/password_reset"><li class="mb-2"><i class="fa fa-lock"></i> Сменить пароль</li></a>
+                                        <li class="mb-0"><i class="fas fa-thumbtack"></i> Задать статус: </li>
+                                            <input type="text" class="form-control" id="status" name="status" value="{{status}}">
+                                    </ul>
+                                    </div>
+                                </div>
+                                <div class="card-body border-top">
+                                    <h3 class="font-16">Настройки приватности</h3>
+                                    <div class="">
+                                        <ul class="list-unstyled mb-0">
+                                        <li class="mb-2"><i class="fa fa-ban"></i> Не показывать мои чаты другим пользователям
+                                            <input type="checkbox" name="private_chats" id="private_chats" {{private_chats}}>
+                                        </li>
+
+                                        <li class="mb-0"><i class="fa fa-users"></i> Не показывать мою личную информацию другим пользователям
+                                            <input type="checkbox" name="private_info" id="private_info" {{private_info}}>
+
+                                        </li>
+
+                                    </ul>
+                                    </div>
+                                </div>
+                                    <input type="submit" class= "btn btn-success" style="width:100%" value="Сохранить изменения">
+                                </form>
+
+                            </div>
+                            <!-- ============================================================== -->
+                            <!-- end card profile -->
+                            <!-- ============================================================== -->
+                        </div>
+                        <!-- ============================================================== -->
+                        <!-- end profile -->
+                        <!-- ============================================================== -->
+                        <!-- ============================================================== -->
+                        <!-- campaign data -->
+                        <!-- ============================================================== -->
+
+                            <!-- ============================================================== -->
+                            <!-- end campaign tab one -->
+                            <!-- ============================================================== -->
+                        </div>
+                <div class="container-fluid dashboard-content ">
+                    <div class="tab-content" id="pills-tabContent" >
+                                    <div class="tab-pane fade show active" id="pills-campaign" role="tabpanel" aria-labelledby="pills-campaign-tab">
+                                        <div class="row">
+
+                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                                <div class="section-block">
+                                                </div>
+                                            </div>
+                                </div>
+                        <!-- ============================================================== -->
+                        <!-- end campaign data -->
+                        <!-- ============================================================== -->
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- end content -->
+            <!-- ============================================================== -->
+                {%include "footer.html"%}
+
+            <!-- ============================================================== -->
+            <!-- end footer -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- end wrapper -->
+        <!-- ============================================================== -->
+    </div>
+        </div>
+    <!-- ============================================================== -->
+    <!-- end main wrapper -->
+    <!-- ============================================================== -->
+    <!-- Optional JavaScript -->
+    <!-- jquery 3.3.1  -->
+
+
+</body>
+<script type="text/javascript" src={% static "assets/vendor/jquery/jquery-3.3.1.min.js" %} ></script>
+    <script type="text/javascript" src={% static "assets/vendor/bootstrap/js/bootstrap.bundle.js" %} ></script>
+    <script type="text/javascript" src={% static "assets/libs/js/main-js.js" %} ></script>
+</html>

@@ -1,0 +1,331 @@
+{% load static %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<div class="footer" style="width:100%; height:90px">
+
+    {% if not request.user.is_authenticated %}
+<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+  Авторизация
+</button>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <h4 class="modal-title" id="myModalLabel">Авторизация</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+            <div class="container">
+              <div class="row">
+                <div class="w-100"></div>
+                <div class="col">
+                     <form method="POST" class="needs-validation" action="/register-user" novalidate>
+                        {% csrf_token %}
+                         <br>
+                        <input type="text" id="username" pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{3,16}$" name="username" class="form-control" placeholder="Логин" required>
+                          <div class="invalid-feedback">
+                           Логин должен состоять не менее чем из 4 символов и не более 16 символов
+                          </div>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="Email" required>
+                         <div class="invalid-feedback">
+                           <small style="font-size:10.5px">Адрес электронной почты должен содеражть @</small>
+                          </div>
+                        <input type="password" id="password1"  pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*" name="password1" class="form-control" placeholder="Пароль" required>
+                         <div class="invalid-feedback">
+                           Минимум 8 символов, одна цифра, одна буква в верхнем регистре и одна в нижнем
+                          </div>
+                        <input type="password" id="password2"  pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*" name="password2" class="form-control" placeholder="Подтвердите пароль" required>
+                         <div class="invalid-feedback">
+                           Минимум 8 символов, одна цифра, одна буква в верхнем регистре и одна в нижнем
+                          </div>
+                        <input type="submit" value="Зарегистрироваться" class="btn btn-dark">
+                         <br>
+                         <br>
+                    </form>
+
+
+
+
+                </div>
+
+                <div class="col">
+
+                   <form class="needs-validation" method="POST" action="/login-user" novalidate>
+                        {% csrf_token %}
+                        <br>
+
+                      <input type="text" id="username_auth" name="username_auth"  class="form-control" placeholder="Логин" required>
+                       <input type="password" id="password" pattern="(?=^.{8,}$)((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*" name="password"  class="form-control" placeholder="Пароль" required>
+                        <input type="submit"  value="Войти" class="btn btn-dark">
+                       <div class="invalid-feedback">
+                           Неверный логин или пароль.
+                          </div>
+                    </form>
+                    <p><a href="accounts/password_reset">Забыли пароль?</a></p>
+                    {% load socialaccount %}
+
+                    <a href="/accounts/vk/login/?process=login"><span style="font-size:40px; color:#4a76a8" class="fab fa-vk"></span></a>
+                    <a href="/accounts/discord/login/?process=login"><span style="font-size:40px; color:#6a84c6" class="fab fa-discord"></span></a>
+
+
+
+                </div>
+              </div>
+            </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script>
+(function() {
+  'use strict';
+  window.addEventListener('load', function() {
+    // Fetch all the forms we want to apply custom Bootstrap validation styles to
+    var forms = document.getElementsByClassName('needs-validation');
+
+    // Loop over them and prevent submission
+    var validation = Array.prototype.filter.call(forms, function(form) {
+      form.addEventListener('submit', function(event) {
+        if (form.checkValidity() === false) {
+          event.preventDefault();
+          event.stopPropagation();
+        }
+
+
+        form.classList.add('was-validated');
+      }, false);
+    });
+  }, false);
+})();
+
+</script>
+Войдите, чтобы пользоваться сайтом
+{%endif%}
+
+
+
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                           FS102/Geo chat©
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                        <a><button data-toggle="modal" data-target="#ModalDocs" class="btn btn-primary" style="float:right;margin-left:10px">О нас <i style="color:#ffffff" class="fa fa-info-circle"></i></button></a>
+
+
+                                {% if request.user.is_authenticated %}
+                                <a><button type="button" style="float: right" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                  Поддержка
+                                </button></a>
+                                {% endif %}
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Поддержка</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form method="POST" action="../send-report">
+            {%csrf_token%}
+            <input type="text" autocomplete="off" id="report" name="report" class="form-control" placeholder="Опишите свою проблему" readonly onfocus="this.removeAttribute('readonly')">
+            <ul>
+                <li><h6 align="left">Напишите свой ник</h6></li>
+                <li><h6 align="left">Подробно опишите свою проблему</h6></li>
+            </ul>
+      <div class="modal-footer">
+        <input type="submit" class="btn btn-primary" style="width:100%" value="Отправить">
+      </div>
+      </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal fade" id="ModalDocs" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+          <div class="wy-body-for-nav">
+            <div class="wy-grid-for-nav">
+      <div class="wy-nav-content">
+        <div class="rst-content">
+<div role="navigation" aria-label="breadcrumbs navigation">
+      <h1>Добро пожаловать в документацию geochat! &raquo;</h1>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+  <div class="section" id="geochat">
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Содержание:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="#h1">О проекте</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#h2">Возможности</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#h3">Начало работы с сайтом</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#h4">Главное меню</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#1">Создание комнат</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#2">Заработок монет</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#3">Общение</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#h5">Красивый профиль</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#4">Гибкая настройка профиля</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="#h6">Изменение пароля</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#5">Забыли пароль?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#6">Сменить пароль</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#7">Действия для смены пароля</a></li>
+</ul>
+</li>
+</ul>
+<hr/>
+    <ul>
+        <li>
+            <div>
+                <h1 id="h1">О проекте</h1>
+                <h2 id="h2">Возможности</h2>
+                <div>
+                    Наш сайт разработан для общения людей по всему миру.
+                    <img  src={% static "docs_images/mainpage.jpg" %} style="width: 100%">
+                    Возможности:
+                    <ul>
+                        <a href="#1"><li>Создание комнат</li></a>
+                        <a href="#2"><li>Заработок монет</li></a>
+                        <a href="#3"><li>Общение</li></a>
+                        <a href="#4"><li>Гибкая настройка профиля</li></a>
+                    </ul>
+                </div>
+            </div>
+        </li>
+
+        <li>
+            <div>
+                <h1 id="h3">Начало работы с сайтом</h1>
+                для начала работы с сайтом вам нужно <strong>зарегестрироваться</strong>
+                <img  src={% static "docs_images/regist.jpg" %} style="width: 100%">
+                <img  src={% static "docs_images/AAO.jpg" %} style="width: 100%">
+                <h2 id="h4">Главное меню</h2>
+                <div>
+                    Боковая панель меню отображает:
+                    <ul>
+                        <li><strong>Кликер</strong>, с помощью которого вы можете зарабатывать монетки;</li>
+                        <li><strong>Доступные чаты</strong>, чаты, которые вы можете видеть и присоединяться к ним, даже если они далеко от вас;</li>
+                        <li><strong>Ваши чаты</strong>, чаты, к которым вы уже присоединились;</li>
+                        <li><strong>Чаты поблизости</strong>, чаты, находящиеся рядом с вами</li>
+                    </ul>
+                    <img  src={% static "docs_images/sidevar.jpg" %} style="width: 100%">
+                </div>
+                <h2 id="1">Создание комнат</h2>
+                <img  src={% static "docs_images/create1.jpg" %} style="width: 100%">
+                <img  src={% static "docs_images/create2.jpg" %} style="width: 100%">
+                <img  src={% static "docs_images/create3.jpg" %} style="width: 100%">
+                <img  src={% static "docs_images/create4.jpg" %} style="width: 100%">
+                В комнатах так же присутствуют <strong>настройки</strong>.
+                <img  src={% static "docs_images/chatsettings.jpg" %} style="width: 100%">
+                <h2 id="2">Заработок монет</h2>
+                1. С помощью кликера, расположенного в боковом меню, вы можете зарабатывать монетки, для создания чатов.
+                2. Посещая наш сайт каждый день, вас будет ждать приятный бонус.
+                <img  src={% static "docs_images/daily-bonus.png" %} style="width: 100%">
+                <h2 id="3">Общение</h2>
+                Общайтесь с людьми и заводите новые знакомства.
+                <img  src={% static "docs_images/speaking.png" %} style="width: 100%">
+                <h2 id="h5">Красивый профиль</h2>
+                <img  src={% static "docs_images/profile3.jpg" %} style="width: 100%">
+                <img  src={% static "docs_images/profile4.jpg" %} style="width: 100%">
+                <h2 id="4">Гибкая настройка профиля</h2>
+                <img  src={% static "docs_images/profile1.jpg" %} style="width: 100%">
+                <img  src={% static "docs_images/profile2.jpg" %} style="width: 100%">
+                <img  src={% static "docs_images/profile5.jpg" %} style="width: 100%">
+            </div>
+        </li>
+
+        <li>
+            <div>
+                <h1 id="h6">Изменение пароля</h1>
+                Если вы забыли или хотите изменить свой пароль, для этого нажмите на <a href="#5">забыли пароль?</a> в окне регистрации или <a href="#6">сменить пароль</a> на странице редактирования профиля соответственно.
+                <h2 id="5">Забыли пароль?</h2>
+                <img  src={% static "docs_images/zabil.jpg" %} style="width: 100%">
+                Далее выполните <a href="#7">действия для смены пароля</a>.
+                <h2 id="6">Сменить пароль</h2>
+                <img  src={% static "docs_images/smenit.jpg" %} style="width: 100%">
+                Далее выполните <a href="#7">действия для смены пароля</a>.
+                <h2 id="7">Действия для смены пароля</h2>
+                <div>
+                    <ul>
+                        <li>
+                            <div>
+                                Введите ваш адрес электронной почты.
+                                <img  src={% static "docs_images/pass1.jpg" %} style="width: 100%">
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                Ожидайте письмо(если письмо не пришло, проверьте спам).
+                                <img  src={% static "docs_images/pass2.jpg" %} style="width: 100%">
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                Перейдите по ссылке.
+                                <img  src={% static "docs_images/pass3.png" %} style="width: 100%">
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                Введите новый пароль.
+                                <img  src={% static "docs_images/pass4.jpg" %} style="width: 100%">
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                Готово!
+                                <img  src={% static "docs_images/pass5.jpg" %} style="width: 100%">
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </li>
+
+    </ul>
+</div>
+</div>
+           </div>
+          </div>
+    <div role="navigation" aria-label="footer navigation">
+    </div>
+  <hr/>
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2020, geochat team
+    </p>
+  </div>
+        </div>
+      </div>
+  </div>
+</div>
+
+
+
+
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>

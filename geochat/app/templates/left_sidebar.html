@@ -1,0 +1,143 @@
+{% load static %}
+<script>
+    var a = 0;
+    function private(){
+        a += 1;
+        if(a % 2 == 1){
+            $("#insert-password").html("");
+            $("#insert-password").append('<input type="password" id="password" name="password" class="form-control" placeholder="Введите пароль..."/>');
+        }
+        else{
+            $("#insert-password").html("");
+            $("#insert-password").append('');
+        }
+    }
+    function update_balance(){
+        $.ajax({
+            url: "/ajax-update-balance",
+            data: {
+            },
+            success: function (result) {
+                var json = $.parseJSON(result);
+                $("#balance").html('Ваш баланс: ' +json['balance']+'<img src={% static "images/geocoin.png" %} style="width: 20px;height: 20px">');
+            }
+        });
+    }
+</script>
+
+<div class="nav-left-sidebar sidebar-dark">
+            <div class="menu-list">
+                <nav class="navbar navbar-expand-lg navbar-light">
+                    <a class="d-xl-none d-lg-none" href="#">Информация</a>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="navbar-toggler-icon"></i>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav flex-column">
+                            <li class="nav-divider">
+                                Меню
+                            </li>
+
+                            <li class="nav-item ">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-1" aria-controls="submenu-1"><i class="fas fa-coins"></i>Кликер <span class="badge badge-success">6</span></a>
+                                <div id="submenu-1" class="collapse submenu" style="">
+                                    <ul class="nav flex-column">
+                                        {% if request.user.is_authenticated %}
+                                        <li class="nav-item">
+                                            <p id="balance">Ваш баланс: {{balance}}<img src={% static "images/geocoin.png" %} style="width: 20px;height: 20px"></p>
+                                        </li>
+                                        <li class="nav-item">
+                                            <button onkeypress="if(event.keyCode == 13) return false;" class="btn btn-secondary" style="width:100%" onclick="update_balance()">Клик</button>
+                                        </li>
+                                        {% else %}
+                                        <li class="nav-item">
+                                            <a class="nav-link">Войдите, чтобы пользоваться кликером</a>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item">
+
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-3" aria-controls="submenu-3"><i class="fa fa-paper-plane"></i>Доступные Чаты</a>
+                                <div id="submenu-3" class="collapse submenu" style="">
+                                    <ul class="nav flex-column">
+                                        {% if request.user.is_authenticated %}
+                                        {% for room in rooms %}
+                                            {% if room.is_place %}
+                                            {% else %}
+                                            {% if room.is_private %}
+                                                <li class="nav-item">
+                                                    <a onclick="open_balloon({{room.x}},{{room.y}})" class="nav-link">{{room.name}} <span class="border border-primary" style="border-radius: 5px;border-color: #50537e !important;"> {{room.members}}/{{room.max_members}}</span></a>
+                                                    <form method="post" action="/join-room">
+                                                    {% csrf_token %}
+                                                    <input type="password" name="password" class="form-control" placeholder="пароль">
+                                                    <input type="hidden" name="id" value="{{room.id}}">
+                                                    <input type="submit" style="width:100%" value="Присоединиться" class="btn btn-secondary">
+                                                </form>
+                                                </li>
+
+                                            {% else %}
+                                                <li class="nav-item">
+
+
+                                                    <a class="nav-link" onclick="open_balloon({{room.x}},{{room.y}})">{{room.name}} <span class="border border-primary" style="border-radius: 5px;border-color: #50537e !important;"> {{room.members}}/{{room.max_members}}</span></a>
+
+                                                    <form method="post" action="/join-room">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="id" value="{{room.id}}">
+                                                    <input type="submit" style="width:100%" value="Присоединиться" class="btn btn-secondary">
+                                                </form>
+                                                </li>
+                                            {% endif %}
+                                        {% endif %}
+                                        {% endfor %}
+                                        {% else %}
+                                        <li class="nav-item">
+                                            <a class="nav-link">Войдите, чтобы пользоваться чатами</a>
+
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-4" aria-controls="submenu-4"><i class="fa fa-comments"></i>Ваши Чаты</a>
+                                <div id="submenu-4" class="collapse submenu" style="">
+                                    <ul class="nav flex-column">
+                                        {% if request.user.is_authenticated %}
+                                        {% for room in roomsj %}
+                                                <li class="nav-item">
+
+                                                    <a class="nav-link" href="../../../../room/{{room.id}}">{{room.name}} <span class="border border-primary" style="border-radius: 5px;border-color: #50537e !important;"> {{room.members}}/{{room.max_members}}</span></a>
+                                                </li>
+                                        {% endfor %}
+                                        {% else %}
+                                         <li class="nav-item">
+
+                                                    <a class="nav-link">Войдите, чтобы пользоваться чатами</a>
+                                                </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </li>
+                            <li class="nav-item ">
+                                <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false" data-target="#submenu-5" aria-controls="submenu-5"><i class="fa fa-comment"></i>Чаты поблизости</a>
+                                <div id="submenu-5" class="collapse submenu" style="">
+                                    <ul class="nav flex-column" id="place-chat">
+                                        {% if not request.user.is_authenticated %}
+                                        <li class="nav-item">
+                                            <a class="nav-link">Войдите, чтобы пользоваться чатами</a>
+                                        </li>
+                                        {% endif %}
+                                    </ul>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
