@@ -6,6 +6,7 @@ before_script:
 stages:
   - lint
   - test
+  - docs
   - deploy
 
 pylint:
@@ -41,8 +42,23 @@ test:
     - cp -r ~/.cache/pip ./.cache/pip
   artifacts:
     paths:
-      - pytest.txt
-      - htmlcov
+      - public/pytest.txt
+      - public/htmlcov
+
+docs:
+  stage: docs
+  before_script:
+    - pip install -r requirements.txt
+    - pip install sphinx_rtd_theme
+    - cd docs
+  script:
+      - make html
+  after_script:
+    - mkdir -p .cache
+    - cp -r ~/.cache/pip ./.cache/pip
+  artifacts:
+    paths:
+      - public/docs
 
 pages:
   stage: deploy
