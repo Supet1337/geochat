@@ -44,22 +44,6 @@ test:
       - pytest.txt
       - htmlcov
 
-
-docs:
-  stage: docs
-  before_script:
-    - pip install -r requirements.txt
-    - pip install sphinx_rtd_theme
-    - cd docs
-  script:
-      - make html
-  after_script:
-    - mkdir -p .cache
-    - cp -r ~/.cache/pip ./.cache/pip
-  artifacts:
-    paths:
-      - docs
-
 pages:
   stage: deploy
   script:
