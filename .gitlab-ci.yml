@@ -6,7 +6,6 @@ before_script:
 stages:
   - lint
   - test
-  - docs
   - deploy
 
 pylint:
@@ -49,7 +48,7 @@ test:
 docs:
   stage: docs
   before_script:
-    - pip install Django django-debug-toolbar Sphinx
+    - pip install -r requirements.txt
     - pip install sphinx_rtd_theme
     - cd docs
   script:
