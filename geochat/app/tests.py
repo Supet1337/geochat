@@ -229,3 +229,8 @@ class TestForms:
         response = client.get('/update-profile-settings')
         assert response.status_code == 301
         assert user.id == useradd.user.id
+    
+        def test_logout(self, client):
+            client, user, useradd = create_test_user_and_force_login(client)
+            response = client.get('/logout')
+            assert response.status_code == 301    
