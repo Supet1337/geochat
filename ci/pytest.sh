@@ -11,4 +11,3 @@ coverage html
 
 coverage=$(sed -n 's/^TOTAL *[0-9]* *[0-9]* *\([0-9]*\)%/\1/p' pytest.txt)
 echo "Покрытие кода: $coverage%"
-
