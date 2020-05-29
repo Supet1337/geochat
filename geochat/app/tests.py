@@ -2,9 +2,11 @@
 import pytest
 
 from django.contrib.auth import get_user_model
-from django.http import request
+from django.http import request, HttpResponseRedirect
 from django.urls import reverse, resolve
 from .models import *
+from .views import *
+
 
 # pylint:disable=import-error, unused-argument, wrong-import-order, invalid-name, missing-function-docstring, no-member, undefined-variable, no-self-use, unused-variable, missing-class-docstring
 
@@ -229,3 +231,8 @@ class TestForms:
         response = client.get('/update-profile-settings')
         assert response.status_code == 301
         assert user.id == useradd.user.id
+
+    def test_logout(self, client):
+        client, user, useradd = create_test_user_and_force_login(client)
+        response = client.get('/logout')
+        assert response.status_code == 301

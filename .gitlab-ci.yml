@@ -37,6 +37,8 @@ test:
     paths:
       - pytest.txt
       - htmlcov
+      - public/pytest.svg
+      - public/coverage.svg
 
 
 docs:
