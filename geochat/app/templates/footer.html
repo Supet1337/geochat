@@ -1,4 +1,5 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 <div class="footer" style="width:100%">
 
     {% if not request.user.is_authenticated %}
@@ -260,7 +261,15 @@
     </section>
   </div>
 </div>
-
+<script type="text/javascript">
+    $(function(){
+            $("a[href^='#']").click(function(){
+                    var _href = $(this).attr("href");
+                    $("html, body").animate({scrollTop: $(_href).offset().top+"px"});
+                    return false;
+            });
+    });
+</script>
 
 
   <script type="text/javascript">
