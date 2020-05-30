@@ -179,7 +179,7 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_BEAT_SCHEDULE = {
     'update_geocoin_cache': {
         'task': 'app.tasks.geocoin_daily_bonus',
-        'schedule': crontab(minute='*/1440')
+        'schedule': crontab(minute='0', hour='0')
     }
 }
 

@@ -47,7 +47,7 @@ class Room(models.Model):
     """Параметр приватности комнаты"""
     is_place = models.BooleanField(default=False)
     """Параметр отображения комнаты (If True, Комната будет видна тем, кто находится поблизости)"""
-    max_members = models.IntegerField(default=10)
+    max_members = models.IntegerField(default=3)
     """Максимальное количество пользователей комнаты"""
     image = models.ImageField(upload_to=room_directory_path, blank=True)
     """Аватар комнаты"""
