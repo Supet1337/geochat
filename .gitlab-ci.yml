@@ -38,8 +38,8 @@ test:
     - cp -r ~/.cache/pip ./.cache/pip
   artifacts:
     paths:
-      - public/pytest.txt
-      - public/htmlcov
+      - pytest.txt
+      - htmlcov
 
 docs:
   stage: docs
