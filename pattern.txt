@@ -1,4 +1,6 @@
+Паттерн:
 · MTV
+Декораторы:
 · @login_required
 · @staticmethod
 · @pytest.mark.django_db
