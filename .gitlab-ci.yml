@@ -30,7 +30,7 @@ test:
     TEST_MODE: "True"
   before_script:
     - pip install -r requirements.txt
-      mkdir public
+    - mkdir public
   script:
     - ./ci/pytest.sh
   after_script:
@@ -39,7 +39,7 @@ test:
   artifacts:
     paths:
       - pytest.txt
-      - htmlcov
+      - htmlcov/
 
 docs:
   stage: docs
