@@ -1,1 +1,4 @@
-MVT
+· MTV
+· @login_required
+· @staticmethod
+· @pytest.mark.django_db
