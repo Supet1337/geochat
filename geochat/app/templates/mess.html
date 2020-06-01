@@ -244,9 +244,9 @@ resize: none !important;
 				  				{% endif %}
 							{% else %}
 								{% if user.image == "" %}
-									<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %} alt="" /><a>    <strong>{{user.user}}</strong><button type="submit" aria-hidden="true" class="close" aria-label="Close"> <i aria-hidden="true" class="fa fa-trash-o"></i></button></p>
+									<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %} alt="" /><a>    <strong>{{user.user}}</strong><button type="submit" aria-hidden="true" class="close" aria-label="Close"> <i aria-hidden="true" class="fa fa-trash"></i></button></p>
 				  				{% else %}
-									<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="{{user.image.url}}" alt="" /><a>    <strong>{{user.user}}</strong> <button type="submit" class="close" aria-hidden="true" aria-label="Close"> <i aria-hidden="true" class="fa fa-trash-o"></i></button></p>
+									<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="{{user.image.url}}" alt="" /><a>    <strong>{{user.user}}</strong> <button type="submit" class="close" aria-hidden="true" aria-label="Close"> <i aria-hidden="true" class="fa fa-trash"></i></button></p>
 				  				{% endif %}
 							{% endif %}
 						{% else %}
