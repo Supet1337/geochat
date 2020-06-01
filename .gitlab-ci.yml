@@ -7,6 +7,7 @@ stages:
   - lint
   - test
   - docs
+  - deploy
 
 pylint:
   stage: lint
@@ -19,7 +20,8 @@ pylint:
     - cp -r ~/.cache/pip ./.cache/pip
   artifacts:
     paths:
-      - pylint.txt
+      - public/pylint.svg
+      - public/pylint.html
 
 test:
   stage: test
@@ -35,11 +37,8 @@ test:
     - cp -r ~/.cache/pip ./.cache/pip
   artifacts:
     paths:
-      - pytest.txt
-      - htmlcov
-      - public/pytest.svg
-      - public/coverage.svg
-
+      - public/pytest.txt
+      - public/htmlcov/
 
 docs:
   stage: docs
@@ -55,3 +54,13 @@ docs:
   artifacts:
     paths:
       - docs
+
+pages:
+  stage: deploy
+  script:
+      - echo 'Publish pages data'
+  artifacts:
+    paths:
+      - public
+  only:
+    - master

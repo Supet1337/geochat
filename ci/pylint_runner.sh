@@ -14,5 +14,5 @@ pylint --load-plugins=pylint_json2html $(ls -d */) --disable="C0111" --output-fo
 pylint-json2html -f jsonextended -o public/pylint.html pylint.json
 
 #cleanup
-
+rm pylint.txt pylint.json
 exit 0
