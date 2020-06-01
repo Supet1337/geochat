@@ -64,6 +64,7 @@ def find_image(context, user_add, name):
     """
     Функция поиска аватара.
 
+    :param name: имя
     :param context: Контекст
     :param user_add: Объект UserAdditionals
     :return: None
@@ -72,14 +73,6 @@ def find_image(context, user_add, name):
         context[name] = -1
     else:
         context[name] = user_add.image
-
-
-def doc(request):
-    """
-    Функция рендера страницы документации.
-    :return: docs.html
-    """
-    return render(request, "docs/build/html/index.html")
 
 
 def view_404(request, exception):

@@ -27,6 +27,4 @@ urlpatterns = [
     path('update-room-picture/<int:number>', update_room_picture),
     path('update-room-settings/<int:number>', update_room_settings),
     path('leave-chat/<int:number>', leave_chat),
-    path('doc', doc),
-
 ]
