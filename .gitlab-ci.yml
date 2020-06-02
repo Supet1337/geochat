@@ -47,15 +47,18 @@ docs:
   before_script:
     - pip install -r requirements.txt
     - pip install sphinx_rtd_theme
+    - mkdir -p public
     - cd docs
   script:
       - make html
+      - cd ../../
+      - mv golf_tracker/docs/_build/html public/docs
   after_script:
     - mkdir -p .cache
     - cp -r ~/.cache/pip ./.cache/pip
   artifacts:
     paths:
-      - docs
+      - public/docs
       
 sphinks_link:
   stage: badges
@@ -63,7 +66,7 @@ sphinks_link:
     - echo "Python other dependencies installation"
     - pip install anybadge
   script:
-    - anybadge -l "Docs" -v "Sphinx" -f doc-link.svg -c green
+    - anybadge -l "Docs" -v "Sphinx" -f doc-link.svg -c blue
   artifacts:
     paths:
       - doc-link.svg
