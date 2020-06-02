@@ -38,7 +38,7 @@ test:
   artifacts:
     paths:
       - public/pytest.txt
-      - public/htmlcov/
+      - public/htmlcov
 
 docs:
   stage: docs
