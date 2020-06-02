@@ -52,12 +52,13 @@ docs:
   script:
       - make html
       - cp -r ./build/html ../public
+      - mv docs/_build/html public/docs
   after_script:
     - mkdir -p .cache
     - cp -r ~/.cache/pip ./.cache/pip
   artifacts:
     paths:
-      - docs
+      - public/docs
       
 sphinks_link:
   stage: badges
