@@ -57,7 +57,7 @@ docs:
     - cp -r ~/.cache/pip ./.cache/pip
   artifacts:
     paths:
-      - public/docs
+      - docs
       
 sphinks_link:
   stage: badges
