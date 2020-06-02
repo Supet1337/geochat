@@ -4,7 +4,7 @@ echo "Накатываем миграции"
 python3 geochat/manage.py makemigrations
 python3 geochat/manage.py migrate
 cd geochat/
-mkdir public
+
 echo "Запускаем тесты"
 pytest --cov -v -x | tee pytest.txt
 coverage html
