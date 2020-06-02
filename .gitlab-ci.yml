@@ -51,8 +51,7 @@ docs:
     - cd docs
   script:
       - make html
-      - cd ../../
-      - mv golf_tracker/docs/_build/html public/docs
+      - cp -r ./build/html ../public
   after_script:
     - mkdir -p .cache
     - cp -r ~/.cache/pip ./.cache/pip
