@@ -8,7 +8,7 @@ cd geochat/
 echo "Запускаем тесты"
 pytest --cov -v -x | tee pytest.txt
 coverage html
-
+mkdir public
 coverage=$(sed -n 's/^TOTAL *[0-9]* *[0-9]* *\([0-9]*\)%/\1/p' pytest.txt)
 echo "Покрытие кода: $coverage%"
 
