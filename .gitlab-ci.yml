@@ -20,8 +20,8 @@ pylint:
     - cp -r ~/.cache/pip ./.cache/pip
   artifacts:
     paths:
-      - pylint.svg
-      - pylint.html
+      - public/pylint.svg
+      - public/pylint.html
 
 test:
   stage: test
@@ -64,3 +64,4 @@ pages:
       - public
   only:
     - master
+
