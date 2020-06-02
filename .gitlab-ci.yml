@@ -51,7 +51,7 @@ docs:
     - cd docs
   script:
       - make html
-      - mv build/html public/docs
+      - cp -r ./build/html ../public
   after_script:
     - mkdir -p .cache
     - cp -r ~/.cache/pip ./.cache/pip
@@ -84,4 +84,5 @@ pages:
       - public
   only:
     - master
+
 
