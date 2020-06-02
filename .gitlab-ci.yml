@@ -55,6 +55,22 @@ docs:
   artifacts:
     paths:
       - docs
+      
+sphinks_link:
+  stage: badges
+  before_script:
+    - echo "Python other dependencies installation"
+    - pip install anybadge
+  script:
+    - anybadge -l "Docs" -v "Sphinx" -f doc-link.svg -c green
+  artifacts:
+    paths:
+      - doc-link.svg
+    when: always
+    expire_in: 4 weeks
+  only:
+    - master
+
 
 pages:
   stage: deploy
