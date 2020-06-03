@@ -51,7 +51,7 @@ docs:
     - cd docs
   script:
       - make html
-      - cp -r ./build/html ../public
+      - cp -r ./build/html/* ../public
   after_script:
     - mkdir -p .cache
     - cp -r ~/.cache/pip ./.cache/pip
