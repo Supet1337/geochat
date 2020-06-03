@@ -50,7 +50,7 @@ docs:
     - mkdir -p public
     - cd public
     - mkdir docs
-    - cd docs
+    - cd ../docs
   script:
       - make html
       - cp -r build/html/* ../public/docs
