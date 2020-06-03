@@ -45,15 +45,17 @@ docs:
   before_script:
     - pip install -r requirements.txt
     - pip install sphinx_rtd_theme
+    - mkdir -p public
     - cd docs
   script:
       - make html
+      - cp -r ./build/html/* ../public
   after_script:
     - mkdir -p .cache
     - cp -r ~/.cache/pip ./.cache/pip
   artifacts:
     paths:
-      - docs
+      - public/docs
 
 pages:
   stage: deploy
