@@ -48,10 +48,12 @@ docs:
     - pip install -r requirements.txt
     - pip install sphinx_rtd_theme
     - mkdir -p public
+    - cd public
+    - mkdir docs
     - cd docs
   script:
       - make html
-      - cp -r ./build/html/* ../public
+      - cp -r build/html/* ../public/docs
   after_script:
     - mkdir -p .cache
     - cp -r ~/.cache/pip ./.cache/pip
