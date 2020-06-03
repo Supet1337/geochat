@@ -1,11 +1,15 @@
+{% load static %}
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<div class="footer" style="width:100%">
+<div class="footer" style="width:100%; height:57px">
 
     {% if not request.user.is_authenticated %}
-<button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+<button type="button" class="btn btn-primary btn-lg"style="height:41px" data-toggle="modal" data-target="#myModal">
   Авторизация
 </button>
-
+<a><button data-toggle="modal" data-target="#ModalDocs" class="btn btn-primary" style="float:right;margin-left:10px">О нас <i style="color:#ffffff" class="fa fa-info-circle"></i></button></a>
+<div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                           FS102/Geo chat©
+                        </div>
 
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -109,19 +113,19 @@
 
 
                 <div class="container-fluid">
+                    {% if request.user.is_authenticated %}
                     <div class="row">
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                            FS102/Geo chat©
                         </div>
                         <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="text-md-right footer-links d-none d-sm-block">
-                                <a><button data-toggle="modal" data-target="#ModalDocs" class="btn btn-primary">О нас <i style="color:#ffffff" class="fa fa-info-circle"></i></button></a>
-                                {% if request.user.is_authenticated %}
-                                <a><button  type="button" style="margin: auto" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                        <a><button data-toggle="modal" data-target="#ModalDocs" class="btn btn-primary" style="float:right;margin-left:10px">О нас <i style="color:#ffffff" class="fa fa-info-circle"></i></button></a>
+
+
+                                <a><button type="button" style="float: right" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
                                   Поддержка
                                 </button></a>
                                 {% endif %}
-                            </div>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl" role="document">
     <div class="modal-content">
@@ -153,109 +157,155 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="ModalDocsLabel">О нас</h5>
           <div class="wy-body-for-nav">
             <div class="wy-grid-for-nav">
-    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
-      <div class="wy-side-scroll">
-        <div class="wy-side-nav-search" >
-            <a href="#" class="icon icon-home"> geochat</a>
-<div role="search">
-  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
-    <input type="text" name="q" placeholder="Search docs" />
-    <input type="hidden" name="check_keywords" value="yes" />
-    <input type="hidden" name="area" value="default" />
-  </form>
-</div>
-        </div>
-        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
-              <p class="caption"><span class="caption-text">Содержание:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="overview.html">О проекте</a></li>
-<li class="toctree-l1"><a class="reference internal" href="overview.html#id3">Начало работы с сайтом</a></li>
-<li class="toctree-l1"><a class="reference internal" href="overview.html#id10">Изменение пароля</a></li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">Модули</a></li>
-</ul>
-        </div>
-      </div>
-    </nav>
-    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
-      <nav class="wy-nav-top" aria-label="top navigation">
-          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">geochat</a>
-      </nav>
       <div class="wy-nav-content">
         <div class="rst-content">
 <div role="navigation" aria-label="breadcrumbs navigation">
-  <ul class="wy-breadcrumbs">
-      <li><a href="#">Docs</a> &raquo;</li>
-      <li>Добро пожаловать в документацию geochat!</li>
-      <li class="wy-breadcrumbs-aside">
-            <a href="_sources/index.rst.txt" rel="nofollow"> View page source</a>
-      </li>
-  </ul>
+      <h1>Добро пожаловать в документацию geochat! &raquo;</h1>
   <hr/>
 </div>
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
   <div class="section" id="geochat">
-      <script type="text/javascript">
-$(function(){
-        $("a[href^='#']").click(function(){
-                var _href = $(this).attr("href");
-                $("html, body").animate({scrollTop: $(_href).offset().top+"px"});
-                return false;
-        });
-});
-</script>
-</script>
-<h1>Добро пожаловать в документацию geochat!<a class="headerlink" href="#geochat" title="Ссылка на этот заголовок">¶</a></h1>
 <div class="toctree-wrapper compound">
 <p class="caption"><span class="caption-text">Содержание:</span></p>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="overview.html">О проекте</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#id2">Возможности</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#h1">О проекте</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#h2">Возможности</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="overview.html#id3">Начало работы с сайтом</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#id4">Главное меню</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#id5">Создание комнат</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#id6">Заработок монет</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#id7">Общение</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#id8">Красивый профиль</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#id9">Гибкая настройка профиля</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#h3">Начало работы с сайтом</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#h4">Главное меню</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#1">Создание комнат</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#2">Заработок монет</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#3">Общение</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#h5">Красивый профиль</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#4">Гибкая настройка профиля</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="overview.html#id10">Изменение пароля</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#id11">Забыли пароль?</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#id12">Сменить пароль</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#id13">Действия для смены пароля</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="code.html">Модули</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="code.html#module-app.views">Функции</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#module-app.models">Модели</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#module-app.adapter">Сигналы</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#module-app.consumers">Консумеры</a></li>
-<li class="toctree-l2"><a class="reference internal" href="code.html#module-app.forms">Формы</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#h6">Изменение пароля</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#5">Забыли пароль?</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#6">Сменить пароль</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#7">Действия для смены пароля</a></li>
 </ul>
 </li>
 </ul>
+<hr/>
+    <ul>
+        <li>
+            <div>
+                <h1 id="h1">О проекте</h1>
+                <h2 id="h2">Возможности</h2>
+                <div>
+                    Наш сайт разработан для общения людей по всему миру.
+                    <img  src={% static "docs_images/mainpage.jpg" %} style="width: 100%">
+                    Возможности:
+                    <ul>
+                        <a href="#1"><li>Создание комнат</li></a>
+                        <a href="#2"><li>Заработок монет</li></a>
+                        <a href="#3"><li>Общение</li></a>
+                        <a href="#4"><li>Гибкая настройка профиля</li></a>
+                    </ul>
+                </div>
+            </div>
+        </li>
+
+        <li>
+            <div>
+                <h1 id="h3">Начало работы с сайтом</h1>
+                для начала работы с сайтом вам нужно <strong>зарегестрироваться</strong>
+                <img  src={% static "docs_images/regist.jpg" %} style="width: 100%">
+                <img  src={% static "docs_images/AAO.jpg" %} style="width: 100%">
+                <h2 id="h4">Главное меню</h2>
+                <div>
+                    Боковая панель меню отображает:
+                    <ul>
+                        <li><strong>Кликер</strong>, с помощью которого вы можете зарабатывать монетки;</li>
+                        <li><strong>Доступные чаты</strong>, чаты, которые вы можете видеть и присоединяться к ним, даже если они далеко от вас;</li>
+                        <li><strong>Ваши чаты</strong>, чаты, к которым вы уже присоединились;</li>
+                        <li><strong>Чаты поблизости</strong>, чаты, находящиеся рядом с вами</li>
+                    </ul>
+                    <img  src={% static "docs_images/sidevar.jpg" %} style="width: 100%">
+                </div>
+                <h2 id="1">Создание комнат</h2>
+                <img  src={% static "docs_images/create1.jpg" %} style="width: 100%">
+                <img  src={% static "docs_images/create2.jpg" %} style="width: 100%">
+                <img  src={% static "docs_images/create3.jpg" %} style="width: 100%">
+                <img  src={% static "docs_images/create4.jpg" %} style="width: 100%">
+                В комнатах так же присутствуют <strong>настройки</strong>.
+                <img  src={% static "docs_images/chatsettings.jpg" %} style="width: 100%">
+                <h2 id="2">Заработок монет</h2>
+                1. С помощью кликера, расположенного в боковом меню, вы можете зарабатывать монетки, для создания чатов.
+                2. Посещая наш сайт каждый день, вас будет ждать приятный бонус.
+                <img  src={% static "docs_images/daily-bonus.png" %} style="width: 100%">
+                <h2 id="3">Общение</h2>
+                Общайтесь с людьми и заводите новые знакомства.
+                <img  src={% static "docs_images/speaking.png" %} style="width: 100%">
+                <h2 id="h5">Красивый профиль</h2>
+                <img  src={% static "docs_images/profile3.jpg" %} style="width: 100%">
+                <img  src={% static "docs_images/profile4.jpg" %} style="width: 100%">
+                <h2 id="4">Гибкая настройка профиля</h2>
+                <img  src={% static "docs_images/profile1.jpg" %} style="width: 100%">
+                <img  src={% static "docs_images/profile2.jpg" %} style="width: 100%">
+                <img  src={% static "docs_images/profile5.jpg" %} style="width: 100%">
+            </div>
+        </li>
+
+        <li>
+            <div>
+                <h1 id="h6">Изменение пароля</h1>
+                Если вы забыли или хотите изменить свой пароль, для этого нажмите на <a href="#5">забыли пароль?</a> в окне регистрации или <a href="#6">сменить пароль</a> на странице редактирования профиля соответственно.
+                <h2 id="5">Забыли пароль?</h2>
+                <img  src={% static "docs_images/zabil.jpg" %} style="width: 100%">
+                Далее выполните <a href="#7">действия для смены пароля</a>.
+                <h2 id="6">Сменить пароль</h2>
+                <img  src={% static "docs_images/smenit.jpg" %} style="width: 100%">
+                Далее выполните <a href="#7">действия для смены пароля</a>.
+                <h2 id="7">Действия для смены пароля</h2>
+                <div>
+                    <ul>
+                        <li>
+                            <div>
+                                Введите ваш адрес электронной почты.
+                                <img  src={% static "docs_images/pass1.jpg" %} style="width: 100%">
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                Ожидайте письмо(если письмо не пришло, проверьте спам).
+                                <img  src={% static "docs_images/pass2.jpg" %} style="width: 100%">
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                Перейдите по ссылке.
+                                <img  src={% static "docs_images/pass3.png" %} style="width: 100%">
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                Введите новый пароль.
+                                <img  src={% static "docs_images/pass4.jpg" %} style="width: 100%">
+                            </div>
+                        </li>
+                        <li>
+                            <div>
+                                Готово!
+                                <img  src={% static "docs_images/pass5.jpg" %} style="width: 100%">
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </li>
+
+    </ul>
 </div>
-</div>
-<div class="section" id="id1">
-<h1>Дополения<a class="headerlink" href="#id1" title="Ссылка на этот заголовок">¶</a></h1>
-<ul class="simple">
-<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Алфавитный указатель</span></a></p></li>
-<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Состав модуля</span></a></p></li>
-<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Поиск</span></a></p></li>
-</ul>
 </div>
            </div>
           </div>
-          <footer>
-    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
-        <a href="overview.html" class="btn btn-neutral float-right" title="О проекте" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+    <div role="navigation" aria-label="footer navigation">
     </div>
   <hr/>
   <div role="contentinfo">
@@ -263,28 +313,17 @@ $(function(){
         &copy; Copyright 2020, geochat team
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
-</footer>
         </div>
       </div>
-    </section>
   </div>
 </div>
 
 
 
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
+
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-      </div>
-      <div class="modal-body">
-      <div class="modal-footer">
-      </div>
       </div>
     </div>
   </div>
@@ -293,8 +332,3 @@ $(function(){
                         </div>
                     </div>
                 </div>
-  <script type="text/javascript">
-      jQuery(function () {
-          SphinxRtdTheme.Navigation.enable(true);
-      });
-  </script>
