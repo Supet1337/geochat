@@ -4,9 +4,9 @@ before_script:
   - python -V
 
 stages:
+  - docs
   - lint
   - test
-  - docs
   - badges
   - deploy
 
