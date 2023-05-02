@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.contrib.auth.hashers import check_password
 from django.core.mail import send_mail
 
+
 # pylint: disable=redefined-outer-name, no-else-return, undefined-variable, unused-argument, invalid-name, inconsistent-return-statements, relative-beyond-top-level, wildcard-import, bare-except, unused-wildcard-import
 
 from .models import *
@@ -134,6 +135,7 @@ def ajax_maps_draw(request, number):
     :param number: номер профиля
     :return: room
     """
+
     rooms = []
     for room in Room.objects.filter(author_id=number):
         rooms.append(room.json())
@@ -246,6 +248,7 @@ def room(request, number):
         return render(request, "mess.html", context)
 
 
+
 def loggout(request):
     """
     Функция деавторизации пользователя
@@ -255,6 +258,7 @@ def loggout(request):
     """
     logout(request)
     return HttpResponseRedirect("/")
+
 
 
 def bonus_geocoin(request):
@@ -275,10 +279,10 @@ def bonus_geocoin(request):
             user_add.save()
             messages.success(request, "С возвращением! Вам начислено 200 геокоинов.")
 
-
 def index(request):
     """
     Функция рендера главной страницы
+
 
     :param request: запрос
     :return: render index.html
@@ -288,6 +292,83 @@ def index(request):
     join_rooms = []
     if request.user.is_authenticated:
         join_rooms = JoinRoom.objects.filter(user=request.user)
+            if form.is_valid():
+                user = form.save(commit=False)
+                user.email = form.data['email']
+                user.save()
+                new_Wallet = Wallet()
+                new_Wallet.user = user
+                new_Wallet.balance = 1000
+                new_Wallet.save()
+                login(request, user)
+
+                message = 'Здравствуйте! {}\nПоздравляем! Вы успешно зарегестрировали аккаунт Geochat.\nВперёд к ' \
+                          'новым приключениям!\n\n\n С уважением, команда Geochat  '.format(user.username)
+                send_mail('Регистрация аккаунта Geochat', message, 'shp.geochat@gmail.com', [user.email],
+                          fail_silently=False)
+                return render(request, 'index.html', context)
+            else:
+                try:
+                    username = request.POST['username_auth']
+                    password = request.POST['password']
+                except:
+                    messages.error(request, 'Пароли не совпадают.')
+                    return HttpResponseRedirect("/")
+                user = authenticate(username=username, password=password)
+                if user is not None:
+                    login(request, user)
+                    return HttpResponseRedirect("/")
+                else:
+                    messages.error(request, 'Неправильный логин или пароль.')
+                return HttpResponseRedirect("/")
+        else:
+            if request.POST.get('name') is None:
+                room_enter = Room.objects.get(id=request.POST.get('id'))
+                joins = JoinRoom.objects.filter(room_id=request.POST.get('id'))
+                if len(joins) < room_enter.max_members:
+                    if check_password(
+                            request.POST.get('password'),
+                            room_enter.password):
+                        new_join = JoinRoom()
+                        new_join.user = request.user
+                        new_join.room_id = request.POST.get('id')
+                        new_join.save()
+                        return HttpResponseRedirect(
+                            '/room/' + str(request.POST.get('id')))
+                    else:
+                        return HttpResponse('Неправильный пароль')
+                else:
+                    return HttpResponse(
+                        'В данном чате уже максимальное количество пользователей')
+            else:
+                if not request.POST.get('name') == '':
+                    new_room = Room()
+                    wallet = Wallet.objects.get(user=request.user)
+                    new_room.author = request.user
+                    new_room.name = request.POST.get('name')
+                    new_room.password = request.POST.get('password')
+                    new_room.x = request.POST.get('x')
+                    new_room.y = request.POST.get('y')
+                    new_room.diametr = request.POST.get('choose_diametr')
+                    new_room.max_members = request.POST.get('choose_max')
+                    if request.POST.get('is_private'):
+                        new_room.is_private = True
+                    else:
+                        new_room.is_private = False
+                    if request.POST.get('is_place'):
+                        new_room.is_place = True
+                    else:
+                        new_room.is_place = False
+                    if wallet.balance - (int(new_room.diametr) - 50 + (int(new_room.max_members) - 3) * 10) >= 0:
+                        wallet.balance -= int(new_room.diametr) - 50 + (int(new_room.max_members) - 3) * 10
+                        wallet.save()
+                    else:
+                        return HttpResponse('Не хватает денег')
+                    new_room.save()
+                else:
+                    return HttpResponse('Название не может быть пустым')
+                return HttpResponseRedirect('/')
+
 
     roomsj = []
     find_joined_rooms(join_rooms, roomsj)
@@ -308,6 +389,7 @@ def index(request):
 
 @login_required
 def profile(request, number):
+
     """
     Функция рендера страницы профиля
 
@@ -317,6 +399,21 @@ def profile(request, number):
     :return: render profile.html
     """
     bonus_geocoin(request)
+
+    if request.method == "POST":
+        form = UploadImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            try:
+                image = Image.objects.get(user=request.user)
+                image.delete()
+            except:
+                pass
+            ava = form.save(commit=False)
+            ava.user = request.user
+            ava.save()
+        return HttpResponseRedirect("../profile/" + str(number))
+    form = UploadImageForm()
+
     context = {}
     user = User.objects.get(id=number)
     user_add = UserAdditionals.objects.get(user=request.user)
@@ -646,6 +743,7 @@ def leave_chat(request, number):
     """
     Функция выхода из чата.
 
+
     :param request: Запрос
     :param number: id чата
     :return: redirect to main page
@@ -659,3 +757,6 @@ def leave_chat(request, number):
             return HttpResponseRedirect("../room/" + str(number))
         else:
             return HttpResponseRedirect('../')
+
+    return render(request, 'profile.html', context)
+
