@@ -1,0 +1,13 @@
+version: '3.1'
+
+services:
+  web:
+    build: ./
+    command: ./docker-entrypoint.sh
+    env_file:
+      - ./config/web/web-variables.env
+    volumes:
+      - ./:/web
+    ports:
+      - "80:80"
+      - "443:443"

@@ -26,6 +26,7 @@ class Room(models.Model):
     def json(self):
         return  {'x':self.x, 'y':self.y,'name':self.name,'author':str(self.author),'is_private':self.is_private,'is_place':self.is_place,'id':str(self.id), 'diametr':self.diametr}
 class Message(models.Model):
+
     text = models.CharField(max_length=250)
     author = models.ForeignKey(to=User, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
