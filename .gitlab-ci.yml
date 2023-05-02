@@ -60,6 +60,7 @@ docs:
   artifacts:
     paths:
       - public/docs
+
       
 sphinks_link:
   stage: badges
@@ -75,6 +76,7 @@ sphinks_link:
     expire_in: 4 weeks
   only:
     - master
+
 
 
 pages:

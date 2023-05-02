@@ -1,12 +1,13 @@
 {% load static %}
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<div class="footer" style="width:100%; height:57px">
+
+<div class="footer" style="width:100%; height:100px">
 
     {% if not request.user.is_authenticated %}
-<button type="button" class="btn btn-primary btn-lg"style="height:41px" data-toggle="modal" data-target="#myModal">
+<button type="button" class="btn btn-primary btn-lg"style="height:46px" data-toggle="modal" data-target="#myModal">
   Авторизация
 </button>
-<a><button data-toggle="modal" data-target="#ModalDocs" class="btn btn-primary" style="float:right;margin-left:10px">О нас <i style="color:#ffffff" class="fa fa-info-circle"></i></button></a>
+<a><button data-toggle="modal" data-target="#ModalDocs" class="btn btn-primary" style="float:right;margin-left:10px; height:46px">О нас <i style="color:#ffffff" class="fa fa-info-circle"></i></button></a>
 <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
                            FS102/Geo chat©
                         </div>
