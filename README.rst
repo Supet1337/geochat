@@ -8,7 +8,7 @@
 
 Наш сайт разработан для общения людей по всему миру.
 
-.. image:: _static/mainpage.jpg
+.. image:: https://github.com/Supet1337/geochat/blob/main/docs/source/_static/mainpage.jpg
 
 Возможности:
 
