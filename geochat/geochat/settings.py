@@ -26,7 +26,9 @@ SECRET_KEY = 'wnt)319w#i$1ug2x)v2q0i_ilx7bia=hk&*1b@j4i%g+fmazfr'
 DEBUG = True
 # DEBUG = os.environ.get('DEBUG')
 
-ALLOWED_HOSTS = ['geochat.savink.in','0.0.0.0']
+
+ALLOWED_HOSTS = ['geochat.savink.in','0.0.0.0','127.0.0.1']
+
 
 # Application definition
 
@@ -152,3 +154,13 @@ if not DEBUG:
 if DEBUG:
     # `debug` is only True in templates if the vistor IP is in INTERNAL_IPS.
     INTERNAL_IPS = type(str('c'), (), {'__contains__': lambda *a: True})()
+
+MEDIA_ROOT = "app/media"
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'shp.geochat@gmail.com'
+EMAIL_HOST_PASSWORD = 'Asdfgh12345'
+
