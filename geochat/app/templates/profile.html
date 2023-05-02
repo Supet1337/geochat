@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="en">
+
+ 
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    {% load static %}
+    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
+    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
+    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=7abcaac9-c988-4344-9b01-50d57672abf2&lang=ru_RU" type="text/javascript"></script>    <script src="../static/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+    <script src="../static/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <script src="../static/assets/libs/js/main-js.js"></script>
+    <title>Профиль</title>
+</head>
+
+<body>
+    <!-- ============================================================== -->
+    <!-- main wrapper -->
+    <!-- ============================================================== -->
+       <!-- ============================================================== -->
+        <!-- navbar -->
+        {% include "header.html" %}
+        <!-- ============================================================== -->
+        {% include "left_sidebar2.html" %}
+        <!-- ============================================================== -->
+        <!-- end navbar -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- left sidebar -->
+        <!-- ============================================================== -->
+
+        <!-- ============================================================== -->
+        <!-- end left sidebar -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- wrapper  -->
+        <!-- ============================================================== -->
+        <div class="dashboard-wrapper">
+            <div class="influence-profile">
+                <div class="container-fluid dashboard-content ">
+                    <!-- ============================================================== -->
+                    <!-- pageheader -->
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- end pageheader -->
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- content -->
+                    <!-- ============================================================== -->
+                    <div class="row">
+                        <!-- ============================================================== -->
+                        <!-- profile -->
+                        <!-- ============================================================== -->
+                        <div class="col-xl-3 col-lg-3 col-md-5 col-sm-12 col-12">
+                            <!-- ============================================================== -->
+                            <!-- card profile -->
+                            <!-- ============================================================== -->
+                            <div class="card" style="width:1590px; height:700px; margin-top:80px">
+                                <div class="card-body">
+                                    <div class="user-avatar text-center d-block">
+                                        {% if image == -1 %}
+                                            <img alt="User Avatar" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %}>
+                                        {% else %}
+                                            <img alt="User Avatar" class="rounded-circle user-avatar-xxl" src="{{image.image.url}}">
+                                        {% endif %}
+                                    </div>
+                                    <div class="text-center">
+                                        <h2 class="font-24 mb-0">{{username}}</h2>
+                                        <p>Статус</p>
+                                    </div>
+                                    {% if request.user.id == id %}
+                                    <form method="post" enctype="multipart/form-data">
+                                        {%csrf_token%}
+                                        {{form.as_p}}
+                                        <input type="submit" class="btn btn-primary" value="Загрузить фотографию">
+                                    </form>
+                                    {% endif %}
+                                </div>
+                                <div class="card-body border-top">
+                                    <h3 class="font-16">Contact Information</h3>
+                                    <div class="">
+                                        <ul class="list-unstyled mb-0">
+                                        <li class="mb-2"><i class="fas fa-fw fa-envelope mr-2"></i>{{email}}</li>
+                                        <li class="mb-0"><i class="fas fa-fw fa-phone mr-2"></i>Дата регистрации:{{last_login}}</li>
+                                    </ul>
+                                    </div>
+                                </div>
+                                <div class="card-body border-top">
+                                    <h3 class="font-16">Баланс</h3>
+                                    <h1 class="mb-0" id="profile-balance">{{balance}}<img src={% static "images/geocoin.png" %} style="width: 40px;height: 40px"></h1>
+                                </div>
+
+                            </div>
+                            <!-- ============================================================== -->
+                            <!-- end card profile -->
+                            <!-- ============================================================== -->
+                        </div>
+                        <!-- ============================================================== -->
+                        <!-- end profile -->
+                        <!-- ============================================================== -->
+                        <!-- ============================================================== -->
+                        <!-- campaign data -->
+                        <!-- ============================================================== -->
+
+                            <!-- ============================================================== -->
+                            <!-- end campaign tab one -->
+                            <!-- ============================================================== -->
+                        </div>
+                    <div class="tab-content" id="pills-tabContent" >
+                                    <div class="tab-pane fade show active" id="pills-campaign" role="tabpanel" aria-labelledby="pills-campaign-tab">
+                                        <div class="row">
+
+                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                                <div class="section-block">
+                                                    <h3 class="section-title">Созданные чаты:</h3>
+                                                </div>
+                                            </div>
+                                            {% for room in created_rooms %}
+                                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h1 class="mb-1">{{room.name}}</h1>
+                                                        <div id="map{{room.id}}" style="width: 333px; height: 300px"></div>
+                                                        <p id="addr{{room.id}}"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% endfor %}
+                                </div>
+                        <!-- ============================================================== -->
+                        <!-- end campaign data -->
+                        <!-- ============================================================== -->
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- end content -->
+            <!-- ============================================================== -->
+            <div class="footer" style="margin-left:0px; width:1640px">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                             FS102/Geo chat©
+                        </div>
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                            <div class="text-md-right footer-links d-none d-sm-block">
+                                <a href="">О нас</a>
+                                <a href=";">Поддержка</a>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- end footer -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- end wrapper -->
+        <!-- ============================================================== -->
+    </div>
+    <!-- ============================================================== -->
+    <!-- end main wrapper -->
+    <!-- ============================================================== -->
+    <!-- Optional JavaScript -->
+    <!-- jquery 3.3.1  -->
+
+   <script>
+    function maps() {
+        $.ajax({
+            url: "/ajax-maps-draw/"+{{id}},
+            success: function (result) {
+                var json = $.parseJSON(result);
+
+                json.forEach(function(item, i, json) {
+                    ymaps.ready(function () {
+    var myMap = new ymaps.Map('map'+json[i].id+'', {
+        center: [json[i].x,json[i].y],
+        zoom:15,
+        controls: ['smallMapDefaultSet']
+    }, {
+        // Зададим ограниченную область прямоугольником,
+        restrictMapArea: true
+    });
+    getAddress(json[i].x,json[i].y,json[i].id)
+});
+
+                });
+
+            }
+
+        });
+
+    }
+    maps();
+    function getAddress(x,y,id) {
+    ymaps.geocode([x,y]).then(function(res) {
+        var firstGeoObject = res.geoObjects.get(0);
+        document.getElementById('addr'+id+'').innerHTML = firstGeoObject.getAddressLine();
+      }
+
+    )}
+   </script>
+</body>
+ 
+</html>

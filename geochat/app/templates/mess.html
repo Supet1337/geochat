@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+{% load static %}
+<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
+<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
+<link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
+    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
+    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
+<style class="cp-pen-styles">
+body {
+  display: flex;
+  min-height: 100vh;
+  font-family: "proxima-nova", "Source Sans Pro", sans-serif;
+  font-size: 1em;
+  letter-spacing: 0.1px;
+  color: #32465a;
+  text-rendering: optimizeLegibility;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
+  -webkit-font-smoothing: antialiased;
+}
+
+#frame {
+  width: 95%;
+  min-width: 1610px;
+  max-width: 1500px;
+  height: 92vh;
+  min-height: 300px;
+  max-height: 720px;
+  background: #E6EAEA;
+}
+
+
+#frame .content {
+  float: center;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+
+#frame .content .contact-profile {
+  width: 2000px;
+  height: 60px;
+  line-height: 60px;
+  background: #f5f5f5;
+}
+#frame .content .contact-profile img {
+  width: 40px;
+  border-radius: 50%;
+  float: left;
+  margin: 9px 12px 0 9px;
+}
+#frame .content .contact-profile p {
+  float: left;
+}
+#frame .content .contact-profile div {
+  float: left;
+}
+#frame .content .messages {
+  height: auto;
+  min-height: calc(100% - 93px);
+  max-height: calc(100% - 93px);
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+
+#frame .content .messages::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+#frame .content .messages ul li {
+  display: inline-block;
+  clear: both;
+  float: left;
+  margin: 15px 15px 5px 15px;
+  width: calc(100% - 25px);
+  font-size: 0.9em;
+}
+
+#frame .content .messages ul li.sent img {
+  margin: 6px 8px 0 0;
+}
+#frame .content .messages ul li.sent p {
+  background: #435f7a;
+  color: #f5f5f5;
+}
+#frame .content .messages ul li.sent div {
+  background: #e6eaea;
+  color: #435f7a;
+}
+#frame .content .messages ul li.replies img {
+  float: right;
+  margin: 6px 0 0 8px;
+}
+#frame .content .messages ul li.replies p {
+  background: #f5f5f5;
+  float: right;
+}
+#frame .content .messages ul li.replies div {
+  background: #e6eaea;
+  float: right;
+}
+#frame .content .messages ul li img {
+  width: 50px;
+  border-radius: 50%;
+  float: left;
+}
+#frame .content .messages ul li p {
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 20px;
+  max-width: 205px;
+  line-height: 130%;
+}
+#frame .content .messages ul li div {
+  display: inline-block;
+  padding: 10px 15px;
+  border-radius: 20px;
+  max-width: 205px;
+  line-height: 130%;
+}
+@media screen and (min-width: 735px) {
+  #frame .content .messages ul li p {
+    max-width: 735px;
+  }
+}
+@media screen and (min-width: 735px) {
+  #frame .content .messages ul li div {
+    max-width: 735px;
+  }
+}
+#frame .content .message-input {
+  position: absolute;
+  bottom: -8px;
+  width: 100%;
+  z-index: 99;
+}
+
+#frame .content .message-input .wrap input {
+  font-family: "proxima-nova",  "Source Sans Pro", sans-serif;
+  float: left;
+  border: none;
+  width: calc(100% - 90px);
+  padding: 11px 32px 10px 8px;
+  font-size: 0.8em;
+  color: #32465a;
+}
+
+
+#frame .content .message-input .wrap .attachment {
+  position: absolute;
+  right: 60px;
+  z-index: 4;
+  margin-top: 10px;
+  font-size: 1.1em;
+  color: #435f7a;
+  opacity: .5;
+  cursor: pointer;
+}
+
+#frame .content .message-input .wrap button {
+  float: left;
+  border: none;
+  width: 80px;
+  padding: 12px 0;
+  cursor: pointer;
+  background: #32465a;
+  color: #f5f5f5;
+}
+
+</style></head><body>
+<div class="dashboard-main-wrapper" style="width:1700px">
+{% include "header.html" %}
+{% include "left_sidebar2.html" %}
+<div class="dashboard-wrapper">
+	<div class="container-fluid  dashboard-content">
+<div id="frame">
+	<div class="content">
+		<div class="contact-profile">
+			<img src={% static "images/geocoin.png" %}>
+			<p>{{room.name}}</p>
+		</div>
+		<div id="scroll" class="messages">
+			<ul id="kek">
+
+			</ul>
+		</div>
+		<div class="message-input">
+
+			<div class="wrap">
+				<input type="text" name="message" id="message" placeholder="Введите сообщение..." autocomplete="off">
+				<button type="submit" id="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
+			</div>
+		</div>
+	</div>
+</div>
+	</div>
+	{% include "footer.html" %}
+</div>
+
+<script >
+
+        const chatSocket = new WebSocket(
+            'ws://'
+            + window.location.host
+            + '/ws/chat/'
+            + '{{room.id}}'
+            + '/'
+        );
+		$("#kek").html("");
+        chatSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            if( data.author_image == '-1'){
+            	if( data.author_name == '{{request.user}}' )
+                	$("#kek").append('<li class="replies"> <a href="../profile/'+data.id+'"><img src={% static "images/default_ava.png" %} alt="" /><a><p style="word-wrap: break-word">'+data.author_name+':<br>'+data.message+'</p><div class="data">'+data.date+'</div></li>');
+            	else
+                	$("#kek").append('<li class="sent"> <a href="../profile/'+data.id+'"><img src={% static "images/default_ava.png" %} alt="" /><a><p style="word-wrap: break-word"">'+data.author_name+':<br>'+data.message+'</p><div class="data">'+data.date+'</div></li>');
+            }
+            else{
+            	if( data.author_name == '{{request.user}}' )
+                	$("#kek").append('<li class="replies"> <a href="../profile/'+data.id+'"><img src="'+data.author_image+'" alt="" /><a><p style="word-wrap: break-word">'+data.author_name+':<br>'+data.message+'</p><div class="data">'+data.date+'</div></li>');
+            	else
+                	$("#kek").append('<li class="sent"> <a href="../profile/'+data.id+'"><img src="'+data.author_image+'" alt="" /><a><p style="word-wrap: break-word"">'+data.author_name+':<br>'+data.message+'</p><div class="data">'+data.date+'</div></li>');
+            }
+            scrl();
+        };
+
+        chatSocket.onclose = function(e) {
+            console.error('Chat socket closed unexpectedly');
+        };
+
+        document.querySelector('#message').focus();
+        document.querySelector('#message').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.querySelector('#submit').click();
+
+            }
+        };
+
+        document.querySelector('#submit').onclick = function(e) {
+            const messageInputDom = document.querySelector('#message');
+            const message = messageInputDom.value;
+            if (message != ''){
+            	chatSocket.send(JSON.stringify({
+                	'message': message,
+                	'author_id': {{request.user.id}},
+                	'room_id': {{room.id}}
+            	}));
+            }
+            messageInputDom.value = '';
+        };
+
+
+
+	load_messages();
+    function load_messages() {
+        $.ajax({
+            url: "/ajax-load-messages/{{room.id}}",
+            method: "POST",
+            data: {
+                csrfmiddlewaretoken: '{{csrf_token}}'
+            },
+            success: function (result) {
+                var json = $.parseJSON(result);
+
+                json.forEach(function(item, i, json) {
+                	if(json[i].image == '-1'){
+                	    if( json[i].author == '{{request.user}}' )
+                       	    $("#kek").append('<li class="replies"> <a href="../profile/'+json[i].id+'"><img src={% static "images/default_ava.png" %} alt="" /><a><p style="word-wrap: break-word"">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+                        else
+                            $("#kek").append('<li class="sent"> <a href="../profile/'+json[i].id+'"><img src={% static "images/default_ava.png" %} alt="" /><a><p style="word-wrap: break-word">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+                	}
+                	else{
+					    if( json[i].author == '{{request.user}}' )
+						    $("#kek").append('<li class="replies"> <a href="../profile/'+json[i].id+'"><img src="'+json[i].image+'" alt="" /><a><p style="word-wrap: break-word"">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+					    else
+						    $("#kek").append('<li class="sent"> <a href="../profile/'+json[i].id+'"><img src="'+json[i].image+'" alt="" /><a><p style="word-wrap: break-word">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+                  }
+                  scrl();
+
+                });
+            }
+        });
+    }
+function scrl(){
+    var block = document.getElementById("scroll");
+    block.scrollTop = block.scrollHeight;
+}
+</script>
+</div>
+</body>
+		<script src="../static/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
+        <script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
+        <script src="../static/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
+        <script src="../static/assets/libs/js/main-js.js"></script>
+</html>
