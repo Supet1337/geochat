@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    {% load static %}
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css'>
+    <link rel="stylesheet" type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
+    <link rel="shortcut icon" href={% static "images/geocoin.png" %}  type="image/png">
+    <link rel="stylesheet" type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
+    <title>Авторизация через социальную сеть</title>
+</head>
+<body>
+     {%load static%}
+     <div class="dashboard-main-wrapper" >
+     <div class="dashboard-header" style="width:100%">
+            <nav class="navbar navbar-expand-lg bg-white fixed-top">
+                <a class="navbar-brand" href="../../">Geo Chat</a>
+            </nav>
+        </div>
+        {% include "left_sidebar2.html" %}
+
+<div class="dashboard-wrapper">
+            <div class="influence-profile">
+                <div class="container-fluid dashboard-content ">
+                    {% load socialaccount %}
+                    <div class="row">
+                                        <form class="splash-container" id="signup_form" method="POST"  action="{% url 'socialaccount_signup' %}">
+                                    {% csrf_token %}
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h3 class="mb-1">Авторизация</h3>
+                                                <p>Пожалуйста введите свои данные.</p>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="form-group">
+                                                    {% for error in form.non_field_errors %}
+                                                        <small style="color:#dc3545; font-size:10.5px">{{ error }}</small>
+                                                    {% endfor %}
+                                                    <input type="text" class="form-control form-control-lg" name="username" placeholder='Логин'  value="{{form.username.value|default_if_none:''}}" autofocus="autofocus" minlength="1" maxlength="150" required>
+                                                    {% for error in form.username.errors %}
+                                                        <small style="color:#dc3545; font-size:10.5px">{{ error }}</small>
+                                                    {% endfor %}
+                                                </div>
+                                                <div class="form-group">
+                                                    <input type="email" name="email" class="form-control form-control-lg" placeholder='Почтовый ящик'  value="{{form.email.value|default_if_none:''}}" required>
+                                                    {% for error in form.email.errors %}
+                                                        <small style="color:#dc3545; font-size:10.5px">{{ error }}</small>
+                                                    {% endfor %}
+                                                </div>
+                                                    <button type="submit" class="btn btn-block btn-primary">Войти</button>
+
+                                                <div class="form-group row pt-0">
+                                                </div>
+                                            </div>
+                                            <div class="card-footer bg-white">
+                                                <p>Есть учётная запись? <a href="../../" class="text-secondary">Войти.</a></p>
+                                            </div>
+                                            </div>
+                                    </form>
+
+                        <!-- ============================================================== -->
+                    </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- end content -->
+            <!-- ============================================================== -->
+            <div class="footer" style="margin-left:0px;width:100%">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
+                             FS102/Geo chat©
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- end footer -->
+            <!-- ============================================================== -->
+        </div>
+        <!-- ============================================================== -->
+        <!-- end wrapper -->
+        <!-- ============================================================== -->
+    </div>
+     </div>
+</body>
+</html>
+    <script type="text/javascript" src={% static "assets/vendor/bootstrap/js/bootstrap.bundle.js" %} ></script>
+    <script type="text/javascript" src={% static "assets/vendor/slimscroll/jquery.slimscroll.js" %} ></script>
+    <script type="text/javascript" src={% static "assets/libs/js/main-js.js" %} ></script>

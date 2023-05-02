@@ -1,30 +1,34 @@
 <!DOCTYPE html>
+<html lang="ru">
 {% load static %}
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css'>
-<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
+<link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css'>
 <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
-    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
-    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
+<link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
+<link rel="shortcut icon" href={% static "images/geocoin.png" %}  type="image/png">
+<script type="text/javascript" src={% static "assets/vendor/jquery/jquery-3.3.1.min.js" %} ></script>
+<script type="text/javascript" src={% static "assets/vendor/bootstrap/js/bootstrap.bundle.js" %} ></script>
+<script type="text/javascript" src={% static "assets/vendor/slimscroll/jquery.slimscroll.js" %} ></script>
+<script type="text/javascript" src={% static "assets/libs/js/main-js.js" %} ></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
-
+<script src='https://cdnjs.cloudflare.com/ajax/libs/reconnecting-websocket/1.0.0/reconnecting-websocket.min.js' crossorigin="anonymous"></script>
+	<title>Чат</title>
 <style class="cp-pen-styles">
 body {
-  display: flex;
-  min-height: 100vh;
-  font-family: "proxima-nova", "Source Sans Pro", sans-serif;
-  font-size: 1em;
+  min-height: 300px;
+  font-family: 'Circular Std Book';
   letter-spacing: 0.1px;
-  color: #32465a;
   text-rendering: optimizeLegibility;
   text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.004);
   -webkit-font-smoothing: antialiased;
 }
 
 #frame {
-  width: 95%;
-  min-width: 1610px;
-  max-width: 1500px;
+  width: 100%;
+  min-width: 340px;
+  max-width: 1610px;
   height: 92vh;
   min-height: 300px;
   max-height: 720px;
@@ -144,8 +148,8 @@ body {
   float: left;
   border: none;
   width: calc(100% - 90px);
-  padding: 11px 32px 10px 8px;
-  font-size: 0.8em;
+  padding: 13px 32px 10px 8px;
+  font-size: 1em;
   color: #32465a;
 }
 
@@ -169,19 +173,112 @@ body {
   cursor: pointer;
   background: #32465a;
   color: #f5f5f5;
+
 }
 
-</style></head><body>
-<div class="dashboard-main-wrapper" style="width:1700px">
+
+
+#id_image {
+width: 100% !important;
+resize: none !important;
+}
+</style>
+
+</head>
+<body>
+<div class="dashboard-main-wrapper" >
 {% include "header.html" %}
 {% include "left_sidebar2.html" %}
+{% include "messages.html" %}
 <div class="dashboard-wrapper">
 	<div class="container-fluid  dashboard-content">
-<div id="frame">
+<div id="frame" >
+	<div class="modal fade"  id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true">
+		    <div class="modal-dialog" role="document">
+            <div  class="modal-content">
+			<div class="modal-header">
+			{% if request.user == room.author %}
+			<h4 class="modal-title" id="myModalLabel1">Настройки чата</h4>
+			{%else%}
+          <h4 class="modal-title" id="myModalLabel1">Список пользователей</h4>
+			{%endif%}
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+            <div class="container">
+
+				  {% if request.user == room.author %}
+
+					  <form method="post" action="../update-room-picture/{{room.id}}" enctype="multipart/form-data">
+						  {%csrf_token%}
+						  {{form.image}}
+							  <input type="submit" style="width: 100%" class= "btn btn-success" value="Сохранить картинку">
+					  </form>
+					  <form method="post" action="../update-room-settings/{{room.id}}">
+						  {%csrf_token%}
+						  <br>
+						  <strong><p>Название чата:</p></strong>
+						  <input class="form-control" type="text" name="name" value="{{room.name}}">
+							  <input type="submit" style="width: 100%" class= "btn btn-success" value="Сохранить изменения">
+
+					  </form>
+						<form action="../delete-room/{{room.id}}" method="post">
+							{%csrf_token%}
+							<button type="submit" class="btn btn-danger" style="width: 100%">Удалить чат</button>
+						</form>
+
+				  {%endif%}
+					<i style="margin-left: 10px; color:#ffe21f" class="fa fa-star"></i>
+					{% for user in user_list %}
+						<form method="POST" action="../leave-chat/{{room.id}}">
+							{%csrf_token%}
+							<input type="hidden" name="user-id" value="{{user.user.id}}">
+						{% if request.user == room.author %}
+							{% if user.id == room.author.id %}
+								{% if user.image == "" %}
+									<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %} alt="" /><a>    <strong>{{user.user}}</strong></p>
+				  				{% else %}
+									<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="{{user.image.url}}" alt="" /><a>    <strong>{{user.user}}</strong></p>
+				  				{% endif %}
+							{% else %}
+								{% if user.image == "" %}
+									<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %} alt="" /><a>    <strong>{{user.user}}</strong><button type="submit" aria-hidden="true" class="close" aria-label="Close"> <i aria-hidden="true" class="fa fa-trash"></i></button></p>
+				  				{% else %}
+									<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="{{user.image.url}}" alt="" /><a>    <strong>{{user.user}}</strong> <button type="submit" class="close" aria-hidden="true" aria-label="Close"> <i aria-hidden="true" class="fa fa-trash"></i></button></p>
+				  				{% endif %}
+							{% endif %}
+						{% else %}
+				  			{% if user.image == "" %}
+								<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %} alt="" /><a>    <strong>{{user.user}}</strong></p>
+				  			{% else %}
+								<p><a href="../profile/{{user.user.id}}"><img style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="{{user.image.url}}" alt="" /><a>    <strong>{{user.user}}</strong></p>
+				  			{% endif %}
+						{%endif%}
+						<hr>
+						</form>
+						{% endfor %}
+
+
+
+            </div>
+			<form method="post" action="../leave-chat/{{room.id}}">
+				{% csrf_token %}
+				<input type="hidden" name="user-id" value="{{request.user.id}}">
+				<button type="submit" class="btn btn-danger" style="width: 100%">Выйти из чата</button>
+			</form>
+    </div>
+  </div>
+</div>
 	<div class="content">
 		<div class="contact-profile">
-			<img src={% static "images/geocoin.png" %}>
-			<p>{{room.name}}</p>
+			{% if room.image == "" %}
+				<img src={% static "images/geocoin.png" %} alt="" />
+			{% else %}
+				<img src="{{room.image.url}}" alt="" />
+			{% endif %}
+			<p>{{room.name}}<a style="" data-toggle="modal" data-target="#myModal1"><i style="margin: auto; position: absolute; right: 20px; top: 20px; font-size:19px" class="fa fa-ellipsis-v"></i></a></p>
 		</div>
 		<div id="scroll" class="messages">
 			<ul id="kek">
@@ -191,24 +288,29 @@ body {
 		<div class="message-input">
 
 			<div class="wrap">
-				<input type="text" name="message" id="message" placeholder="Введите сообщение..." autocomplete="off">
+				<input type="text" autocomplete="off" name="message" id="message" placeholder="Введите сообщение...">
 				<button type="submit" id="submit"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
 			</div>
 		</div>
 	</div>
 </div>
 	</div>
-	{% include "footer.html" %}
+{% include "footer.html" %}
 </div>
 
 <script >
+var soc = 'ws://';
+if (window.location.protocol == 'https:') {
+     soc = 'wss://';
+}
 
-        const chatSocket = new WebSocket(
-            'ws://'
+        const chatSocket = new ReconnectingWebSocket(
+            soc
             + window.location.host
             + '/ws/chat/'
             + '{{room.id}}'
             + '/'
+
         );
 		$("#kek").html("");
         chatSocket.onmessage = function(e) {
@@ -221,9 +323,9 @@ body {
             }
             else{
             	if( data.author_name == '{{request.user}}' )
-                	$("#kek").append('<li class="replies"> <a href="../profile/'+data.id+'"><img src="'+data.author_image+'" alt="" /><a><p style="word-wrap: break-word">'+data.author_name+':<br>'+data.message+'</p><div class="data">'+data.date+'</div></li>');
+                	$("#kek").append('<li class="replies"> <a href="../profile/'+data.id+'"><img style="width: 50px; height: 50px;" class="rounded-circle user-avatar-xxl" src="'+data.author_image+'" alt="" /><a><p style="word-wrap: break-word">'+data.author_name+':<br>'+data.message+'</p><div class="data">'+data.date+'</div></li>');
             	else
-                	$("#kek").append('<li class="sent"> <a href="../profile/'+data.id+'"><img src="'+data.author_image+'" alt="" /><a><p style="word-wrap: break-word"">'+data.author_name+':<br>'+data.message+'</p><div class="data">'+data.date+'</div></li>');
+                	$("#kek").append('<li class="sent"> <a href="../profile/'+data.id+'"><img style="width: 50px; height: 50px;" class="rounded-circle user-avatar-xxl" src="'+data.author_image+'" alt="" /><a><p style="word-wrap: break-word"">'+data.author_name+':<br>'+data.message+'</p><div class="data">'+data.date+'</div></li>');
             }
             scrl();
         };
@@ -275,9 +377,9 @@ body {
                 	}
                 	else{
 					    if( json[i].author == '{{request.user}}' )
-						    $("#kek").append('<li class="replies"> <a href="../profile/'+json[i].id+'"><img src="'+json[i].image+'" alt="" /><a><p style="word-wrap: break-word"">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+						    $("#kek").append('<li class="replies"> <a href="../profile/'+json[i].id+'"><img style="width: 50px; height: 50px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'" alt="" /><a><p style="word-wrap: break-word"">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
 					    else
-						    $("#kek").append('<li class="sent"> <a href="../profile/'+json[i].id+'"><img src="'+json[i].image+'" alt="" /><a><p style="word-wrap: break-word">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
+						    $("#kek").append('<li class="sent"> <a href="../profile/'+json[i].id+'"><img style="width: 50px; height: 50px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'" alt="" /><a><p style="word-wrap: break-word">'+json[i].author+':<br>'+json[i].text+'</p><div class="data">'+json[i].date+'</div></li>');
                   }
                   scrl();
 
@@ -292,8 +394,5 @@ function scrl(){
 </script>
 </div>
 </body>
-		<script src="../static/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
-        <script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
-        <script src="../static/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
-        <script src="../static/assets/libs/js/main-js.js"></script>
+
 </html>

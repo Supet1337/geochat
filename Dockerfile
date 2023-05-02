@@ -11,4 +11,5 @@ RUN apt-get update && \
     apt-get install -y build-essential libzbar-dev
 
 COPY . /web/
+WORKDIR /web/geochat
 

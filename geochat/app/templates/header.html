@@ -1,10 +1,9 @@
 {%load static%}
-<div class="dashboard-header">
-
+<div class="dashboard-header" style="width:100%">
             <nav class="navbar navbar-expand-lg bg-white fixed-top">
                 <a class="navbar-brand" href="../../">Geo Chat</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+                    <span class="fa fa-angle-down"></span>
                 </button>
                 <div class="collapse navbar-collapse " id="navbarSupportedContent">
                     <ul class="navbar-nav ml-auto navbar-right-top">
@@ -13,7 +12,8 @@
                                 {% if image == -1 %}
                                     <img alt="User Avatar" style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %}>
                                 {% else %}
-                                    <img alt="User Avatar" style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="{{image.image.url}}">
+                                    <img alt="User Avatar" style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="{{image.url}}">
+                                <!--Пофиксить аву в хедере-->
                                 {% endif %}
                             </a>
                             <div class="dropdown-menu dropdown-menu-right nav-user-dropdown" aria-labelledby="navbarDropdownMenuLink2">
@@ -25,8 +25,9 @@
                                     {%endif%}
                                 </div>
                                 {% if request.user.is_authenticated%}
-                                <a class="dropdown-item" href="../profile/{{request.user.id}}"><i class="fas fa-user mr-2"></i>Аккаунт</a>
-                                <a class="dropdown-item" href="../logout"><i class="fas fa-power-off mr-2"></i>Выйти</a>
+                                <a class="dropdown-item" href="../profile/{{request.user.id}}"><i class="fa fa-user"></i> Аккаунт</a>
+                                <a class="dropdown-item" href="../profile-settings"><i class="fa fa-cog"></i> Настройки</a>
+                                <a class="dropdown-item" href="../logout"><i class="fa fa-power-off "></i> Выйти</a>
                                 {%else%}
                                 {%endif%}
                             </div>

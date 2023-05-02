@@ -1,31 +1,53 @@
 <!doctype html>
-<html lang="en">
+<html lang="ru">
 
  
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap CSS -->
     {% load static %}
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
-    <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/fonts/fontawesome/css/fontawesome-all.css" %}>
-    <script src="https://api-maps.yandex.ru/2.1/?apikey=7abcaac9-c988-4344-9b01-50d57672abf2&lang=ru_RU" type="text/javascript"></script>    <script src="../static/assets/vendor/jquery/jquery-3.3.1.min.js"></script>
-    <script src="../static/assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
-    <script src="../static/assets/vendor/slimscroll/jquery.slimscroll.js"></script>
-    <script src="../static/assets/libs/js/main-js.js"></script>
+    <script type="text/javascript" src={% static "assets/vendor/jquery/jquery-3.3.1.min.js" %} ></script>
+    <script type="text/javascript" src={% static "assets/vendor/bootstrap/js/bootstrap.bundle.js" %} ></script>
+    <script type="text/javascript" src={% static "assets/libs/js/main-js.js" %} ></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=7abcaac9-c988-4344-9b01-50d57672abf2&lang=ru_RU" type="text/javascript" width="100%"></script>
+    <link rel="shortcut icon" href={% static "images/geocoin.png" %}  type="image/png">
+
+
     <title>Профиль</title>
+    <style>
+    .row.content {height: 1500px}
+    .profile {
+      background-color: #f2f2f2;
+      height: 100%;
+    }
+    footer {
+      background-color: #545;
+      color: white;
+      padding: 16px;
+    }
+    @media screen and (max-width: 767px) {
+      .profile {
+        height: auto;
+        padding: 16px;
+      }
+      .row.content {height: auto;}
+    }
+  </style>
 </head>
 
 <body>
     <!-- ============================================================== -->
     <!-- main wrapper -->
+    <div class="dashboard-main-wrapper">
     <!-- ============================================================== -->
        <!-- ============================================================== -->
         <!-- navbar -->
         {% include "header.html" %}
-        <!-- ============================================================== -->
         {% include "left_sidebar2.html" %}
         <!-- ============================================================== -->
         <!-- end navbar -->
@@ -56,51 +78,50 @@
                         <!-- ============================================================== -->
                         <!-- profile -->
                         <!-- ============================================================== -->
-                        <div class="col-xl-3 col-lg-3 col-md-5 col-sm-12 col-12">
                             <!-- ============================================================== -->
                             <!-- card profile -->
                             <!-- ============================================================== -->
-                            <div class="card" style="width:1590px; height:700px; margin-top:80px">
+                            <div class="card" style="width:100%; height:700px; margin-top:80px; min-width:320px">
                                 <div class="card-body">
                                     <div class="user-avatar text-center d-block">
                                         {% if image == -1 %}
-                                            <img alt="User Avatar" class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %}>
+                                            <img alt="User Avatar"  class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %}>
                                         {% else %}
-                                            <img alt="User Avatar" class="rounded-circle user-avatar-xxl" src="{{image.image.url}}">
+                                            <img alt="User Avatar"  class="rounded-circle user-avatar-xxl" src="{{image.url}}">
                                         {% endif %}
                                     </div>
                                     <div class="text-center">
                                         <h2 class="font-24 mb-0">{{username}}</h2>
-                                        <p>Статус</p>
+                                        <p>{{status}}</p>
                                     </div>
-                                    {% if request.user.id == id %}
-                                    <form method="post" enctype="multipart/form-data">
-                                        {%csrf_token%}
-                                        {{form.as_p}}
-                                        <input type="submit" class="btn btn-primary" value="Загрузить фотографию">
-                                    </form>
+                                </div>
+                                <div class="card-body border-top">
+                                    <h3 class="font-16">Информация о профиле</h3>
+                                    {% if private_info and request.user.id != id %}
+                                        Этот пользователь скрыл личную информацию о себе.
+                                    {% else %}
+                                    <div class="">
+                                        <ul class="list-unstyled mb-0">
+                                        <li class="mb-2"><i class="fa fa-envelope"></i> {{email}}</li>
+                                        <li class="mb-0"><i class="fa fa-calendar"></i> Дата регистрации:{{last_login}}</li>
+                                    </ul>
+                                    </div>
                                     {% endif %}
                                 </div>
                                 <div class="card-body border-top">
-                                    <h3 class="font-16">Contact Information</h3>
-                                    <div class="">
-                                        <ul class="list-unstyled mb-0">
-                                        <li class="mb-2"><i class="fas fa-fw fa-envelope mr-2"></i>{{email}}</li>
-                                        <li class="mb-0"><i class="fas fa-fw fa-phone mr-2"></i>Дата регистрации:{{last_login}}</li>
-                                    </ul>
-                                    </div>
-                                </div>
-                                <div class="card-body border-top">
+                                    {% if private_info and request.user.id != id %}
+                                        Этот пользователь скрыл личную информацию о себе.
+                                    {% else %}
                                     <h3 class="font-16">Баланс</h3>
-                                    <h1 class="mb-0" id="profile-balance">{{balance}}<img src={% static "images/geocoin.png" %} style="width: 40px;height: 40px"></h1>
+                                    <h1 class="mb-0" id="profile-balance">{{my_balance}}<img src={% static "images/geocoin.png" %} style="width: 40px;height: 40px"></h1>
+                                    {% endif %}
                                 </div>
 
                             </div>
                             <!-- ============================================================== -->
                             <!-- end card profile -->
                             <!-- ============================================================== -->
-                        </div>
-                        <!-- ============================================================== -->
+                            <!-- ============================================================== -->
                         <!-- end profile -->
                         <!-- ============================================================== -->
                         <!-- ============================================================== -->
@@ -111,6 +132,8 @@
                             <!-- end campaign tab one -->
                             <!-- ============================================================== -->
                         </div>
+                    </div>
+                    <div class="container-fluid dashboard-content ">
                     <div class="tab-content" id="pills-tabContent" >
                                     <div class="tab-pane fade show active" id="pills-campaign" role="tabpanel" aria-labelledby="pills-campaign-tab">
                                         <div class="row">
@@ -120,18 +143,32 @@
                                                     <h3 class="section-title">Созданные чаты:</h3>
                                                 </div>
                                             </div>
+                                            {% if private_chats and request.user.id != id %}
+                                                Этот пользователь скрыл созданные чаты.
+                                            {% else %}
+                                            {% if room_len == True %}
+                                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                                <div class="section-block">
+                                                    <h3 class="section-title">Этот пользователь не создал ни одного чата.</h3>
+                                                </div>
+                                            </div>
+                                                {% else %}
                                             {% for room in created_rooms %}
-                                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12">
-                                                <div class="card">
+                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="margin-right: 190px">
+                                                <div class="card" style="width: 100%; height: 420px; min-width:350px">
                                                     <div class="card-body">
+                                                       <!-- <a href="../room/{{room.id}}"><h1 class="mb-1">{{room.name}}</h1></a> -->
                                                         <h1 class="mb-1">{{room.name}}</h1>
-                                                        <div id="map{{room.id}}" style="width: 333px; height: 300px"></div>
+                                                        <div id="map{{room.id}}" style="width: 100%; height: 300px; min-width:300px"></div>
                                                         <p id="addr{{room.id}}"></p>
                                                     </div>
                                                 </div>
                                             </div>
                                             {% endfor %}
+                                            {% endif %}
+                                            {% endif %}
                                 </div>
+                                        </div>
                         <!-- ============================================================== -->
                         <!-- end campaign data -->
                         <!-- ============================================================== -->
@@ -141,22 +178,7 @@
             <!-- ============================================================== -->
             <!-- end content -->
             <!-- ============================================================== -->
-            <div class="footer" style="margin-left:0px; width:1640px">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                             FS102/Geo chat©
-                        </div>
-                        <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
-                            <div class="text-md-right footer-links d-none d-sm-block">
-                                <a href="">О нас</a>
-                                <a href=";">Поддержка</a>
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {%include "footer.html"%}
             <!-- ============================================================== -->
             <!-- end footer -->
             <!-- ============================================================== -->
@@ -184,10 +206,24 @@
         center: [json[i].x,json[i].y],
         zoom:15,
         controls: ['smallMapDefaultSet']
-    }, {
+    },
+
+    {
         // Зададим ограниченную область прямоугольником,
         restrictMapArea: true
     });
+       myPlacemark1 = new ymaps.Placemark([json[i].x,json[i].y], {
+
+            balloonContent: '<img alt="User Avatar" style="width: 32px; height: 32px;" class="rounded-circle user-avatar-xxl" src="'+json[i].image+'">'+json[i].name+'',
+            hintContent: '<a>'+json[i].name+'</a>'
+        }, {
+
+            preset: 'islands#greenCircleIcon'
+        }),
+
+
+    myMap.geoObjects.add(myPlacemark1);
+
     getAddress(json[i].x,json[i].y,json[i].id)
 });
 
@@ -204,9 +240,8 @@
         var firstGeoObject = res.geoObjects.get(0);
         document.getElementById('addr'+id+'').innerHTML = firstGeoObject.getAddressLine();
       }
-
     )}
    </script>
 </body>
- 
+
 </html>

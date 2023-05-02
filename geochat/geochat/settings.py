@@ -11,10 +11,12 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import sys
+from celery.schedules import crontab
+# pylint: no-name-in-module,
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
@@ -23,17 +25,19 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'wnt)319w#i$1ug2x)v2q0i_ilx7bia=hk&*1b@j4i%g+fmazfr'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 # DEBUG = os.environ.get('DEBUG')
 
 
-ALLOWED_HOSTS = ['geochat.savink.in','0.0.0.0','127.0.0.1']
+ALLOWED_HOSTS = ['*']
 
 
+TEST_MODE = 'pytest' in sys.modules
 # Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
+    'django.contrib.sites',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
@@ -43,6 +47,18 @@ INSTALLED_APPS = [
     'channels',
     'app',
     'storages',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.vk',
+    'allauth.socialaccount.providers.discord',
+]
+
+SITE_ID = 2
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
 MIDDLEWARE = [
@@ -68,13 +84,13 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = 'geochat.wsgi.application'
-
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
@@ -90,12 +106,22 @@ CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [('redis', 6379)],
         },
     },
 }
+REDIS = {
+    'second': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('redis_coin', 6379)],
+        },
+    },
+}
+
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -111,7 +137,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
@@ -133,12 +158,32 @@ MEDIA_URL = '/media/'
 
 STATIC_ROOT = "./collectedstatic"
 MEDIA_ROOT = "./media/"
-
+SOCIALACCOUNT_AUTO_SIGNUP = False
+SOCIALACCOUNT_ADAPTER = 'app.adapter.SocialAccountAdapter'
+SOCIALACCOUNT_PROVIDERS = {
+    'vk': {
+        'SCOPE': ['email']
+    }
+}
 
 SECURE_SSL_REDIRECT = True
-
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 # s3 serve static
 
+CELERY_BROKER_URL = 'redis://redis:6379'
+CELERY_RESULT_BACKEND = 'redis://redis:6379'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+
+CELERY_BEAT_SCHEDULE = {
+    'update_geocoin_cache': {
+        'task': 'app.tasks.geocoin_daily_bonus',
+        'schedule': crontab(minute='0', hour='0')
+    }
+}
 
 AWS_ACCESS_KEY_ID = "SCWWC0NA79VBS7DQ1G0R"
 AWS_SECRET_ACCESS_KEY = "91d10a80-a8c2-49f0-ad3e-62fdad004c9d"
@@ -155,12 +200,17 @@ if DEBUG:
     # `debug` is only True in templates if the vistor IP is in INTERNAL_IPS.
     INTERNAL_IPS = type(str('c'), (), {'__contains__': lambda *a: True})()
 
-MEDIA_ROOT = "app/media"
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'shp.geochat@gmail.com'
-EMAIL_HOST_PASSWORD = 'Asdfgh12345'
+ACCOUNT_EMAIL_VERIFICATION = "none"
+EMAIL_HOST_USER = 'shp.geochat@yandex.ru'
+EMAIL_HOST_PASSWORD = 'srgobbbgbhzoeias'
+DEFAULT_FROM_EMAIL = 'shp.geochat@yandex.ru'
+
+FIXTURE_DIRS = ['app/fixtures', 'geochat/app/fixtures',
+                'geochat/geochat/app/fixtures',
+                './geochat/geochat/app/fixtures', '.././app/fixtures']
 

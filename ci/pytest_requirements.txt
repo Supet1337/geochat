@@ -1,0 +1,5 @@
+Django
+pytest
+pytest-django
+django-debug-toolbar
+pytest-cov
