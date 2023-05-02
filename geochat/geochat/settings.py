@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'wnt)319w#i$1ug2x)v2q0i_ilx7bia=hk&*1b@j4i%g+fmazfr'
+SECRET_KEY = ''
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -185,12 +185,12 @@ CELERY_BEAT_SCHEDULE = {
     }
 }
 
-AWS_ACCESS_KEY_ID = "SCWWC0NA79VBS7DQ1G0R"
-AWS_SECRET_ACCESS_KEY = "91d10a80-a8c2-49f0-ad3e-62fdad004c9d"
+AWS_ACCESS_KEY_ID = ""
+AWS_SECRET_ACCESS_KEY = ""
 AWS_STORAGE_BUCKET_NAME = "geochat-static"
 AWS_DEFAULT_ACL = 'public-read'
-AWS_S3_REGION_NAME = "nl-ams"
-AWS_S3_ENDPOINT_URL = "https://s3.nl-ams.scw.cloud"
+AWS_S3_REGION_NAME = ""
+AWS_S3_ENDPOINT_URL = ""
 
 if not DEBUG:
     DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
@@ -206,9 +206,9 @@ EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 ACCOUNT_EMAIL_VERIFICATION = "none"
-EMAIL_HOST_USER = 'shp.geochat@yandex.ru'
-EMAIL_HOST_PASSWORD = 'srgobbbgbhzoeias'
-DEFAULT_FROM_EMAIL = 'shp.geochat@yandex.ru'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+DEFAULT_FROM_EMAIL = ''
 
 FIXTURE_DIRS = ['app/fixtures', 'geochat/app/fixtures',
                 'geochat/geochat/app/fixtures',
