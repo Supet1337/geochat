@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap CSS -->
     {% load static %}
-    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css'>
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.2/css/font-awesome.min.css'>
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/vendor/bootstrap/css/bootstrap.min.css" %}>
     <link rel='stylesheet' type='text/css' media='screen' href={% static "assets/libs/css/style.css" %}>
     <script type="text/javascript" src={% static "assets/vendor/jquery/jquery-3.3.1.min.js" %} ></script>
@@ -49,7 +49,6 @@
         <!-- navbar -->
         {% include "header.html" %}
         {% include "left_sidebar2.html" %}
-        {% include "messages.html" %}
         <!-- ============================================================== -->
         <!-- end navbar -->
         <!-- ============================================================== -->
@@ -85,10 +84,10 @@
                             <div class="card" style="width:100%; height:700px; margin-top:80px; min-width:320px">
                                 <div class="card-body">
                                     <div class="user-avatar text-center d-block">
-                                        {% if profile_image == -1 %}
+                                        {% if image == -1 %}
                                             <img alt="User Avatar"  class="rounded-circle user-avatar-xxl" src={% static "images/default_ava.png" %}>
                                         {% else %}
-                                            <img alt="User Avatar"  class="rounded-circle user-avatar-xxl" src="{{profile_image.url}}">
+                                            <img alt="User Avatar"  class="rounded-circle user-avatar-xxl" src="{{image.url}}">
                                         {% endif %}
                                     </div>
                                     <div class="text-center">
@@ -104,7 +103,7 @@
                                     <div class="">
                                         <ul class="list-unstyled mb-0">
                                         <li class="mb-2"><i class="fa fa-envelope"></i> {{email}}</li>
-                                        <li class="mb-0"><i class="fas fa-calendar-alt"></i> Дата регистрации:{{date_joined}}</li>
+                                        <li class="mb-0"><i class="fa fa-calendar"></i> Дата регистрации:{{last_login}}</li>
                                     </ul>
                                     </div>
                                     {% endif %}
@@ -114,7 +113,7 @@
                                         Этот пользователь скрыл личную информацию о себе.
                                     {% else %}
                                     <h3 class="font-16">Баланс</h3>
-                                    <h1 class="mb-0" id="profile-balance">{{balance}}<img src={% static "images/geocoin.png" %} style="width: 40px;height: 40px"></h1>
+                                    <h1 class="mb-0" id="profile-balance">{{my_balance}}<img src={% static "images/geocoin.png" %} style="width: 40px;height: 40px"></h1>
                                     {% endif %}
                                 </div>
 
@@ -148,20 +147,19 @@
                                                 Этот пользователь скрыл созданные чаты.
                                             {% else %}
                                             {% if room_len == True %}
-                                                    <div class="col">
+                                                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
                                                 <div class="section-block">
                                                     <h3 class="section-title">Этот пользователь не создал ни одного чата.</h3>
                                                 </div>
                                             </div>
-                                            <div class="w-100"></div>
                                                 {% else %}
                                             {% for room in created_rooms %}
-                                            <div class="col-xl-3 col-lg-3 col-md-6 col-sm-12 col-12" >
-                                                <div class="card" style="width: 100%; height: 420px; min-width:260px; max-width:350px">
+                                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" style="margin-right: 190px">
+                                                <div class="card" style="width: 100%; height: 420px; min-width:350px">
                                                     <div class="card-body">
                                                        <!-- <a href="../room/{{room.id}}"><h1 class="mb-1">{{room.name}}</h1></a> -->
                                                         <h1 class="mb-1">{{room.name}}</h1>
-                                                        <div id="map{{room.id}}" style="width: 100%; height: 300px; min-width:210px; max-width:350px"></div>
+                                                        <div id="map{{room.id}}" style="width: 100%; height: 300px; min-width:300px"></div>
                                                         <p id="addr{{room.id}}"></p>
                                                     </div>
                                                 </div>
@@ -169,7 +167,6 @@
                                             {% endfor %}
                                             {% endif %}
                                             {% endif %}
-
                                 </div>
                                         </div>
                         <!-- ============================================================== -->

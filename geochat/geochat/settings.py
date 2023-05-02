@@ -28,7 +28,9 @@ SECRET_KEY = 'wnt)319w#i$1ug2x)v2q0i_ilx7bia=hk&*1b@j4i%g+fmazfr'
 DEBUG = False
 # DEBUG = os.environ.get('DEBUG')
 
+
 ALLOWED_HOSTS = ['*']
+
 
 TEST_MODE = 'pytest' in sys.modules
 # Application definition
@@ -198,6 +200,7 @@ if DEBUG:
     # `debug` is only True in templates if the vistor IP is in INTERNAL_IPS.
     INTERNAL_IPS = type(str('c'), (), {'__contains__': lambda *a: True})()
 
+
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_USE_TLS = True
@@ -210,3 +213,4 @@ DEFAULT_FROM_EMAIL = 'shp.geochat@yandex.ru'
 FIXTURE_DIRS = ['app/fixtures', 'geochat/app/fixtures',
                 'geochat/geochat/app/fixtures',
                 './geochat/geochat/app/fixtures', '.././app/fixtures']
+
